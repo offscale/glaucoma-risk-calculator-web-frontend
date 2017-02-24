@@ -53,6 +53,13 @@ export class AuthService {
       .catch(handleError);
   }
 
+  getAll(): Observable<{users: User[]}> {
+    const options = new RequestOptions({headers: new Headers({'X-Access-Token': this.accessToken})});
+    return this.http.get('/api/users', options)
+      .map(response => response.json())
+      .catch(handleError);
+  }
+
   del(redirect_uri?: string): Observable<Response> {
     this.redirect_uri = redirect_uri;
 
