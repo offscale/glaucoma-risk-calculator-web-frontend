@@ -1,0 +1,4 @@
+<alert *ngFor="let alert of alerts;let i = index" [type]="alert.type" dismissible="true" (close)="closeAlert(i)"
+style="color: #ffcc9a">
+  <h3>{{ alert?.msg }}</h3>
+</alert>

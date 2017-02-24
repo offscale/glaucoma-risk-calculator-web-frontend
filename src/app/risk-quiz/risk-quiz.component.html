@@ -1,0 +1,75 @@
+<form (ngSubmit)="onSubmit()" ngModel ngDefaultControl name="riskQuizForm" id="riskQuizForm" #riskQuizForm="ngModel">
+  <div class="form-group">
+    <label for="age">Age</label>
+    <input type="number" class="form-control"
+           id="age" [(ngModel)]="model.age" name="age" placeholder="Enter age">
+  </div>
+  <fieldset class="form-group" id="gender" name="gender">
+    <h6>Gender</h6>
+    <div class="form-check">
+      <label class="form-check-label">
+        <input type="radio" class="form-check-input" name="male" id="male" value="male" [(ngModel)]="model.gender">
+        Male
+      </label>
+    </div>
+    <div class="form-check">
+      <label class="form-check-label">
+        <input type="radio" class="form-check-input" name="female" id="female" value="female" [(ngModel)]="model.gender">
+        Female
+      </label>
+    </div>
+  </fieldset>
+  <div class="form-group">
+    <label for="ethnicity">Ethnicity</label>
+    <select class="form-control" id="ethnicity" name="ethnicity" [(ngModel)]="model.ethnicity">
+      <option>Korean</option>
+      <option>Japanese</option>
+      <option>3</option>
+      <option>4</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <h6>Previous history of ocular disease</h6>
+
+    <ng-select (data)="ocular_diseases_selected($event)"
+               [multiple]=true
+               [items]="ocular_diseases"
+               id="ocularDiseases"
+               name="ocularDiseases"
+               placeholder="Click to select ocular disease(s)"></ng-select>
+  </div>
+  <div class="form-group">
+    <label for="ocularSurgeries">Previous history of ocular surgery</label>
+    <small class="form-text text-muted">Ctrl + select to choose multiple</small>
+
+    <select multiple class="form-control"
+            id="ocularSurgeries" name="ocularSurgeries" [(ngModel)]="model.ocular_surgery_history">
+      <option>retinal detachment</option>
+      <option>corneal transplant</option>
+      <option>congenital cataracts</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="other_info">Other information</label>
+    <textarea class="form-control"
+              id="other_info" [(ngModel)]="model.other_info" name="other_info" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Calculate your risk</button>
+</form>
+
+<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Results</h4>
+      </div>
+      <div class="modal-body">
+        <h5>TODO!</h5>
+        <pre>{{model|json}}</pre>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<button class="btn btn-lg btn-warning" (click)="login()" *ngIf="!loggedIn()">Authenticate with Office 365</button>
+
+<button class="btn btn-sm btn-outline-danger" (click)="logout()" *ngIf="loggedIn()">Office 365 logout</button>
+
+<form *ngIf="loggedIn()" (ngSubmit)="sendTestEmail()">
+  <div class="form-group">
+    <label for="recipient">Recipient</label>
+    <input type="email" class="form-control" id="recipient" name="recipient"
+           aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="mail_base.recipient">
+    <small id="emailHelp" class="form-text text-muted">Address to send email</small>
+  </div>
+
+  <div class="form-group">
+    <label for="subject">Subject</label>
+    <input type="text" class="form-control" id="subject" name="subject"
+           aria-describedby="subjectHelp" placeholder="Enter subject" [(ngModel)]="mail_base.subject">
+    <small id="subjectHelp" class="form-text text-muted">Subject of email</small>
+  </div>
+
+  <button class="btn btn-lg btn-primary" type="submit">Send test email</button>
+</form>
+
+
+<button type="button" class="btn btn-sm" (click)="toggleCollapse()">Advanced</button>
+<hr *ngIf="!isCollapsed">
+<div [collapse]="isCollapsed" class="card card-block card-header">
+  <div class="well well-lg">
+    More info:
+    <a href="https://graph.microsoft.io/en-us/docs/authorization/app_authorization" target="_blank">
+      Microsoft Graph app authorisation
+    </a>
+    <form (ngSubmit)="updateAuth()">
+      <div class="form-group">
+        <label for="recipient">Client ID</label>
+        <input type="text" class="form-control" id="client_id" name="client_id"
+               placeholder="Enter client_id" [(ngModel)]="client_id">
+      </div>
+
+      <div class="form-group">
+        <label for="recipient">Tenant ID</label>
+        <input type="text" class="form-control" id="tenant_id" name="tenant_id"
+               placeholder="Enter tenant_id" [(ngModel)]="tenant_id">
+      </div>
+
+      <button class="btn btn-outline-warning" type="submit">Update auth</button>
+    </form>
+  </div>
+</div>
+
