@@ -43,6 +43,16 @@ export class AuthService {
     localStorage.setItem('access-token', this.accessToken);
   }
 
+  create_user(user: User): Observable<User> {
+    const options = new RequestOptions({headers: this.headers});
+    return this.http.post('/api/user', JSON.stringify(user), options)
+      .map(response => {
+        this.accessToken = response.headers.get('x-access-token');
+        return response.json()
+      })
+      .catch(handleError);
+  }
+
   post(user: User): Observable<User> {
     const options = new RequestOptions({headers: this.headers});
     return this.http.post('/api/auth', JSON.stringify(user), options)
