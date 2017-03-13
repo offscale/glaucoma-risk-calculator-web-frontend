@@ -1,0 +1,67 @@
+export const quizzes: Array<{}> = [
+  {
+    "schema": {
+      "type": "object",
+      "title": "Quiz 0",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "pattern": "^\\S+@\\S+$",
+          "description": "Email will be used for evil."
+        },
+        "comment": {
+          "title": "Comment",
+          "type": "string",
+          "maxLength": 20,
+          "validationMessage": "Don't be greedy!"
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "comment"
+      ]
+    },
+    "form": [
+      {
+        "type": "help",
+        "helpvalue": "<div class=\"alert alert-info\">Grid it up with bootstrap</div>"
+      },
+      {
+        "type": "section",
+        "htmlClass": "row",
+        "items": [
+          {
+            "type": "section",
+            "htmlClass": "col-xs-6",
+            "items": [
+              "name"
+            ]
+          },
+          {
+            "type": "section",
+            "htmlClass": "col-xs-6",
+            "items": [
+              "email"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "comment",
+        "type": "textarea",
+        "placeholder": "Make a comment"
+      },
+      {
+        "type": "submit",
+        "style": "btn-info",
+        "title": "OK"
+      }
+    ]
+  }
+];

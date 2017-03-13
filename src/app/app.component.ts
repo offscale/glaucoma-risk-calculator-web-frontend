@@ -19,10 +19,15 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     const qs = parseQueryString(location.hash);
     if (Object.keys(qs).length > 0) {
-      this.msAuthService.getConf().subscribe(console.info, console.error);
-      !!qs.id_token && this.msAuthService.getAccessToken(qs.state);
-      this.msAuthService.access_token = qs.access_token;
-      !!qs.state && this.router.navigateByUrl(decodeURIComponent(qs.state));
+      this.msAuthService.getConf().subscribe(
+        conf => {
+          console.info(conf);
+          !!qs.id_token && this.msAuthService.getAccessToken(qs.state);
+          this.msAuthService.access_token = qs.access_token;
+          !!qs.state && this.router.navigateByUrl(decodeURIComponent(qs.state));
+        },
+        console.error
+      );
     }
   }
 }

@@ -29,14 +29,14 @@ export class RichTextComponent implements AfterViewInit, OnInit, OnDestroy {
           this.emailTplService.email_tpl = email_tpl;
           this.init();
         },
-        error => console.error(error) && this.init()
+        error => console.error(error) || this.init()
       )
   }
 
   private init() {
     tinymce.init({
       selector: `#${this.elementId}`,
-      //plugins: ['link', 'paste', 'table'],
+      plugins: ['link', 'paste'/*, 'table'*/],
       skin_url: 'assets/skins/lightgray',
       setup: editor => {
         this.editor = editor;

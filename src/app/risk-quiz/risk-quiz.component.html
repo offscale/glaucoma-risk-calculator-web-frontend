@@ -24,8 +24,13 @@
     <select class="form-control" id="ethnicity" name="ethnicity" [(ngModel)]="model.ethnicity">
       <option>Korean</option>
       <option>Japanese</option>
-      <option>3</option>
-      <option>4</option>
+      <option>Irish</option>
+      <option>Italian, Irish, English (Massachusetts, USA)</option>
+      <option>White (Minnesota, USA)</option>
+      <option>White (Wisconsin, USA)</option>
+      <option>White (Australia)</option>
+      <option>Caribbean (Saint Lucia)</option>
+      <option>Caribbean (Barbados)</option>
     </select>
   </div>
   <div class="form-group">
@@ -50,6 +55,16 @@
     </select>
   </div>
   <div class="form-group">
+    <label for="familyHistory">Family history of glaucoma</label>
+    <small class="form-text text-muted">Ctrl + select to choose multiple</small>
+
+    <select multiple class="form-control"
+            id="familyHistory" name="familyHistory" [(ngModel)]="model.family_history_of_glaucoma">
+      <option>maternal</option>
+      <option>fraternal</option>
+    </select>
+  </div>
+  <div class="form-group">
     <label for="other_info">Other information</label>
     <textarea class="form-control"
               id="other_info" [(ngModel)]="model.other_info" name="other_info" rows="3"></textarea>
@@ -67,7 +82,15 @@
         <h4 class="modal-title">Results</h4>
       </div>
       <div class="modal-body">
-        <h5>TODO!</h5>
+        Enter your details and we'll email you a computed risk score:
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control"
+                 id="email" [(ngModel)]="model.email" name="email" placeholder="Enter email">
+        </div>
+        <button (click)="email()" class="btn btn-lg btn-outline-primary">Email my result</button>
+
+        Information used to calculate:
         <pre>{{model|json}}</pre>
       </div>
     </div>

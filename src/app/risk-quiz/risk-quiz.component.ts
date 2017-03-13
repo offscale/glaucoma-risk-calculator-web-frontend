@@ -2,6 +2,7 @@ import 'rxjs/add/observable/of';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IRiskQuiz } from './risk-quiz.model';
 import { ModalDirective } from 'ng2-bootstrap';
+import { AlertsService } from '../alerts/alerts.service';
 
 @Component({
   selector: 'app-risk-quiz',
@@ -10,8 +11,9 @@ import { ModalDirective } from 'ng2-bootstrap';
 })
 export class RiskQuizComponent implements OnInit {
   private submitted: boolean = false;
-  public model: IRiskQuiz = <IRiskQuiz>{};
+  public model: IRiskQuiz = {} as IRiskQuiz;
   public riskQuizForm: any;
+  public quiz: {};
   public ocular_diseases: Array<string> = [
     'trauma', 'inflammation', 'pseudoexfoliation', 'pigment dispersion syndrome'
   ];
@@ -20,6 +22,9 @@ export class RiskQuizComponent implements OnInit {
   ];
 
   @ViewChild('childModal') public childModal: ModalDirective;
+
+  constructor(private alertsService: AlertsService) {
+  }
 
   public showChildModal(): void {
     this.childModal.show();
@@ -39,5 +44,10 @@ export class RiskQuizComponent implements OnInit {
 
   ocular_diseases_selected(values: Array<{id: string, name: string}>) {
     this.model.ocular_disease_history = values.map(v => v.id);
+  }
+
+  email() {
+    this.childModal.hide();
+    this.alertsService.add({msg: 'Your risk is being calculated, and will be emailed', type: 'info'})
   }
 }

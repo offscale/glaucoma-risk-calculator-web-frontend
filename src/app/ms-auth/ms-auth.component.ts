@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MsAuthService } from './ms-auth.service';
 import { EmailTplService } from '../api/email_tpl/email-tpl.service';
+import { AlertsService } from '../alerts/alerts.service';
 
 @Component({
   selector: 'app-ms-auth',
@@ -12,7 +13,8 @@ export class MsAuthComponent implements OnInit {
   private _client_id: string;
   private _tenant_id: string;
 
-  constructor(private msAuthService: MsAuthService,
+  constructor(private alertsService: AlertsService,
+              private msAuthService: MsAuthService,
               private emailTplService: EmailTplService) {
   }
 
@@ -39,7 +41,9 @@ export class MsAuthComponent implements OnInit {
       recipient: this.mail_base.recipient,
       subject: this.mail_base.subject,
       content: this.emailTplService.email_tpl.tpl
-    }).subscribe(console.info, console.error);
+    }).subscribe(email => console.info(email) || this.alertsService.add({
+      type: 'info', msg: 'Sent email'
+    }), console.error);
   }
 
   public toggleCollapse() {
@@ -67,7 +71,7 @@ export class MsAuthComponent implements OnInit {
       client_id: this._client_id, tenant_id: this._tenant_id,
       access_token: this.msAuthService.access_token
     }).subscribe(
-      console.info,
+      auth => console.info(auth) || this.alertsService.add({type: 'info', msg: 'Updated auth'}),
       error => console.error(error) //this.authService.redirOnResIfUnauth(error)
     )
   }

@@ -59,11 +59,11 @@ export class EmailTplComponent implements OnInit {
   }
 
   save() {
-    this.emailTplService.hasTpl() ?
+    (this.emailTplService.hasTpl() ?
       this.tplUpdate(Object.assign({tpl: this.emailTplService.email_tpl.tpl}, this.emailTplService.email_tpl))
       : this.tplCreate({
         tpl: this.emailTplService.email_tpl.tpl,
         createdAt: new Date().toISOString()
-      })
+      })) || this.alertsService.add({type: 'info', msg: 'Updated email template'})
   }
 }

@@ -4,6 +4,7 @@ import { RiskQuizComponent } from './risk-quiz.component';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'ng2-select';
 import { ModalModule, TypeaheadModule } from 'ng2-bootstrap';
+import { JsonSchemaFormModule } from 'angular2-json-schema-form/src';
 
 @NgModule({
   imports: [
