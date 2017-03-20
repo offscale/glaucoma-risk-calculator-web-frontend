@@ -3,6 +3,21 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { IRiskQuiz } from './risk-quiz.model';
 import { ModalDirective } from 'ng2-bootstrap';
 import { AlertsService } from '../alerts/alerts.service';
+import { IRiskJson, list_ethnicities, risk_from_study } from 'glaucoma-risk-quiz-engine';
+import * as math from 'mathjs';
+
+math.config({
+  number: 'BigNumber',  // Default type of number:
+                        // 'number' (default), 'BigNumber', or 'Fraction'
+  precision: 20         // Number of significant digits for BigNumbers
+});
+
+
+// least susceptible / low risk
+// susceptible / medium risk
+// highly susceptible / high risk
+
+const risk_json: IRiskJson = require('./risk.json') as IRiskJson;
 
 @Component({
   selector: 'app-risk-quiz',
@@ -10,6 +25,9 @@ import { AlertsService } from '../alerts/alerts.service';
   styleUrls: ['./risk-quiz.component.css']
 })
 export class RiskQuizComponent implements OnInit {
+  public evilIn: any;
+  public evil: any;
+  private result: number;
   private submitted: boolean = false;
   public model: IRiskQuiz = {} as IRiskQuiz;
   public riskQuizForm: any;
@@ -35,14 +53,19 @@ export class RiskQuizComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.info(list_ethnicities(risk_json));
   }
 
   onSubmit() {
     this.submitted = true;
+    this.result = risk_from_study(risk_json, {
+      study: this.model.ethnicity,
+      age: this.model.age, gender: this.model.gender
+    });
     this.childModal.show();
   }
 
-  ocular_diseases_selected(values: Array<{id: string, name: string}>) {
+  ocular_diseases_selected(values: Array<{ id: string, name: string }>) {
     this.model.ocular_disease_history = values.map(v => v.id);
   }
 

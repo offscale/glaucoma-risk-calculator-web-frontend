@@ -32,6 +32,9 @@
         "../src/assets/fonts/css/fontello-ie7.css",
         "styles.css"
       ],
+      "scripts": [
+        "../node_modules/mathjs/dist/math.min.js"
+      ],
       "addons": [
         "../src/assets/fonts/font/*.+(otf|eot|svg|ttf|woff|woff2)"
       ],

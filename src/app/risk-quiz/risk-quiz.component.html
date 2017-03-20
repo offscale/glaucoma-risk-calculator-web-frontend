@@ -2,7 +2,13 @@
   <div class="form-group">
     <label for="age">Age</label>
     <input type="number" class="form-control"
-           id="age" [(ngModel)]="model.age" name="age" placeholder="Enter age">
+           id="age" [(ngModel)]="model.age" name="age"
+           #age="ngModel"
+           placeholder="Enter age" required>
+    <div [hidden]="age.valid || age.pristine"
+         class="alert alert-danger">
+      Age is required
+    </div>
   </div>
   <fieldset class="form-group" id="gender" name="gender">
     <h6>Gender</h6>
@@ -14,17 +20,19 @@
     </div>
     <div class="form-check">
       <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="female" id="female" value="female" [(ngModel)]="model.gender">
+        <input type="radio" class="form-check-input" name="female" id="female" value="female"
+               [(ngModel)]="model.gender">
         Female
       </label>
     </div>
   </fieldset>
   <div class="form-group">
     <label for="ethnicity">Ethnicity</label>
-    <select class="form-control" id="ethnicity" name="ethnicity" [(ngModel)]="model.ethnicity">
+    <select class="form-control" id="ethnicity" name="ethnicity" [(ngModel)]="model.ethnicity" required>
       <option>Korean</option>
       <option>Japanese</option>
       <option>Irish</option>
+      <option>White (German, Norwegian, Irish, English) [Olmsted County study]</option>
       <option>Italian, Irish, English (Massachusetts, USA)</option>
       <option>White (Minnesota, USA)</option>
       <option>White (Wisconsin, USA)</option>
@@ -69,10 +77,13 @@
     <textarea class="form-control"
               id="other_info" [(ngModel)]="model.other_info" name="other_info" rows="3"></textarea>
   </div>
-  <button type="submit" class="btn btn-primary">Calculate your risk</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!riskQuizForm.form.valid">
+    Calculate your risk
+  </button>
 </form>
 
-<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
@@ -82,6 +93,8 @@
         <h4 class="modal-title">Results</h4>
       </div>
       <div class="modal-body">
+        {{result}}
+        <!--
         Enter your details and we'll email you a computed risk score:
         <div class="form-group">
           <label for="email">Email</label>
@@ -89,6 +102,7 @@
                  id="email" [(ngModel)]="model.email" name="email" placeholder="Enter email">
         </div>
         <button (click)="email()" class="btn btn-lg btn-outline-primary">Email my result</button>
+        -->
 
         Information used to calculate:
         <pre>{{model|json}}</pre>
