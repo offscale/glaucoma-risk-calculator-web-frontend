@@ -19,7 +19,6 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    console.info('this.getAccessToken() =', this.accessToken);
     return !!this.accessToken;
   }
 

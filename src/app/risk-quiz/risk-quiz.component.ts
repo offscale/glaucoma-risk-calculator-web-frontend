@@ -1,10 +1,9 @@
 import 'rxjs/add/observable/of';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IRiskQuiz } from './risk-quiz.model';
 import { ModalDirective } from 'ng2-bootstrap';
 import { AlertsService } from '../alerts/alerts.service';
-import { IRiskJson, list_ethnicities, risk_from_study } from 'glaucoma-risk-quiz-engine';
 import * as math from 'mathjs';
+import { IRiskQuiz } from './risk-quiz.model';
 
 math.config({
   number: 'BigNumber',  // Default type of number:
@@ -16,8 +15,6 @@ math.config({
 // least susceptible / low risk
 // susceptible / medium risk
 // highly susceptible / high risk
-
-const risk_json: IRiskJson = require('./risk.json') as IRiskJson;
 
 @Component({
   selector: 'app-risk-quiz',
@@ -53,15 +50,16 @@ export class RiskQuizComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.info(list_ethnicities(risk_json));
+    //console.info(list_ethnicities(risk_json));
   }
 
   onSubmit() {
     this.submitted = true;
-    this.result = risk_from_study(risk_json, {
-      study: this.model.ethnicity,
-      age: this.model.age, gender: this.model.gender
-    });
+    this.result = 5;
+    /*risk_from_study(risk_json, {
+     study: this.model.ethnicity,
+     age: this.model.age, gender: this.model.gender
+     });*/
     this.childModal.show();
   }
 

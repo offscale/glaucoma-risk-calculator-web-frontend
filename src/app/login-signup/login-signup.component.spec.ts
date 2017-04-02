@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 
 describe('Component: LoginSignup', () => {
   it('should create an instance', () => {
-    let component = new LoginSignupComponent(null,null);
+    let component = new LoginSignupComponent(null,null,null);
     expect(component).toBeTruthy();
   });
 });

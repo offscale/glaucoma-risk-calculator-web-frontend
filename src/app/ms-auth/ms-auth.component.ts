@@ -37,6 +37,7 @@ export class MsAuthComponent implements OnInit {
   }
 
   sendTestEmail() {
+    console.info('MsAuthComponent::sendTestEmail');
     this.msAuthService.sendEmail({
       recipient: this.mail_base.recipient,
       subject: this.mail_base.subject,
@@ -68,7 +69,8 @@ export class MsAuthComponent implements OnInit {
 
   public updateAuth() {
     this.msAuthService.insertConf({
-      client_id: this._client_id, tenant_id: this._tenant_id,
+      client_id: this._client_id,
+      tenant_id: this._tenant_id,
       access_token: this.msAuthService.access_token
     }).subscribe(
       auth => console.info(auth) || this.alertsService.add({type: 'info', msg: 'Updated auth'}),

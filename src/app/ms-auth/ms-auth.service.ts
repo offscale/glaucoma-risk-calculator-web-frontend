@@ -96,16 +96,21 @@ export class MsAuthService {
 
   login() {
     //check for id_token or access_token in url
-    if (this.params["id_token"] != null)
+    console.info("this.params['id_token'] =", this.params['id_token']);
+    console.info("this.params['access_token'] =", this.params['access_token']);
+    if (this.params['id_token'] !== null)
       this.getAccessToken();
-    else if (this.params["access_token"] != null)
-      this.access_token = this.params["access_token"];
+    else if (this.params['access_token'] !== null)
+      this.access_token = this.params['access_token'];
 
     //redirect to get id_token
+    //console.info('this.genParams() =', this.genParams())
+    /*
     const params = new URLSearchParams();
     params.set('response_type', 'id_token');
     params.appendAll(this.genParams());
     window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
+    */
   }
 
   logout() {
@@ -139,6 +144,7 @@ export class MsAuthService {
   private genParams(state?: string): URLSearchParams {
     const params: URLSearchParams = new URLSearchParams();
     params.set('client_id', this.client_id);
+    console.info('genParams::client_id =', this.client_id);
     params.set('redirect_uri', this.getHostOrigin());
     params.set('state', state || window.location.pathname); // redirect_uri doesn't work with angular for some reason?
     params.set('nonce', MsAuthService.genNonce());
@@ -162,7 +168,7 @@ export class MsAuthService {
         }],
         body: {
           content: mail.content,
-          contentType: "html"
+          contentType: 'html'
         }
       }
     };

@@ -22,9 +22,9 @@ import { AppService } from './app.service';
   imports: [
     RouterModule, RouterModule.forRoot(rootRoutes),
     BrowserModule, HttpModule, FormsModule,
-    FooterModule, HomeModule, UsersModule,
+    NavbarModule, FooterModule, HomeModule, UsersModule,
     DashboardModule, EmailModule, AlertsModule,
-    RiskQuizModule, NavbarModule],
+    RiskQuizModule],
   declarations: [AppComponent],
   providers: [AuthService, AuthGuard, AlertsService, AppService],
   bootstrap: [AppComponent]

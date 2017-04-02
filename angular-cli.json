@@ -66,6 +66,7 @@
     }
   },
   "defaults": {
+    "host": "glaucoma-australia.complicated.io",
     "styleExt": "css",
     "prefixInterfaces": false,
     "inline": {

@@ -1,0 +1,44 @@
+<div *ngIf="submitted">
+  <h2>Risk calculation</h2>
+  <h3>Risk is {{riskQuiz.risk}}; meaning you're in the <strong>{{most_at_risk}}</strong> most at risk category</h3>
+
+  <ng2-kw-gauge
+    [bgRadius] = progressGraph.bgRadius
+    [bgColor] = progressGraph.bgColor
+    [rounded] = progressGraph.rounded
+    [reverse] = progressGraph.reverse
+    [animationSecs] = progressGraph.animationSecs
+    [labels] = progressGraph.labels
+    [segments] = progressGraph.segments>
+  </ng2-kw-gauge>
+
+
+
+  <br>
+  <button class="btn btn-default" (click)="onClick()">Redo</button>
+  <br>
+  <hr>
+  <h6>Your submission</h6>
+  <div class="row">
+    <div class="col-xs-3">Age</div>
+    <div class="col-xs-9  pull-left">&nbsp;{{ riskQuiz.age }}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">Gender</div>
+    <div class="col-xs-9 pull-left">&nbsp;{{ riskQuiz.gender }}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">Ethnicity</div>
+    <div class="col-xs-9 pull-left">&nbsp;{{ riskQuiz.ethnicity }}</div>
+  </div>
+  <h5>
+    <small>References</small>
+  </h5>
+  <ol>
+    <li *ngFor="let ref of riskQuiz.ref">{{parseRef(ref)}}</li>
+  </ol>
+  <h5>Get your friends screened</h5>
+  <button class="btn btn-lg btn-warning">Share as email</button>
+  <button class="btn btn-lg btn-primary">Share on facebook</button>
+  <button class="btn btn-lg btn-info">Share on Twitter</button>
+</div>

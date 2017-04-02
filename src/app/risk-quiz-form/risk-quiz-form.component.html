@@ -1,0 +1,55 @@
+<div class="container">
+  <div [hidden]="submitted">
+    <form [formGroup]="riskForm" *ngIf="active" (ngSubmit)="onSubmit()">
+      <fieldset class="form-group" id="gender" name="gender">
+        <h6>Gender</h6>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" name="gender" id="male" value="male" formControlName="gender">
+            Male
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" name="gender" id="female" value="female"
+                   formControlName="gender">
+            Female
+          </label>
+        </div>
+        <div *ngIf="formErrors.gender" class="alert alert-danger">
+          {{ formErrors.gender }}
+        </div>
+      </fieldset>
+
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" id="age" class="form-control"
+               formControlName="age">
+      </div>
+
+      <div class="form-group">
+        <label for="ethnicity">Ethnicity</label>
+        <select id="ethnicity" class="form-control"
+                formControlName="ethnicity" required>
+          <option *ngFor="let ethnicity of ethnicities" [value]="ethnicity">
+            {{ethnicity}}
+          </option>
+        </select>
+
+        <div *ngIf="formErrors.ethnicity" class="alert alert-danger">
+          {{ formErrors.ethnicity }}
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-default"
+              [disabled]="!riskForm.valid">Submit
+      </button>
+      <button type="button" class="btn btn-default" (click)="addRisk()">
+        Calculate risk
+      </button>
+    </form>
+  </div>
+
+  <app-risk-quiz-form-submitted [riskQuiz]="riskQuiz" [(submitted)]="submitted" *ngIf="submitted">
+  </app-risk-quiz-form-submitted>
+</div>
