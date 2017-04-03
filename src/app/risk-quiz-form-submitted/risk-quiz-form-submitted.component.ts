@@ -1,8 +1,33 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { s_col_to_s } from 'glaucoma-risk-quiz-engine';
-import { RiskStatsService } from 'app/api/risk_stats/risk_stats/risk-stats.service';
-import { RiskQuiz } from '../risk-quiz/risk-quiz.model';
 import { GaugeLabel, GaugeSegment } from 'ng2-kw-gauge';
+import { s_col_to_s } from 'glaucoma-risk-quiz-engine';
+import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
+import { RiskQuiz } from '../risk-quiz/risk-quiz.model';
+
+export interface IItem {
+  id?: string;
+  type?: string;
+  issued?: string;
+  DOI?: string;
+  URL?: string;
+  chapter?: string;
+  publisher?: string;
+  issn?: string;
+  isbn?: string;
+  author?: string;
+  series?: string;
+  booktitle?: string;
+  title?: string;
+  number?: string;
+  pages?: string;
+  note?: string;
+  edition?: string;
+  editor?: string;
+  address?: string;
+  annote?: string;
+  journal?: string;
+  volume?: string;
+}
 
 @Component({
   selector: 'app-risk-quiz-form-submitted',
@@ -11,8 +36,10 @@ import { GaugeLabel, GaugeSegment } from 'ng2-kw-gauge';
 })
 export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   @Input() riskQuiz: RiskQuiz;
-  most_at_risk: string = '';
   @Input() submitted: boolean = false;
+  most_at_risk: string = '';
+  isCollapsed: boolean = true;
+
   colors = {
     indigo: '#14143e',
     pink: '#fd1c49',
@@ -57,7 +84,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         this.riskQuiz.calcRisk(this.riskStatsService.risk_stats);
         this.riskStatsService.risk = this.riskQuiz.risk;
         this.riskQuiz.ref = this.riskStatsService.risk_stats.studies[s_col_to_s(this.riskQuiz.ethnicity)].ref;
-        this.riskQuiz.prepareRef();
+        //this.riskQuiz.prepareRef();
 
         const risk_pc = math.multiply(
           math.divide(this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1, this.riskQuiz.risks.length), 100
@@ -65,7 +92,15 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         this.most_at_risk =
           `${this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1} / ${this.riskQuiz.risks.length}`;
 
-        const color = math.compare(risk_pc, 50) > -1 ? this.colors.orange : this.colors.mint;
+        const color = (() => {
+          if (math.compare(risk_pc, 25) < 1)
+            return this.colors.cyan;
+          else if (math.compare(risk_pc, 50) < 1)
+            return this.colors.mint;
+          else if (math.compare(risk_pc, 75) < 1)
+            return this.colors.orange;
+          return this.colors.pink;
+        })();
         this.progressGraph.labels.push(
           new GaugeLabel({
             color: this.colors.white,
@@ -76,7 +111,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
           }),
           new GaugeLabel({
             color: color,
-            text: `${math.format(risk_pc, 4)}%`,
+            text: `${math.format(risk_pc, 6).slice(0, -1)}%`,
             x: 0,
             y: 0,
             fontSize: '2em'
@@ -92,7 +127,12 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
     );
   }
 
-  parseRef(ref: {}) {
+  public toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+  }
+
+  parseRef(ref: IItem) {
+    console.info('ref keys =', Object.keys(ref));
     return JSON.stringify(ref)
   }
 }

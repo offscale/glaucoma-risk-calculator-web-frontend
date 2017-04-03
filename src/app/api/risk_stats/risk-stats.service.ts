@@ -3,10 +3,10 @@ import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { AssertionError } from 'assert';
 import { IRiskJson } from 'glaucoma-risk-quiz-engine';
-
+import { handleError } from '../service-utils';
+import { AuthService } from '../auth/auth.service';
 import { IRiskStats, IRiskStatsBase } from './risk-stats';
-import { handleError } from '../../service-utils';
-import { AuthService } from '../../auth/auth.service';
+
 
 @Injectable()
 export class RiskStatsService {

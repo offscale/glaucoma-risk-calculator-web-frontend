@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as math from 'mathjs';
 import { ethnicities_pretty, list_ethnicities } from 'glaucoma-risk-quiz-engine';
 import { RiskQuiz } from '../risk-quiz/risk-quiz.model';
-import { RiskStatsService } from '../api/risk_stats/risk_stats/risk-stats.service';
+import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
 
 
 math.config({

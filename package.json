@@ -1,6 +1,6 @@
 {
   "name": "glaucoma-risk-calc-web-frontend",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "MIT",
   "author": "Samuel Marks <samuel@offscale.io>",
   "angular-cli": {},
