@@ -14,6 +14,7 @@ export interface IRiskQuiz {
 
 export class RiskQuiz implements IRiskQuiz {
   public risk: number;
+  public client_risk: number;
   public riskLength: number;
   public risks: number[];
   public ref: Array<IItem>;

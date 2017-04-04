@@ -2,8 +2,8 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as math from 'mathjs';
 import { ethnicities_pretty, list_ethnicities } from 'glaucoma-risk-quiz-engine';
-import { RiskQuiz } from '../risk-quiz/risk-quiz.model';
 import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
+import { RiskQuiz } from './risk-quiz.model';
 
 
 math.config({
@@ -17,10 +17,11 @@ math.config({
   templateUrl: './risk-quiz-form.component.html'
 })
 export class RiskQuizFormComponent implements OnInit, AfterViewInit {
-  riskQuiz = new RiskQuiz(null, null, null);
-  submitted = false;
+  riskQuiz: RiskQuiz = new RiskQuiz(null, null, null);
+  submitted: boolean = false;
+  isCopied: boolean = false;
   // TODO: Workaround until NgForm has a reset method (#6822)
-  active = true;
+  active: boolean = true;
   result: number;
 
   riskForm: FormGroup;

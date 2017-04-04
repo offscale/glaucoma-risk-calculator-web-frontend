@@ -1,8 +1,12 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GaugeLabel, GaugeSegment } from 'ng2-kw-gauge';
 import { s_col_to_s } from 'glaucoma-risk-quiz-engine';
 import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
-import { RiskQuiz } from '../risk-quiz/risk-quiz.model';
+import { RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
+import { RiskResService } from '../api/risk_res/risk_res.service';
+import { MsAuthService } from '../ms-auth/ms-auth.service';
+
 
 export interface IItem {
   id?: string;
@@ -39,6 +43,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   @Input() submitted: boolean = false;
   most_at_risk: string = '';
   isCollapsed: boolean = true;
+  id: number = undefined;
+  share_url: string;
 
   colors = {
     indigo: '#14143e',
@@ -63,19 +69,37 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
 
   @Output() submittedChange: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private riskStatsService: RiskStatsService) {
-    GaugeSegment
-    GaugeLabel
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private riskStatsService: RiskStatsService,
+              private riskResService: RiskResService) {
   }
 
-  onClick() {
+  redo() {
     this.submittedChange.emit(false);
+    this.router.navigate(['/']).catch(console.error);
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
+    if (this.submitted)
+      this.prepareView();
+    else
+      this.route.params
+        .switchMap((params: Params) => {
+          this.id = +params['id'];
+          return this.riskResService.read(this.id)
+        })
+        .subscribe((riskQuiz: any) => {
+          this.riskQuiz = riskQuiz;
+          this.submitted = true;
+          this.prepareView()
+        });
+  }
+
+  private prepareView() {
     if (!(this.riskQuiz instanceof RiskQuiz))
       this.riskQuiz = new RiskQuiz(this.riskQuiz['age'], this.riskQuiz['gender'], this.riskQuiz['ethnicity']);
     this.riskStatsService.read('latest').subscribe(
@@ -89,6 +113,10 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         const risk_pc = math.multiply(
           math.divide(this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1, this.riskQuiz.risks.length), 100
         );
+        const risk_pc_as_s: string =
+          (fmt_s => `${fmt_s.lastIndexOf('.') > -1 && fmt_s.length > 3 ? fmt_s.slice(0, -1) : risk_pc}%`)(
+            math.format(risk_pc, 6)
+          );
         this.most_at_risk =
           `${this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1} / ${this.riskQuiz.risks.length}`;
 
@@ -111,17 +139,25 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
           }),
           new GaugeLabel({
             color: color,
-            text: `${math.format(risk_pc, 6).slice(0, -1)}%`,
+            text: risk_pc_as_s,
             x: 0,
             y: 0,
             fontSize: '2em'
           })
         );
         this.progressGraph.segments.push(new GaugeSegment({
-          value: risk_pc,
+          value: risk_pc as number,
           color: color,
           borderWidth: 20
         }));
+
+        this.riskQuiz.client_risk = risk_pc;
+        if (this.id === undefined)
+          this.riskResService.create(this.riskQuiz).subscribe(r => {
+            this.id = r.id;
+            this.share_url = this.idWithUrl()
+          }, console.error);
+        else this.share_url = this.idWithUrl();
       },
       console.error
     );
@@ -134,5 +170,9 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   parseRef(ref: IItem) {
     console.info('ref keys =', Object.keys(ref));
     return JSON.stringify(ref)
+  }
+
+  idWithUrl(): string {
+    return `${MsAuthService.getHostOrigin()}/results/${this.id}`;
   }
 }

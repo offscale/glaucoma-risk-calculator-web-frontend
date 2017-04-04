@@ -136,7 +136,7 @@ export class MsAuthService {
     window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
   }
 
-  getHostOrigin(): string {
+  static getHostOrigin(): string {
     return `${window.location.protocol}//${window.location.hostname}${window.location.port ?
       ':' + window.location.port : ''}`;
   }
@@ -145,7 +145,7 @@ export class MsAuthService {
     const params: URLSearchParams = new URLSearchParams();
     params.set('client_id', this.client_id);
     console.info('genParams::client_id =', this.client_id);
-    params.set('redirect_uri', this.getHostOrigin());
+    params.set('redirect_uri', MsAuthService.getHostOrigin());
     params.set('state', state || window.location.pathname); // redirect_uri doesn't work with angular for some reason?
     params.set('nonce', MsAuthService.genNonce());
     return params;

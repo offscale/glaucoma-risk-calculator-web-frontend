@@ -4,7 +4,6 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AlertsModule } from './alerts/alerts.module';
-import { RiskQuizModule } from './risk-quiz/risk-quiz.module';
 import { AuthService } from './api/auth/auth.service';
 import { AuthGuard } from './api/auth/auth-guard.service';
 import { AlertsService } from './alerts/alerts.service';
@@ -23,8 +22,7 @@ import { AppService } from './app.service';
     RouterModule, RouterModule.forRoot(rootRoutes),
     BrowserModule, HttpModule, FormsModule,
     NavbarModule, FooterModule, HomeModule, UsersModule,
-    DashboardModule, EmailModule, AlertsModule,
-    RiskQuizModule],
+    DashboardModule, EmailModule, AlertsModule],
   declarations: [AppComponent],
   providers: [AuthService, AuthGuard, AlertsService, AppService],
   bootstrap: [AppComponent]
