@@ -45,6 +45,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   isCollapsed: boolean = true;
   id: number = undefined;
   share_url: string;
+  recommendation: string;
 
   colors = {
     indigo: '#14143e',
@@ -111,7 +112,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         //this.riskQuiz.prepareRef();
 
         const fam_risk = familial_risks_from_study(this.riskStatsService.risk_stats, this.riskQuiz.toJSON());
-        const risk_pc = (pc => ((r => r > 100 ? 100 : r)(fam_risk.reduce((a, b) => a + b) + pc)))(math.multiply(
+        const risk_pc = (pc => ((r => r > 100 ? 100 : r)(fam_risk.reduce((a, b) => a + b, 1) + pc)))(math.multiply(
           math.divide(this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1, this.riskQuiz.risks.length), 100
         ));
         const risk_pc_as_s: string =
@@ -153,6 +154,17 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         }));
 
         this.riskQuiz.client_risk = risk_pc.valueOf();
+
+        this.recommendation = 'See an eye-health professional ';
+        if (risk_pc <= 25)
+          this.recommendation += ' in the next two years.';
+        else if (risk_pc <= 50)
+          this.recommendation += ' in the next year.';
+        else if (risk_pc <= 75)
+          this.recommendation += ' in the next 6 months.';
+        else
+          this.recommendation += ' ASAP.';
+
         if (this.id === undefined)
           this.riskResService.create(this.riskQuiz).subscribe(r => {
             this.id = r.id;
