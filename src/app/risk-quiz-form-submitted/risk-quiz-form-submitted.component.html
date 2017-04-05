@@ -1,7 +1,8 @@
 <div class="container">
   <div *ngIf="submitted">
     <h2>Risk calculation</h2>
-    <h3>Risk is {{riskQuiz.risk}}; meaning you're in the <strong>{{most_at_risk}}</strong> most at risk category</h3>
+    <h3>Risk is {{riskQuiz.risk}}; meaning you're in the <strong>{{most_at_risk}}</strong> most at risk category <span
+      *ngIf="riskQuiz.sibling || riskQuiz.parent">. Adding in <strong>family risk</strong>, and you're:</span></h3>
 
     <ng2-kw-gauge
       [bgRadius]=progressGraph.bgRadius
@@ -23,7 +24,8 @@
         <button class="btn btn-lg btn-warning">Share as email</button>
       </div>
       <div class="btn-group mr-2" role="group" aria-label="facebook">
-        <a class="btn btn-lg btn-primary" [href]="'https://www.facebook.com/sharer/sharer.php?u='+share_url" target="_blank">
+        <a class="btn btn-lg btn-primary" [href]="'https://www.facebook.com/sharer/sharer.php?u='+share_url"
+           target="_blank">
           Share on facebook
         </a>
       </div>
@@ -31,7 +33,8 @@
         <a target="_blank" class="btn btn-lg btn-info"
            [href]="'https://twitter.com/intent/tweet?text='+'Be Glaucoma aware, take the quiz. Here\'s what I got: '+share_url"
            data-size="large">
-          Tweet</a>
+          Tweet
+        </a>
       </div>
       <div class="btn-group" role="group" aria-label="copy-link">
         <button class="btn btn-lg btn-outline" [class.btn-success]="isCopied" type="button" ngxClipboard
@@ -58,6 +61,14 @@
         <div class="row">
           <div class="col-xs-3">Ethnicity</div>
           <div class="col-xs-9 pull-left">&nbsp;{{ riskQuiz.ethnicity }}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-3">Sibling with glaucoma</div>
+          <div class="col-xs-9 pull-left">&nbsp;{{ riskQuiz.sibling }}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-3">Parent with glaucoma</div>
+          <div class="col-xs-9 pull-left">&nbsp;{{ riskQuiz.parent }}</div>
         </div>
         <h5>
           <small>References</small>

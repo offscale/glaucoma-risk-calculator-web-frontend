@@ -41,6 +41,20 @@
         </div>
       </div>
 
+      <div class="form-check">
+        <p class="form-text" style="margin-bottom: 2px">
+          Family history of glaucoma
+        </p>
+        <label class="form-check-label">
+          <input class="form-control form-check-input" type="checkbox" id="sibling" formControlName="sibling">
+          Sibling
+        </label>
+        <label class="form-check-label">
+          <input class="form-control form-check-input" type="checkbox" id="parent" formControlName="parent">
+          Parent
+        </label>
+      </div>
+
       <button type="submit" class="btn "
               [class.btn-primary]="riskForm.valid"
               [class.btn-outline-secondary]="!riskForm.valid"

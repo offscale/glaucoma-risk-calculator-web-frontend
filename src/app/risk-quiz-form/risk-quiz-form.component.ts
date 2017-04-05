@@ -87,7 +87,9 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
       'gender': [this.riskQuiz.gender, [
         Validators.required
       ]],
-      'ethnicity': [this.riskQuiz.ethnicity, Validators.required]
+      'ethnicity': [this.riskQuiz.ethnicity, Validators.required],
+      'sibling': [this.riskQuiz.sibling],
+      'parent': [this.riskQuiz.parent]
     });
 
     this.riskForm.valueChanges
@@ -97,9 +99,7 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
   }
 
   onValueChanged(data?: any) {
-    if (!this.riskForm) {
-      return;
-    }
+    if (!this.riskForm) return;
     const form = this.riskForm;
 
     let hasError: boolean = false;

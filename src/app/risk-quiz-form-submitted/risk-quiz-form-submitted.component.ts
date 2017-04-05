@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GaugeLabel, GaugeSegment } from 'ng2-kw-gauge';
-import { s_col_to_s } from 'glaucoma-risk-quiz-engine';
+import { familial_risks_from_study, s_col_to_s } from 'glaucoma-risk-quiz-engine';
 import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
 import { RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../api/risk_res/risk_res.service';
@@ -101,7 +101,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
 
   private prepareView() {
     if (!(this.riskQuiz instanceof RiskQuiz))
-      this.riskQuiz = new RiskQuiz(this.riskQuiz['age'], this.riskQuiz['gender'], this.riskQuiz['ethnicity']);
+      this.riskQuiz = new RiskQuiz(this.riskQuiz['age'], this.riskQuiz['gender'], this.riskQuiz['ethnicity'], this.riskQuiz['sibling'], this.riskQuiz['parent']);
     this.riskStatsService.read('latest').subscribe(
       content => {
         this.riskStatsService.risk_stats = content.risk_json;
@@ -110,9 +110,10 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         this.riskQuiz.ref = this.riskStatsService.risk_stats.studies[s_col_to_s(this.riskQuiz.ethnicity)].ref;
         //this.riskQuiz.prepareRef();
 
-        const risk_pc = math.multiply(
+        const fam_risk = familial_risks_from_study(this.riskStatsService.risk_stats, this.riskQuiz.toJSON());
+        const risk_pc = (pc => ((r => r > 100 ? 100 : r)(fam_risk.reduce((a, b) => a + b) + pc)))(math.multiply(
           math.divide(this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1, this.riskQuiz.risks.length), 100
-        );
+        ));
         const risk_pc_as_s: string =
           (fmt_s => `${fmt_s.lastIndexOf('.') > -1 && fmt_s.length > 3 ? fmt_s.slice(0, -1) : risk_pc}%`)(
             math.format(risk_pc, 6)
@@ -151,7 +152,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
           borderWidth: 20
         }));
 
-        this.riskQuiz.client_risk = risk_pc;
+        this.riskQuiz.client_risk = risk_pc.valueOf();
         if (this.id === undefined)
           this.riskResService.create(this.riskQuiz).subscribe(r => {
             this.id = r.id;

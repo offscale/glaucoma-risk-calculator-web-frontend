@@ -7,3 +7,11 @@
 a {
   outline: 0;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+p, div {
+  font-family: 'Helvetica Neue', sans-serif;
+}
