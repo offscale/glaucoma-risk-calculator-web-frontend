@@ -8,9 +8,9 @@ describe('RichtextComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RichTextComponent ]
+      declarations: [RichTextComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

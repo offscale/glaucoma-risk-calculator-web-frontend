@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GaugeLabel, GaugeSegment } from 'ng2-kw-gauge';
-import { familial_risks_from_study, s_col_to_s } from 'glaucoma-risk-quiz-engine';
+import { familial_risks_from_study, s_col_to_s } from 'glaucoma-risk-calculator-engine';
 import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
 import { RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../api/risk_res/risk_res.service';
@@ -112,13 +112,15 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         //this.riskQuiz.prepareRef();
 
         const fam_risk = familial_risks_from_study(this.riskStatsService.risk_stats, this.riskQuiz.toJSON());
-        const risk_pc = (pc => ((r => r > 100 ? 100 : r)(fam_risk.reduce((a, b) => a + b, 1) + pc)))(math.multiply(
-          math.divide(this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1, this.riskQuiz.risks.length), 100
-        ));
-        const risk_pc_as_s: string =
-          (fmt_s => `${fmt_s.lastIndexOf('.') > -1 && fmt_s.length > 3 ? fmt_s.slice(0, -1) : risk_pc}%`)(
-            math.format(risk_pc, 6)
-          );
+        const risk_pc =
+          (pc => ((r => r > 100 ? 100 : r)(fam_risk.reduce((a, b) => a + b, 1) + pc)))(math.multiply(
+            math.divide(this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1, this.riskQuiz.risks.length), 100
+          ));
+        //const risk_pc = get_risk_pc.call(this);
+        const risk_pc_as_s: string = math.format(risk_pc, 6)
+          /*(fmt_s => `${fmt_s.lastIndexOf('.') > -1 && fmt_s.length > 3 ? fmt_s.slice(0, -1) : risk_pc}%`)(
+           math.format(risk_pc, 6)
+           )*/;
         this.most_at_risk =
           `${this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1} / ${this.riskQuiz.risks.length}`;
 

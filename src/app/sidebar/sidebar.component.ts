@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { AppService } from '../app.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',

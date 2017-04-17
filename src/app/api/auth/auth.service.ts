@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/toPromise';
@@ -28,7 +28,7 @@ export class AuthService {
     this.redirect_uri = redirect_uri;
     this.router.navigate(['login-signup']).then(
       success => success ? console.info('state changed') : this.alertsService.alerts.push(
-          {msg: 'state didn\'t change', type: 'warning'}),
+        {msg: 'state didn\'t change', type: 'warning'}),
       err => this.alertsService.alerts.push({msg: err, type: 'danger'}));
   }
 
@@ -62,7 +62,7 @@ export class AuthService {
       .catch(handleError);
   }
 
-  getAll(): Observable<{users: User[]}> {
+  getAll(): Observable<{ users: User[] }> {
     const options = new RequestOptions({headers: new Headers({'X-Access-Token': this.accessToken})});
     return this.http.get('/api/users', options)
       .map(response => response.json())
@@ -100,7 +100,7 @@ export class AuthService {
   }
 
   redirOnResIfUnauth(error) {
-    return error.error_message && error.error_message === "Nothing associated with that access token" && this.del(window.location.hash).subscribe(
+    return error.error_message && error.error_message === 'Nothing associated with that access token' && this.del(window.location.hash).subscribe(
         _ => this.router.navigateByUrl('/login-signup'), console.error)
   }
 }

@@ -1,6 +1,6 @@
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/filter';
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../api/auth/auth.service';
 import { User } from '../api/auth/user';

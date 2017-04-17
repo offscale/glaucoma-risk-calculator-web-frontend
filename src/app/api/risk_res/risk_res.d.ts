@@ -13,5 +13,5 @@ export interface IRiskResBase {
   other_info?: string;
   family_history_of_glaucoma?: string[];
   email?: string;
-  createdAt?: string|Date;
+  createdAt?: string | Date;
 }

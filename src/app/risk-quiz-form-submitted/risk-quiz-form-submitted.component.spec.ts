@@ -8,9 +8,9 @@ describe('RiskQuizFormSubmittedComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RiskQuizFormSubmittedComponent ]
+      declarations: [RiskQuizFormSubmittedComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

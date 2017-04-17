@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, URLSearchParams, Headers, RequestOptions, Response } from '@angular/http';
+import { Headers, Http, RequestOptions, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../api/auth/auth.service';
 import { handleError } from '../api/service-utils';
@@ -38,7 +38,7 @@ export interface IMail {
   content: string;
 }
 
-export function parseQueryString(url: string): ResHash {
+export const parseQueryString = (url: string): ResHash => {
   let params: ResHash = {} as ResHash;
   const queryString = url.substring(1);
   const regex = /([^&=]+)=([^&]*)/g;
@@ -47,7 +47,7 @@ export function parseQueryString(url: string): ResHash {
     params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
   }
   return params;
-}
+};
 
 @Injectable()
 export class MsAuthService {
@@ -96,8 +96,8 @@ export class MsAuthService {
 
   login() {
     //check for id_token or access_token in url
-    console.info("this.params['id_token'] =", this.params['id_token']);
-    console.info("this.params['access_token'] =", this.params['access_token']);
+    console.info('this.params[\'id_token\'] =', this.params['id_token']);
+    console.info('this.params[\'access_token\'] =', this.params['access_token']);
     if (this.params['id_token'] !== null)
       this.getAccessToken();
     else if (this.params['access_token'] !== null)
@@ -106,11 +106,11 @@ export class MsAuthService {
     //redirect to get id_token
     //console.info('this.genParams() =', this.genParams())
     /*
-    const params = new URLSearchParams();
-    params.set('response_type', 'id_token');
-    params.appendAll(this.genParams());
-    window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
-    */
+     const params = new URLSearchParams();
+     params.set('response_type', 'id_token');
+     params.appendAll(this.genParams());
+     window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
+     */
   }
 
   logout() {

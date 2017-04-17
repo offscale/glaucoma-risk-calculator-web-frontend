@@ -1,4 +1,4 @@
-import { IInput, IRiskJson, risk_from_study, risks_from_study, s_col_to_s } from 'glaucoma-risk-quiz-engine';
+import { IInput, IRiskJson, risk_from_study, risks_from_study, s_col_to_s } from 'glaucoma-risk-calculator-engine';
 import { IItem } from '../risk-quiz-form-submitted/risk-quiz-form-submitted.component';
 
 export interface IRiskQuiz {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ServerStatusService } from '../api/server-status.service';
 import { ServerStatus } from '../api/ServerStatus';
 

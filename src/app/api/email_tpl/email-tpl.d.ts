@@ -5,5 +5,5 @@ export interface IEmailTpl extends IEmailTplBase {
 
 export interface IEmailTplBase {
   tpl: string;
-  createdAt: Date|string;
+  createdAt: Date | string;
 }

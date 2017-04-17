@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as math from 'mathjs';
-import { ethnicities_pretty, list_ethnicities } from 'glaucoma-risk-quiz-engine';
+import { ethnicities_pretty, list_ethnicities } from 'glaucoma-risk-calculator-engine';
 import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
 import { RiskQuiz } from './risk-quiz.model';
 

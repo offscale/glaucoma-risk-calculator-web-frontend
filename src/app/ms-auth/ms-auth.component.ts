@@ -18,7 +18,7 @@ export class MsAuthComponent implements OnInit {
               private emailTplService: EmailTplService) {
   }
 
-  mail_base: {recipient: string, subject: string} = {} as any;
+  mail_base: { recipient: string, subject: string } = {} as any;
 
   ngOnInit() {
     this.msAuthService.getConf().subscribe(console.info, console.error)

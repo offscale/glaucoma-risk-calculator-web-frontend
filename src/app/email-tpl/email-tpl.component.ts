@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IEmailTplBase, IEmailTpl } from '../api/email_tpl/email-tpl';
+import { IEmailTpl, IEmailTplBase } from '../api/email_tpl/email-tpl';
 import { EmailTplService } from '../api/email_tpl/email-tpl.service';
 import { AlertsService } from '../alerts/alerts.service';
 
@@ -25,7 +25,7 @@ export class EmailTplComponent implements OnInit {
     this.emailTplService.create(new_email_tpl).subscribe(this.handleEmailTpl, this.handleError)
   }
 
-  tplRead(createdAt: string|Date) {
+  tplRead(createdAt: string | Date) {
     this.emailTplService.read(createdAt).subscribe(
       (email_tpl: IEmailTpl) =>
         this.emailTplService.email_tpl = email_tpl,
@@ -43,7 +43,7 @@ export class EmailTplComponent implements OnInit {
     ).subscribe(this.handleEmailTpl, this.handleError)
   }
 
-  tplDestroy(createdAt: string|Date) {
+  tplDestroy(createdAt: string | Date) {
     this.emailTplService.destroy(createdAt).subscribe(
       _ => _,
       this.handleError

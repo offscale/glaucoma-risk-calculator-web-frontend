@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { IEmailTpl, IEmailTplBase } from './email-tpl.d';
 import { handleError } from '../service-utils';
@@ -40,7 +40,7 @@ export class EmailTplService {
       .catch(handleError)
   }
 
-  read(createdAt: string|'latest'|Date): Observable<IEmailTpl> {
+  read(createdAt: string | 'latest' | Date): Observable<IEmailTpl> {
     this.setReqOptions();
     return this.http.get(`/api/email_tpl/${createdAt}`, this.req_options)
       .map((r: Response) => r.json() as IEmailTpl)
@@ -54,11 +54,11 @@ export class EmailTplService {
       .catch(handleError)
   }
 
-  destroy(createdAt: string|Date): Observable<{}> {
+  destroy(createdAt: string | Date): Observable<{}> {
     this.setReqOptions();
     return this.http.delete(`/api/email_tpl/${createdAt}`, this.req_options)
       .map((r: Response) => r.status === 204 ? Object.freeze({}) : Observable.throw(
-          new AssertionError(`Expected status of 204, got ${r.status}`)))
+        new AssertionError(`Expected status of 204, got ${r.status}`)))
       .catch(handleError)
   }
 }

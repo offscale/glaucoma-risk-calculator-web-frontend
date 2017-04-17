@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { AssertionError } from 'assert';
-import { IRiskJson } from 'glaucoma-risk-quiz-engine';
+import { IRiskJson } from 'glaucoma-risk-calculator-engine';
 import { handleError } from '../service-utils';
 import { AuthService } from '../auth/auth.service';
 import { IRiskRes, IRiskResBase } from './risk_res';
