@@ -19,28 +19,32 @@ export class LoginSignupComponent implements OnInit {
   }
 
   ngOnInit() {
+    /* tslint:disable:no-unused-expression */
     this.authService.isLoggedIn() && this.gotoDash();
   }
 
   onSubmit(user: User): void {
-    const handleUser = user => {
+    const handleUser = _user => {
       if (!this.authService.isLoggedIn()) {
-        this.alertsService.alerts.push({msg: JSON.stringify(user), type: 'warning'});
+        this.alertsService.alerts.push({msg: JSON.stringify(_user), type: 'warning'});
         return;
       }
+      /* tslint:disable:no-console */
       console.info(`Logged in with ${this.authService.accessToken}`);
       this.gotoDash();
     };
 
     this.authService.post(user)
       .subscribe(handleUser,
-        (error: IStatusBody) => console.error('error =', error) || error.status === 404 && error._parsed.error_message === 'User not found' ?
-          this.authService.create_user(user).subscribe(handleUser, subHandleError.bind(this))
-          : subHandleError.bind(this)
+        (error: IStatusBody) =>
+          console.error('error =', error) || error.status === 404 && error._parsed.error_message === 'User not found' ?
+            this.authService.create_user(user).subscribe(handleUser, subHandleError.bind(this))
+            : subHandleError.bind(this)
       );
   }
 
   private gotoDash() {
+    /* tslint:disable:no-console */
     this.router.navigate(['/admin/dashboard']).then(success =>
         success ? console.info('state changed') : this.alertsService.alerts.push(
           {msg: 'state didn\'t change', type: 'warning'}),

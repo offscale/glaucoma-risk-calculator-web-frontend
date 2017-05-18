@@ -4,12 +4,11 @@ import { AppService } from '../app.service';
 
 @Injectable()
 export class AlertsService {
+  public alerts: Array<IAlert> = [];
   private readonly _padding = 4.5;
 
   constructor(public appService: AppService) {
   }
-
-  public alerts: Array<IAlert> = [];
 
   public add(alert: IAlert): void {
     this.alerts.push(alert);

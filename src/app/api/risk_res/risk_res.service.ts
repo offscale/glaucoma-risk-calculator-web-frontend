@@ -1,31 +1,23 @@
+import { AssertionError } from 'assert';
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs';
-import { AssertionError } from 'assert';
+import { Observable } from 'rxjs/Observable';
 import { IRiskJson } from 'glaucoma-risk-calculator-engine';
+
 import { handleError } from '../service-utils';
 import { AuthService } from '../auth/auth.service';
 import { IRiskRes, IRiskResBase } from './risk_res';
 import { IRiskQuiz } from '../../risk-quiz-form/risk-quiz.model';
 
 
+
 @Injectable()
 export class RiskResService {
-  private req_options: RequestOptions;
   public risk_res: IRiskJson;
   public risk;
+  private req_options: RequestOptions;
 
   constructor(private authService: AuthService, private http: Http) {
-  }
-
-  private setReqOptions() {
-    this.req_options = new RequestOptions({
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-Access-Token': this.authService.accessToken
-      })
-    });
   }
 
   create(risk_res: IRiskQuiz): Observable<IRiskRes> {
@@ -58,5 +50,15 @@ export class RiskResService {
       .map((r: Response) => r.status === 204 ? Object.freeze({}) : Observable.throw(
         new AssertionError(`Expected status of 204, got ${r.status}`)))
       .catch(handleError)
+  }
+
+  private setReqOptions() {
+    this.req_options = new RequestOptions({
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Access-Token': this.authService.accessToken
+      })
+    });
   }
 }

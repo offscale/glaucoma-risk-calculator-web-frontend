@@ -9,46 +9,14 @@ import { AlertsService } from '../alerts/alerts.service';
   styleUrls: ['./ms-auth.component.css']
 })
 export class MsAuthComponent implements OnInit {
-  public isCollapsed: boolean = true;
+  public isCollapsed = true;
+  mail_base: { recipient: string, subject: string } = {} as any;
   private _client_id: string;
   private _tenant_id: string;
 
   constructor(private alertsService: AlertsService,
               private msAuthService: MsAuthService,
               private emailTplService: EmailTplService) {
-  }
-
-  mail_base: { recipient: string, subject: string } = {} as any;
-
-  ngOnInit() {
-    this.msAuthService.getConf().subscribe(console.info, console.error)
-  }
-
-  login() {
-    this.msAuthService.login();
-  }
-
-  loggedIn(): boolean {
-    return !!this.msAuthService.access_token;
-  }
-
-  logout() {
-    this.msAuthService.logout();
-  }
-
-  sendTestEmail() {
-    console.info('MsAuthComponent::sendTestEmail');
-    this.msAuthService.sendEmail({
-      recipient: this.mail_base.recipient,
-      subject: this.mail_base.subject,
-      content: this.emailTplService.email_tpl.tpl
-    }).subscribe(email => console.info(email) || this.alertsService.add({
-      type: 'info', msg: 'Sent email'
-    }), console.error);
-  }
-
-  public toggleCollapse() {
-    this.isCollapsed = !this.isCollapsed;
   }
 
   public get client_id(): string {
@@ -67,6 +35,38 @@ export class MsAuthComponent implements OnInit {
     this._tenant_id = val;
   }
 
+  ngOnInit() {
+    this.msAuthService.getConf().subscribe(console.info, console.error)
+  }
+
+  login() {
+    this.msAuthService.login();
+  }
+
+  loggedIn(): boolean {
+    return !!this.msAuthService.access_token;
+  }
+
+  logout() {
+    this.msAuthService.logout();
+  }
+
+  sendTestEmail() {
+    /* tslint:disable:no-console */
+    console.info('MsAuthComponent::sendTestEmail');
+    this.msAuthService.sendEmail({
+      recipient: this.mail_base.recipient,
+      subject: this.mail_base.subject,
+      content: this.emailTplService.email_tpl.tpl
+    }).subscribe(email => console.info(email) || this.alertsService.add({
+      type: 'info', msg: 'Sent email'
+    }), console.error);
+  }
+
+  public toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+  }
+
   public updateAuth() {
     this.msAuthService.insertConf({
       client_id: this._client_id,
@@ -74,7 +74,7 @@ export class MsAuthComponent implements OnInit {
       access_token: this.msAuthService.access_token
     }).subscribe(
       auth => console.info(auth) || this.alertsService.add({type: 'info', msg: 'Updated auth'}),
-      error => console.error(error) //this.authService.redirOnResIfUnauth(error)
+      error => console.error(error) // this.authService.redirOnResIfUnauth(error)
     )
   }
 }

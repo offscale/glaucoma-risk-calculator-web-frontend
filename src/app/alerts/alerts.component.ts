@@ -10,7 +10,7 @@ import { AlertComponent } from 'ngx-bootstrap';
   styleUrls: ['./alerts.component.css']
 })
 export class AlertsComponent implements OnInit {
-  @Input() public type: string = 'warning';
+  @Input() public type = 'warning';
   @Input() public dismissible: boolean;
   @Input() public dismissOnTimeout: number;
 

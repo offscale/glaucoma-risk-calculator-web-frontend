@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { IEmailTpl, IEmailTplBase } from './email-tpl.d';
 import { handleError } from '../service-utils';
 import { AssertionError } from 'assert';
@@ -8,8 +8,11 @@ import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class EmailTplService {
-  private req_options: RequestOptions;
   public email_tpl: IEmailTplBase;
+  private req_options: RequestOptions;
+
+  constructor(private authService: AuthService, private http: Http) {
+  }
 
   public hasTpl(): boolean {
     return !!this.email_tpl && Object.keys(this.email_tpl).length > 0 && !!this.email_tpl.tpl;
@@ -18,19 +21,6 @@ export class EmailTplService {
   public setTpl(tpl: string) {
     this.hasTpl() ? this.email_tpl.tpl = tpl :
       this.email_tpl = <IEmailTplBase>{tpl: tpl, createdAt: new Date().toISOString()}
-  }
-
-  constructor(private authService: AuthService, private http: Http) {
-  }
-
-  private setReqOptions() {
-    this.req_options = new RequestOptions({
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-Access-Token': this.authService.accessToken
-      })
-    });
   }
 
   create(email_tpl: IEmailTplBase): Observable<IEmailTpl> {
@@ -60,5 +50,15 @@ export class EmailTplService {
       .map((r: Response) => r.status === 204 ? Object.freeze({}) : Observable.throw(
         new AssertionError(`Expected status of 204, got ${r.status}`)))
       .catch(handleError)
+  }
+
+  private setReqOptions() {
+    this.req_options = new RequestOptions({
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Access-Token': this.authService.accessToken
+      })
+    });
   }
 }

@@ -50,20 +50,21 @@ export class EmailTplComponent implements OnInit {
     )
   }
 
-  private handleEmailTpl(email_tpl: IEmailTpl) {
-    this.emailTplService.email_tpl = email_tpl;
-  }
-
-  private handleError(error: string) {
-    this.alertsService.add({type: 'warning', msg: error})
-  }
-
   save() {
+    /* tslint:disable:no-unused-expression */
     (this.emailTplService.hasTpl() ?
       this.tplUpdate(Object.assign({tpl: this.emailTplService.email_tpl.tpl}, this.emailTplService.email_tpl))
       : this.tplCreate({
         tpl: this.emailTplService.email_tpl.tpl,
         createdAt: new Date().toISOString()
       })) || this.alertsService.add({type: 'info', msg: 'Updated email template'})
+  }
+
+  private handleEmailTpl(email_tpl: IEmailTpl) {
+    this.emailTplService.email_tpl = email_tpl;
+  }
+
+  private handleError(error: string) {
+    this.alertsService.add({type: 'warning', msg: error})
   }
 }

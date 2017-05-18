@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 
 import { AlertsService } from '../../alerts/alerts.service';
@@ -12,25 +12,11 @@ import { User } from './user';
 @Injectable()
 export class AuthService {
   private headers = new Headers({'Content-Type': 'application/json'});
-  private _accessToken: AccessToken;
   private redirect_uri: string;
+  private _accessToken: AccessToken;
 
   constructor(private http: Http, private router: Router,
               private alertsService: AlertsService) {
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.accessToken;
-  }
-
-  redirUnauth(redirect_uri?: string) {
-    if (this.isLoggedIn()) return;
-
-    this.redirect_uri = redirect_uri;
-    this.router.navigate(['login-signup']).then(
-      success => success ? console.info('state changed') : this.alertsService.alerts.push(
-        {msg: 'state didn\'t change', type: 'warning'}),
-      err => this.alertsService.alerts.push({msg: err, type: 'danger'}));
   }
 
   get accessToken(): AccessToken {
@@ -41,6 +27,21 @@ export class AuthService {
   set accessToken(val: AccessToken) {
     this._accessToken = !!val ? val : this._accessToken;
     localStorage.setItem('access-token', this.accessToken);
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.accessToken;
+  }
+
+  redirUnauth(redirect_uri?: string) {
+    if (this.isLoggedIn()) return;
+
+    this.redirect_uri = redirect_uri;
+    /* tslint:disable:no-console */
+    this.router.navigate(['login-signup']).then(
+      success => success ? console.info('state changed') : this.alertsService.alerts.push(
+        {msg: 'state didn\'t change', type: 'warning'}),
+      err => this.alertsService.alerts.push({msg: err, type: 'danger'}));
   }
 
   create_user(user: User): Observable<User> {
@@ -101,7 +102,8 @@ export class AuthService {
   }
 
   redirOnResIfUnauth(error) {
-    return error.error_message && error.error_message === 'Nothing associated with that access token' && this.del(window.location.hash).subscribe(
-        _ => this.router.navigateByUrl('/login-signup'), console.error)
+    return error.error_message && error.error_message === 'Nothing associated with that access token' && this.del(
+        window.location.hash
+      ).subscribe(_ => this.router.navigateByUrl('/login-signup'), console.error)
   }
 }

@@ -12,13 +12,12 @@ import { EmailTplService } from '../api/email_tpl/email-tpl.service';
   styleUrls: ['./richtext.component.css']
 })
 export class RichTextComponent implements AfterViewInit, OnInit, OnDestroy {
-  constructor(private zone: NgZone, private emailTplService: EmailTplService) {
-  }
-
   @Input() elementId: String;
   @Output() onEditorKeyup: EventEmitter<any> = new EventEmitter();
-
   editor;
+
+  constructor(private zone: NgZone, private emailTplService: EmailTplService) {
+  }
 
   ngOnInit() {
   }
@@ -31,6 +30,10 @@ export class RichTextComponent implements AfterViewInit, OnInit, OnDestroy {
       },
       error => console.error(error) || this.init()
     )
+  }
+
+  ngOnDestroy() {
+    tinymce.remove(this.editor);
   }
 
   private init() {
@@ -54,9 +57,5 @@ export class RichTextComponent implements AfterViewInit, OnInit, OnDestroy {
         });
       },
     });
-  }
-
-  ngOnDestroy() {
-    tinymce.remove(this.editor);
   }
 }

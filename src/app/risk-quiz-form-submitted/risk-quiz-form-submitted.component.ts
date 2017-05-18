@@ -40,9 +40,9 @@ export interface IItem {
 })
 export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   @Input() riskQuiz: RiskQuiz;
-  @Input() submitted: boolean = false;
-  most_at_risk: string = '';
-  isCollapsed: boolean = true;
+  @Input() submitted = false;
+  most_at_risk = '';
+  isCollapsed = true;
   id: number = undefined;
   share_url: string;
   recommendation: string;
@@ -100,23 +100,39 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         });
   }
 
+  public toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+  }
+
+  parseRef(ref: IItem) {
+    /* tslint:disable:no-console */
+    console.info('ref keys =', Object.keys(ref));
+    return JSON.stringify(ref)
+  }
+
+  idWithUrl(): string {
+    return `${MsAuthService.getHostOrigin()}/results/${this.id}`;
+  }
+
   private prepareView() {
     if (!(this.riskQuiz instanceof RiskQuiz))
-      this.riskQuiz = new RiskQuiz(this.riskQuiz['age'], this.riskQuiz['gender'], this.riskQuiz['ethnicity'], this.riskQuiz['sibling'], this.riskQuiz['parent']);
+      this.riskQuiz = new RiskQuiz(this.riskQuiz['age'],
+        this.riskQuiz['gender'], this.riskQuiz['ethnicity'],
+        this.riskQuiz['sibling'], this.riskQuiz['parent']);
     this.riskStatsService.read('latest').subscribe(
       content => {
         this.riskStatsService.risk_stats = content.risk_json as IRiskJson;
         this.riskQuiz.calcRisk(this.riskStatsService.risk_stats);
         this.riskStatsService.risk = this.riskQuiz.risk;
         this.riskQuiz.ref = this.riskStatsService.risk_stats.studies[s_col_to_s(this.riskQuiz.ethnicity)].ref;
-        //this.riskQuiz.prepareRef();
+        // this.riskQuiz.prepareRef();
 
         const fam_risk = familial_risks_from_study(this.riskStatsService.risk_stats, this.riskQuiz.toJSON());
         const risk_pc =
           (pc => ((r => r > 100 ? 100 : r)(fam_risk.reduce((a, b) => a + b, 1) + pc)))(math.multiply(
             math.divide(this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1, this.riskQuiz.risks.length), 100
           ));
-        //const risk_pc = get_risk_pc.call(this);
+        // const risk_pc = get_risk_pc.call(this);
         const risk_pc_as_s: string = math.format(risk_pc, 6)
           /*(fmt_s => `${fmt_s.lastIndexOf('.') > -1 && fmt_s.length > 3 ? fmt_s.slice(0, -1) : risk_pc}%`)(
            math.format(risk_pc, 6)
@@ -176,18 +192,5 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
       },
       console.error
     );
-  }
-
-  public toggleCollapse() {
-    this.isCollapsed = !this.isCollapsed;
-  }
-
-  parseRef(ref: IItem) {
-    console.info('ref keys =', Object.keys(ref));
-    return JSON.stringify(ref)
-  }
-
-  idWithUrl(): string {
-    return `${MsAuthService.getHostOrigin()}/results/${this.id}`;
   }
 }

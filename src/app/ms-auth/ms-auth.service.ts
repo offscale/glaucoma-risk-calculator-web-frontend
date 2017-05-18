@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response, URLSearchParams } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../api/auth/auth.service';
 import { handleError } from '../api/service-utils';
 
@@ -39,7 +39,7 @@ export interface IMail {
 }
 
 export const parseQueryString = (url: string): ResHash => {
-  let params: ResHash = {} as ResHash;
+  const params: ResHash = {} as ResHash;
   const queryString = url.substring(1);
   const regex = /([^&=]+)=([^&]*)/g;
   let m: RegExpExecArray;
@@ -51,23 +51,27 @@ export const parseQueryString = (url: string): ResHash => {
 
 @Injectable()
 export class MsAuthService {
+  public email_conf: IEmailConf = {} as IEmailConf;
+  private params: ResHash;
   private _tenant_id: string;
   private _client_id: string;
-  private params: ResHash;
   private _access_token: string;
-  public email_conf: IEmailConf = {} as IEmailConf;
+
+  static genNonce() {
+    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz'; // '-._~';
+    const result = [];
+    const g: ArrayBufferViewForEach = window.crypto.getRandomValues(new Uint8Array(32)) as ArrayBufferViewForEach;
+    g.forEach(c => result.push(charset[c % charset.length]));
+    return result.join('');
+  }
+
+  static getHostOrigin(): string {
+    return `${window.location.protocol}//${window.location.hostname}${window.location.port ?
+      ':' + window.location.port : ''}`;
+  }
 
   constructor(private http: Http, private authService: AuthService) {
     this.params = parseQueryString(location.hash);
-  }
-
-  get client_id(): string {
-    if (!this._client_id) throw TypeError('client_id must be defined. Did you run MsAuthService.setup?');
-    return this._client_id;
-  }
-
-  set client_id(val: string) {
-    this._client_id = val;
   }
 
   get tenant_id(): string {
@@ -78,6 +82,17 @@ export class MsAuthService {
   set tenant_id(val: string) {
     this._tenant_id = val;
   }
+
+
+  get client_id(): string {
+    if (!this._client_id) throw TypeError('client_id must be defined. Did you run MsAuthService.setup?');
+    return this._client_id;
+  }
+
+  set client_id(val: string) {
+    this._client_id = val;
+  }
+
 
   get access_token(): string {
     if (!this._access_token) this._access_token = localStorage.getItem('ms-access-token');
@@ -95,7 +110,8 @@ export class MsAuthService {
   }
 
   login() {
-    //check for id_token or access_token in url
+    // check for id_token or access_token in url
+    /* tslint:disable:no-console */
     console.info('this.params[\'id_token\'] =', this.params['id_token']);
     console.info('this.params[\'access_token\'] =', this.params['access_token']);
     if (this.params['id_token'] !== null)
@@ -103,8 +119,8 @@ export class MsAuthService {
     else if (this.params['access_token'] !== null)
       this.access_token = this.params['access_token'];
 
-    //redirect to get id_token
-    //console.info('this.genParams() =', this.genParams())
+    // redirect to get id_token
+    // console.info('this.genParams() =', this.genParams())
     /*
      const params = new URLSearchParams();
      params.set('response_type', 'id_token');
@@ -118,37 +134,14 @@ export class MsAuthService {
     this._access_token = null;
   }
 
-  static genNonce() {
-    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz';//'-._~';
-    const result = [];
-    const g: ArrayBufferViewForEach = window.crypto.getRandomValues(new Uint8Array(32)) as ArrayBufferViewForEach;
-    g.forEach(c => result.push(charset[c % charset.length]));
-    return result.join('');
-  }
-
   public getAccessToken(state?: string) {
-    //redirect to get access_token
+    // redirect to get access_token
     const params = new URLSearchParams();
     params.set('response_type', 'token');
     params.appendAll(this.genParams(state));
     params.set('resource', 'https://graph.microsoft.com');
     params.set('prompt', 'none');
     window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
-  }
-
-  static getHostOrigin(): string {
-    return `${window.location.protocol}//${window.location.hostname}${window.location.port ?
-      ':' + window.location.port : ''}`;
-  }
-
-  private genParams(state?: string): URLSearchParams {
-    const params: URLSearchParams = new URLSearchParams();
-    params.set('client_id', this.client_id);
-    console.info('genParams::client_id =', this.client_id);
-    params.set('redirect_uri', MsAuthService.getHostOrigin());
-    params.set('state', state || window.location.pathname); // redirect_uri doesn't work with angular for some reason?
-    params.set('nonce', MsAuthService.genNonce());
-    return params;
   }
 
   public sendEmail(mail: IMail): Observable<IMail> {
@@ -228,5 +221,16 @@ export class MsAuthService {
           this.authService.redirOnResIfUnauth(error);
         return Observable.throw(error);
       });
+  }
+
+  private genParams(state?: string): URLSearchParams {
+    const params: URLSearchParams = new URLSearchParams();
+    params.set('client_id', this.client_id);
+    /* tslint:disable:no-console */
+    console.info('genParams::client_id =', this.client_id);
+    params.set('redirect_uri', MsAuthService.getHostOrigin());
+    params.set('state', state || window.location.pathname); // redirect_uri doesn't work with angular for some reason?
+    params.set('nonce', MsAuthService.genNonce());
+    return params;
   }
 }

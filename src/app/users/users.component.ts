@@ -14,11 +14,17 @@ export class UsersComponent implements OnInit {
     {title: 'updatedAt', className: ['office-header', 'text-success'], name: 'updatedAt', sort: 'asc'},
     {title: 'createdAt.', name: 'createdAt'}
   ];
-  public page: number = 1;
-  public itemsPerPage: number = 10;
-  public maxSize: number = 5;
-  public numPages: number = 1;
-  public length: number = 0;
+  public config: any = {
+    paging: true,
+    sorting: {columns: this.columns},
+    filtering: {filterString: ''},
+    className: ['table-striped', 'table-bordered']
+  };
+  public page = 1;
+  public itemsPerPage = 10;
+  public maxSize = 5;
+  public numPages = 1;
+  public length = 0;
 
   constructor(private authService: AuthService) {
   }
@@ -31,16 +37,9 @@ export class UsersComponent implements OnInit {
     this.onChangeTable(this.config);
   }
 
-  public config: any = {
-    paging: true,
-    sorting: {columns: this.columns},
-    filtering: {filterString: ''},
-    className: ['table-striped', 'table-bordered']
-  };
-
   public changePage(page: any, data: Array<any> = this.users): Array<any> {
-    let start = (page.page - 1) * page.itemsPerPage;
-    let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
+    const start = (page.page - 1) * page.itemsPerPage;
+    const end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
     return data.slice(start, end);
   }
 
@@ -49,7 +48,7 @@ export class UsersComponent implements OnInit {
       return data;
     }
 
-    let columns = this.config.sorting.columns || [];
+    const columns = this.config.sorting.columns || [];
     let columnName: string = void 0;
     let sort: string = void 0;
 
@@ -94,7 +93,7 @@ export class UsersComponent implements OnInit {
         item[config.filtering.columnName].match(this.config.filtering.filterString));
     }
 
-    let tempArray: Array<any> = [];
+    const tempArray: Array<any> = [];
     filteredData.forEach((item: any) => {
       let flag = false;
       this.columns.forEach((column: any) => {
@@ -120,8 +119,8 @@ export class UsersComponent implements OnInit {
       Object.assign(this.config.sorting, config.sorting);
     }
 
-    let filteredData = this.changeFilter(this.users, this.config);
-    let sortedData = this.changeSort(filteredData, this.config);
+    const filteredData = this.changeFilter(this.users, this.config);
+    const sortedData = this.changeSort(filteredData, this.config);
     this.users = page && config.paging ? this.changePage(page, sortedData) : sortedData;
     this.length = sortedData.length;
   }
