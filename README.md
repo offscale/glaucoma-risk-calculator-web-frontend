@@ -13,6 +13,10 @@ Requires a server with HTTPS—for Office 365 / Microsoft Graph auth—and the A
 
     d=users; for f in "$d"/*; do mv "$f" "$d/$d.${f#*.}"; done
 
+## Update version in app with
+
+    sed -i "/this.serverStatus =/c\    this.serverStatus = {version: 'App $(jq -r .version package.json); '};" src/app/server-status/server-status.component.ts
+
 ## Development setup
 
 Install latest:
