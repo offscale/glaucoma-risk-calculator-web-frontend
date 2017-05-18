@@ -6,6 +6,7 @@ import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
 import { RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../api/risk_res/risk_res.service';
 import { MsAuthService } from '../ms-auth/ms-auth.service';
+import 'rxjs/add/operator/switchMap';
 
 
 export interface IItem {
@@ -115,6 +116,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   }
 
   private prepareView() {
+    console.info('this.riskQuiz[\'ethnicity\'] =', this.riskQuiz['ethnicity']);
     if (!(this.riskQuiz instanceof RiskQuiz))
       this.riskQuiz = new RiskQuiz(this.riskQuiz['age'],
         this.riskQuiz['gender'], this.riskQuiz['ethnicity'],
@@ -124,7 +126,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         this.riskStatsService.risk_stats = content.risk_json as IRiskJson;
         this.riskQuiz.calcRisk(this.riskStatsService.risk_stats);
         this.riskStatsService.risk = this.riskQuiz.risk;
-        this.riskQuiz.ref = this.riskStatsService.risk_stats.studies[s_col_to_s(this.riskQuiz.ethnicity)].ref;
+        this.riskQuiz.ref = this.riskStatsService.risk_stats.studies[this.riskQuiz.study].ref;
         // this.riskQuiz.prepareRef();
 
         const fam_risk = familial_risks_from_study(this.riskStatsService.risk_stats, this.riskQuiz.toJSON());

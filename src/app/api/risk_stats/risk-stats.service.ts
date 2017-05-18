@@ -6,6 +6,7 @@ import { IRiskJson } from 'glaucoma-risk-calculator-engine';
 import { handleError } from '../service-utils';
 import { AuthService } from '../auth/auth.service';
 import { IRiskStats, IRiskStatsBase } from './risk-stats';
+import 'rxjs/add/operator/catch';
 
 
 @Injectable()

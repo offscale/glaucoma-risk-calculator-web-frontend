@@ -5,6 +5,7 @@ import { IEmailTpl, IEmailTplBase } from './email-tpl.d';
 import { handleError } from '../service-utils';
 import { AssertionError } from 'assert';
 import { AuthService } from '../auth/auth.service';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class EmailTplService {

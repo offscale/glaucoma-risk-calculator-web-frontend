@@ -1,4 +1,4 @@
-import { IInput, IRiskJson, risk_from_study, risks_from_study, s_col_to_s } from 'glaucoma-risk-calculator-engine';
+import { ethnicity2study, IInput, IRiskJson, risk_from_study, risks_from_study } from 'glaucoma-risk-calculator-engine';
 import { IItem } from '../risk-quiz-form-submitted/risk-quiz-form-submitted.component';
 
 export interface IRiskQuiz {
@@ -20,6 +20,7 @@ export class RiskQuiz implements IRiskQuiz {
   public riskLength: number;
   public risks: number[];
   public ref: Array<IItem>;
+  public study: string;
 
   constructor(public age: number,
               public gender: string,
@@ -33,9 +34,9 @@ export class RiskQuiz implements IRiskQuiz {
   }
 
   calcRisk(risk_json: IRiskJson) {
-    const ethnicity = s_col_to_s(this.ethnicity);
+    this.study = ethnicity2study(risk_json)[this.ethnicity];
     const input: IInput = {
-      study: ethnicity,
+      study: this.study,
       age: this.age,
       gender: this.gender
     } as IInput;
@@ -48,7 +49,7 @@ export class RiskQuiz implements IRiskQuiz {
       age: this.age,
       gender: this.gender,
       ethnicity: this.ethnicity,
-      study: s_col_to_s(this.ethnicity),
+      study: this.study,
       parent: this.parent,
       sibling: this.sibling,
       client_risk: this.client_risk

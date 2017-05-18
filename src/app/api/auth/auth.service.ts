@@ -3,11 +3,13 @@ import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/catch';
 
 import { AlertsService } from '../../alerts/alerts.service';
 import { handleError } from '../service-utils';
 import { AccessToken } from './access-token';
 import { User } from './user';
+
 
 @Injectable()
 export class AuthService {

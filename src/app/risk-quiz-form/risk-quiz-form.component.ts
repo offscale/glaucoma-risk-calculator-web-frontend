@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as math from 'mathjs';
-import { ethnicities_pretty, IRiskJson, list_ethnicities } from 'glaucoma-risk-calculator-engine';
+import { ethnicity2study, IRiskJson } from 'glaucoma-risk-calculator-engine';
 import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
 import { RiskQuiz } from './risk-quiz.model';
 
@@ -18,11 +18,12 @@ math.config({
 })
 export class RiskQuizFormComponent implements OnInit, AfterViewInit {
   riskQuiz: RiskQuiz = new RiskQuiz(null, null, null);
-  submitted: boolean = false;
-  isCopied: boolean = false;
+  submitted = false;
+  isCopied = false;
   // TODO: Workaround until NgForm has a reset method (#6822)
-  active: boolean = true;
+  active = true;
   result: number;
+  ethnicity2study: {};
 
   riskForm: FormGroup;
 
@@ -54,8 +55,15 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
     this.riskStatsService.read('latest').subscribe(
       content => {
         this.riskStatsService.risk_stats = content.risk_json as IRiskJson;
+        this.ethnicity2study = ethnicity2study(this.riskStatsService.risk_stats);
+        this.all_ethnicities = this.ethnicities = Object.keys(this.ethnicity2study).sort();
+        /*
         this.all_ethnicities = list_ethnicities(this.riskStatsService.risk_stats);
-        this.ethnicities = ethnicities_pretty(this.all_ethnicities)
+        console.info('[list_ethnicities] this.all_ethnicities =', this.all_ethnicities);
+        console.info(`[list_ethnicities] this.all_ethnicities = ${this.all_ethnicities}`);
+        this.ethnicities = ethnicities_pretty(this.all_ethnicities) as any;
+        console.info('[ethnicities_pretty] this.all_ethnicities =', this.all_ethnicities);
+        */
       },
       console.error
     );
@@ -102,20 +110,22 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
     if (!this.riskForm) return;
     const form = this.riskForm;
 
-    let hasError: boolean = false;
-    for (const field in this.formErrors) {
-      // clear previous error message (if any)
-      this.formErrors[field] = '';
-      const control = form.get(field);
+    let hasError = false;
+    for (const field in this.formErrors)
+      if (this.formErrors.hasOwnProperty(field)) {
+        // clear previous error message (if any)
+        this.formErrors[field] = '';
+        const control = form.get(field);
 
-      if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
-        for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
+        if (control && control.dirty && !control.valid) {
+          const messages = this.validationMessages[field];
+          for (const key in control.errors) {
+            if (control.errors.hasOwnProperty(key))
+              this.formErrors[field] += messages[key] + ' ';
+          }
+          hasError = true;
         }
-        hasError = true;
       }
-    }
-    //if (!hasError) this.riskQuiz.calcRisk(risk_json)
+    // if (!hasError) this.riskQuiz.calcRisk(risk_json)
   }
 }

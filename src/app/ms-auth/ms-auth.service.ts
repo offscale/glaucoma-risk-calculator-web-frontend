@@ -3,6 +3,7 @@ import { Headers, Http, RequestOptions, Response, URLSearchParams } from '@angul
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../api/auth/auth.service';
 import { handleError } from '../api/service-utils';
+import 'rxjs/add/operator/catch';
 
 
 interface ArrayBufferViewForEach extends ArrayBufferView {

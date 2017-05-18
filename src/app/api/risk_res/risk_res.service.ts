@@ -2,18 +2,16 @@ import { AssertionError } from 'assert';
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { IRiskJson } from 'glaucoma-risk-calculator-engine';
+import 'rxjs/add/operator/catch';
 
 import { handleError } from '../service-utils';
 import { AuthService } from '../auth/auth.service';
-import { IRiskRes, IRiskResBase } from './risk_res';
 import { IRiskQuiz } from '../../risk-quiz-form/risk-quiz.model';
-
+import { IRiskRes, IRiskResBase } from './risk_res';
 
 
 @Injectable()
 export class RiskResService {
-  public risk_res: IRiskJson;
   public risk;
   private req_options: RequestOptions;
 
@@ -22,7 +20,7 @@ export class RiskResService {
 
   create(risk_res: IRiskQuiz): Observable<IRiskRes> {
     this.setReqOptions();
-    return this.http.post('/api/risk_res', JSON.stringify(risk_res), this.req_options)
+    return this.http.post('/api/risk_res', risk_res, this.req_options)
       .map((r: Response) => r.json() as IRiskRes)
       .catch(handleError)
   }
