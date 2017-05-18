@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import { AlertsService } from '../../alerts/alerts.service';
 import { handleError } from '../service-utils';

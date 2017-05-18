@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import { handleError } from '../service-utils';
 import { AuthService } from '../auth/auth.service';

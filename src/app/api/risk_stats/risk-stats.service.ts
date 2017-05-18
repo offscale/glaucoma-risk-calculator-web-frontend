@@ -7,6 +7,7 @@ import { handleError } from '../service-utils';
 import { AuthService } from '../auth/auth.service';
 import { IRiskStats, IRiskStatsBase } from './risk-stats';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 
 @Injectable()

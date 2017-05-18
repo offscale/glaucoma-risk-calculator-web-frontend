@@ -6,6 +6,7 @@ import { handleError } from '../service-utils';
 import { AssertionError } from 'assert';
 import { AuthService } from '../auth/auth.service';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class EmailTplService {
