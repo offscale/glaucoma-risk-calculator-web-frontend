@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IAlert } from './alert';
 import { AlertsService } from './alerts.service';
-import { AlertComponent } from 'ng2-bootstrap';
+import { AlertComponent } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-alerts',

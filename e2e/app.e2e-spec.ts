@@ -1,6 +1,6 @@
 import { GlaucomaRiskCalcWebFrontendPage } from './app.po';
 
-describe('glaucoma-risk-calc-web-frontend App', function() {
+describe('glaucoma-risk-calculator-web-frontend App', () => {
   let page: GlaucomaRiskCalcWebFrontendPage;
 
   beforeEach(() => {
@@ -9,6 +9,6 @@ describe('glaucoma-risk-calc-web-frontend App', function() {
 
   it('should display message saying app works', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    page.getParagraphText().then(res => expect(res).toEqual('app works!'));
   });
 });

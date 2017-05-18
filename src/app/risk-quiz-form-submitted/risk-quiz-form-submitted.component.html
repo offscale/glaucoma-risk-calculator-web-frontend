@@ -4,7 +4,7 @@
     <h3>Risk is {{riskQuiz.risk}}; meaning you're in the <strong>{{most_at_risk}}</strong> most at risk category <span
       *ngIf="riskQuiz.sibling || riskQuiz.parent">. Adding in <strong>family risk</strong>, and you're:</span></h3>
 
-    <ng2-kw-gauge
+    <ng-gauge
       [bgRadius]=progressGraph.bgRadius
       [bgColor]=progressGraph.bgColor
       [rounded]=progressGraph.rounded
@@ -12,7 +12,7 @@
       [animationSecs]=progressGraph.animationSecs
       [labels]=progressGraph.labels
       [segments]=progressGraph.segments>
-    </ng2-kw-gauge>
+    </ng-gauge>
 
     <h3>{{recommendation}}</h3>
 
@@ -39,7 +39,7 @@
         </a>
       </div>
       <div class="btn-group" role="group" aria-label="copy-link">
-        <button class="btn btn-lg btn-outline" [class.btn-success]="isCopied" type="button" ngxClipboard
+        <button class="btn btn-lg btn-outline" [class.btn-success]="isCopied" ngxClipboard
                 [cbContent]="share_url" (cbOnSuccess)="isCopied = true">
           Copy link
         </button>

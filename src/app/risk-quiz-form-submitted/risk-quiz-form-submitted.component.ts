@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { GaugeLabel, GaugeSegment } from 'ng2-kw-gauge';
-import { familial_risks_from_study, s_col_to_s } from 'glaucoma-risk-calculator-engine';
+import { GaugeLabel, GaugeSegment } from 'ng-gauge';
+import { familial_risks_from_study, IRiskJson, s_col_to_s } from 'glaucoma-risk-calculator-engine';
 import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
 import { RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../api/risk_res/risk_res.service';
@@ -105,7 +105,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
       this.riskQuiz = new RiskQuiz(this.riskQuiz['age'], this.riskQuiz['gender'], this.riskQuiz['ethnicity'], this.riskQuiz['sibling'], this.riskQuiz['parent']);
     this.riskStatsService.read('latest').subscribe(
       content => {
-        this.riskStatsService.risk_stats = content.risk_json;
+        this.riskStatsService.risk_stats = content.risk_json as IRiskJson;
         this.riskQuiz.calcRisk(this.riskStatsService.risk_stats);
         this.riskStatsService.risk = this.riskQuiz.risk;
         this.riskQuiz.ref = this.riskStatsService.risk_stats.studies[s_col_to_s(this.riskQuiz.ethnicity)].ref;

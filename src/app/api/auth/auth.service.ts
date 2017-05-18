@@ -3,6 +3,7 @@ import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/toPromise';
+
 import { AlertsService } from '../../alerts/alerts.service';
 import { handleError } from '../service-utils';
 import { AccessToken } from './access-token';

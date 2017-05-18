@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ButtonsModule } from 'ng2-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap';
 import { LoginSignupComponent } from './login-signup.component';
 import { AuthService } from '../api/auth/auth.service';
 import { loginSignupRoutes } from './login-signup.routes';

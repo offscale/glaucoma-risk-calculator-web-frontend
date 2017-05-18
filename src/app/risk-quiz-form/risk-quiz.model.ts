@@ -38,7 +38,7 @@ export class RiskQuiz implements IRiskQuiz {
       study: ethnicity,
       age: this.age,
       gender: this.gender
-    };
+    } as IInput;
     this.risk = risk_from_study(risk_json, input);
     this.risks = risks_from_study(risk_json, input);
   }

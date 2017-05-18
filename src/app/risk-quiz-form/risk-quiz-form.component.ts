@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as math from 'mathjs';
-import { ethnicities_pretty, list_ethnicities } from 'glaucoma-risk-calculator-engine';
+import { ethnicities_pretty, IRiskJson, list_ethnicities } from 'glaucoma-risk-calculator-engine';
 import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
 import { RiskQuiz } from './risk-quiz.model';
 
@@ -53,7 +53,7 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.riskStatsService.read('latest').subscribe(
       content => {
-        this.riskStatsService.risk_stats = content.risk_json;
+        this.riskStatsService.risk_stats = content.risk_json as IRiskJson;
         this.all_ethnicities = list_ethnicities(this.riskStatsService.risk_stats);
         this.ethnicities = ethnicities_pretty(this.all_ethnicities)
       },
