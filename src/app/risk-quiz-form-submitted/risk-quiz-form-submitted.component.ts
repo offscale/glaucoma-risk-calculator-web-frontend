@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GaugeLabel, GaugeSegment } from 'ng-gauge';
-import { familial_risks_from_study, IRiskJson, s_col_to_s } from 'glaucoma-risk-calculator-engine';
+import { familial_risks_from_study, IMultiplicativeRisks, IRiskJson } from 'glaucoma-risk-calculator-engine';
 import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
-import { RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
+import { IRiskQuiz, RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../api/risk_res/risk_res.service';
 import { MsAuthService } from '../ms-auth/ms-auth.service';
 import 'rxjs/add/operator/switchMap';
@@ -71,6 +71,42 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
 
   @Output() submittedChange: EventEmitter<boolean> = new EventEmitter();
 
+  // <pie grid>
+  colorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
+
+  // line, area
+  autoScale = true;
+
+  pieData = [
+    {
+      'name': 'France',
+      'value': 7200000
+    }
+  ];
+  pieView: [760, 760];
+
+  // </pie grid>
+
+  // <advanced-pie-chart>
+
+  pieAdvDim: any[] = [700, 400];
+
+  pieAdvColorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
+
+  pieAdvData = [];
+  pieAdvLabel = 'times more at risk';
+  pieAdvGradient = true;
+
+  // </advanced-pie-chart>
+
+  pie_grid = false;
+  pie_adv = true;
+  gauge = false;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private riskStatsService: RiskStatsService,
@@ -94,8 +130,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
           this.id = +params['id'];
           return this.riskResService.read(this.id)
         })
-        .subscribe((riskQuiz: any) => {
-          this.riskQuiz = riskQuiz;
+        .subscribe((riskQuiz: IRiskQuiz) => {
+          this.riskQuiz = new RiskQuiz(riskQuiz);
           this.submitted = true;
           this.prepareView()
         });
@@ -116,20 +152,18 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   }
 
   private prepareView() {
-    console.info('this.riskQuiz[\'ethnicity\'] =', this.riskQuiz['ethnicity']);
+    console.info('this.riskQuiz.riskQuiz[\'ethnicity\'] =', this.riskQuiz.riskQuiz['ethnicity']);
     if (!(this.riskQuiz instanceof RiskQuiz))
-      this.riskQuiz = new RiskQuiz(this.riskQuiz['age'],
-        this.riskQuiz['gender'], this.riskQuiz['ethnicity'],
-        this.riskQuiz['sibling'], this.riskQuiz['parent']);
+      this.riskQuiz = new RiskQuiz(this.riskQuiz);
     this.riskStatsService.read('latest').subscribe(
       content => {
-        this.riskStatsService.risk_stats = content.risk_json as IRiskJson;
-        this.riskQuiz.calcRisk(this.riskStatsService.risk_stats);
+        this.riskStatsService.risk_json = content.risk_json as IRiskJson;
+        this.riskQuiz.calcRisk(this.riskStatsService.risk_json);
         this.riskStatsService.risk = this.riskQuiz.risk;
-        this.riskQuiz.ref = this.riskStatsService.risk_stats.studies[this.riskQuiz.study].ref;
+        this.riskQuiz.ref = this.riskStatsService.risk_json.studies[this.riskQuiz.study].ref;
         // this.riskQuiz.prepareRef();
 
-        const fam_risk = familial_risks_from_study(this.riskStatsService.risk_stats, this.riskQuiz.toJSON());
+        const fam_risk = familial_risks_from_study(this.riskStatsService.risk_json, this.riskQuiz.toJSON());
         const risk_pc =
           (pc => ((r => r > 100 ? 100 : r)(fam_risk.reduce((a, b) => a + b, 1) + pc)))(math.multiply(
             math.divide(this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1, this.riskQuiz.risks.length), 100
@@ -142,36 +176,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         this.most_at_risk =
           `${this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1} / ${this.riskQuiz.risks.length}`;
 
-        const color = (() => {
-          if (math.compare(risk_pc, 25) < 1)
-            return this.colors.cyan;
-          else if (math.compare(risk_pc, 50) < 1)
-            return this.colors.mint;
-          else if (math.compare(risk_pc, 75) < 1)
-            return this.colors.orange;
-          return this.colors.pink;
-        })();
-        this.progressGraph.labels.push(
-          new GaugeLabel({
-            color: this.colors.white,
-            text: 'most at risk',
-            x: 0,
-            y: 20,
-            fontSize: '1em'
-          }),
-          new GaugeLabel({
-            color: color,
-            text: risk_pc_as_s,
-            x: 0,
-            y: 0,
-            fontSize: '2em'
-          })
-        );
-        this.progressGraph.segments.push(new GaugeSegment({
-          value: risk_pc as number,
-          color: color,
-          borderWidth: 20
-        }));
+        this.gaugeView(risk_pc, risk_pc_as_s);
+        this.pieAdvView(this.riskQuiz.multiplicative_risks);
 
         this.riskQuiz.client_risk = risk_pc.valueOf();
 
@@ -185,8 +191,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
         else
           this.recommendation += ' ASAP.';
 
-        if (this.id === undefined)
-          this.riskResService.create(this.riskQuiz).subscribe(r => {
+        if (this.id == null)
+          this.riskResService.create(this.riskQuiz.toJSON()).subscribe(r => {
             this.id = r.id;
             this.share_url = this.idWithUrl()
           }, console.error);
@@ -194,5 +200,52 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
       },
       console.error
     );
+  }
+
+  private gaugeView(risk_pc: number, risk_pc_as_s: string) {
+    const color = (() => {
+      if (math.compare(risk_pc, 25) < 1)
+        return this.colors.cyan;
+      else if (math.compare(risk_pc, 50) < 1)
+        return this.colors.mint;
+      else if (math.compare(risk_pc, 75) < 1)
+        return this.colors.orange;
+      return this.colors.pink;
+    })();
+    this.progressGraph.labels.push(
+      new GaugeLabel({
+        color: this.colors.white,
+        text: 'most at risk',
+        x: 0,
+        y: 20,
+        fontSize: '1em'
+      }),
+      new GaugeLabel({
+        color: color,
+        text: risk_pc_as_s,
+        x: 0,
+        y: 0,
+        fontSize: '2em'
+      })
+    );
+    this.progressGraph.segments.push(new GaugeSegment({
+      value: risk_pc as number,
+      color: color,
+      borderWidth: 20
+    }));
+    this.gauge = true;
+  }
+
+  private pieAdvView(multiplicative_risks: IMultiplicativeRisks) {
+    this.pieAdvData = Object.keys(multiplicative_risks).map(k => ({name: k, value: multiplicative_risks[k]})
+    ).filter(o => o.value > 1);
+  }
+
+  onPieGridSelect(event) {
+    console.log(event);
+  }
+
+  pieAdvOnSelect(event) {
+    console.log(event);
   }
 }

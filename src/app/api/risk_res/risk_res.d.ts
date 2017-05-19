@@ -7,6 +7,9 @@ export interface IRiskResBase {
   age: number;
   gender: string;
   ethnicity: string;
+  study: string;
+  myopia: boolean;
+  diabetes: boolean;
   client_risk: number;
   ocular_disease_history?: string[];
   ocular_surgery_history?: string[];

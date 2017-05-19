@@ -17,7 +17,7 @@ math.config({
   templateUrl: './risk-quiz-form.component.html'
 })
 export class RiskQuizFormComponent implements OnInit, AfterViewInit {
-  riskQuiz: RiskQuiz = new RiskQuiz(null, null, null);
+  riskQuiz: RiskQuiz = new RiskQuiz({} as any);
   submitted = false;
   isCopied = false;
   // TODO: Workaround until NgForm has a reset method (#6822)
@@ -33,7 +33,9 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
   formErrors = {
     gender: '',
     age: '',
-    ethnicity: ''
+    ethnicity: '',
+    myopia: '',
+    diabetes: ''
   };
 
   validationMessages = {
@@ -54,16 +56,9 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.riskStatsService.read('latest').subscribe(
       content => {
-        this.riskStatsService.risk_stats = content.risk_json as IRiskJson;
-        this.ethnicity2study = ethnicity2study(this.riskStatsService.risk_stats);
+        this.riskStatsService.risk_json = content.risk_json as IRiskJson;
+        this.ethnicity2study = ethnicity2study(this.riskStatsService.risk_json);
         this.all_ethnicities = this.ethnicities = Object.keys(this.ethnicity2study).sort();
-        /*
-        this.all_ethnicities = list_ethnicities(this.riskStatsService.risk_stats);
-        console.info('[list_ethnicities] this.all_ethnicities =', this.all_ethnicities);
-        console.info(`[list_ethnicities] this.all_ethnicities = ${this.all_ethnicities}`);
-        this.ethnicities = ethnicities_pretty(this.all_ethnicities) as any;
-        console.info('[ethnicities_pretty] this.all_ethnicities =', this.all_ethnicities);
-        */
       },
       console.error
     );
@@ -75,11 +70,13 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     this.submitted = true;
-    this.riskQuiz = this.riskForm.value;
+    if (this.riskForm.value.ethnicity != null && this.riskForm.value.ethnicity.length)
+      this.riskForm.value.ethnicity = this.riskForm.value.ethnicity[0].id;
+    this.riskQuiz = new RiskQuiz(this.riskForm.value);
   }
 
   addRisk() {
-    this.riskQuiz = new RiskQuiz(null, null, null);
+    this.riskQuiz = new RiskQuiz({} as any);
     this.buildForm();
 
     this.active = false;
@@ -88,20 +85,16 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
 
   buildForm(): void {
     this.riskForm = this.fb.group({
-      'age': [this.riskQuiz.age, [
-        Validators.required
-      ]
-      ],
-      'gender': [this.riskQuiz.gender, [
-        Validators.required
-      ]],
-      'ethnicity': [this.riskQuiz.ethnicity, Validators.required],
-      'sibling': [this.riskQuiz.sibling],
-      'parent': [this.riskQuiz.parent]
+      age: [this.riskQuiz.riskQuiz.age, [Validators.required]],
+      gender: [this.riskQuiz.riskQuiz.gender, [Validators.required]],
+      ethnicity: [this.riskQuiz.riskQuiz.ethnicity, Validators.required],
+      sibling: [this.riskQuiz.riskQuiz.sibling],
+      parent: [this.riskQuiz.riskQuiz.parent],
+      myopia: [this.riskQuiz.riskQuiz.myopia],
+      diabetes: [this.riskQuiz.riskQuiz.diabetes]
     });
 
-    this.riskForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+    this.riskForm.valueChanges.subscribe(data => this.onValueChanged(data));
 
     this.onValueChanged(); // (re)set validation messages now
   }
@@ -127,5 +120,10 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
         }
       }
     // if (!hasError) this.riskQuiz.calcRisk(risk_json)
+  }
+
+  public selected_ethnicity(ethnicity: Array<{ id: string, text: string }>): void {
+    if (ethnicity == null || !ethnicity.length) return;
+    this.riskQuiz.riskQuiz.ethnicity = this.riskForm.value.ethnicity = ethnicity[0].id;
   }
 }

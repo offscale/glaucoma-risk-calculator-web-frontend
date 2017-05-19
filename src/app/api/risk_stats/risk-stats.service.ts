@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class RiskStatsService {
-  public risk_stats: IRiskJson;
+  public risk_json: IRiskJson;
   public risk;
   private req_options: RequestOptions;
 

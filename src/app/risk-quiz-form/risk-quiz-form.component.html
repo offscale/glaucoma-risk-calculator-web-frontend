@@ -24,21 +24,16 @@
       <div class="form-group">
         <label for="age">Age</label>
         <input type="number" id="age" class="form-control"
-               formControlName="age">
+               formControlName="age" placeholder="Specify age">
       </div>
 
       <div class="form-group">
-        <label for="ethnicity">Ethnicity</label>
-        <select id="ethnicity" class="form-control"
-                formControlName="ethnicity" required>
-          <option *ngFor="let ethnicity of ethnicities" [value]="ethnicity">
-            {{ethnicity}}
-          </option>
-        </select>
-
-        <div *ngIf="formErrors.ethnicity" class="alert alert-danger">
-          {{ formErrors.ethnicity }}
-        </div>
+        <ng-select [items]="ethnicities"
+                   (selected)="selected_ethnicity($event)"
+                   (data)="selected_ethnicity($event)"
+                   id="ethnicity" formControlName="ethnicity"
+                   placeholder="Search for ethnicity">
+        </ng-select>
       </div>
 
       <div class="form-check">
@@ -52,6 +47,20 @@
         <label class="form-check-label">
           <input class="form-control form-check-input" type="checkbox" id="parent" formControlName="parent">
           Parent
+        </label>
+      </div>
+
+      <div class="form-check">
+        <p class="form-text" style="margin-bottom: 2px">
+          Other health issues
+        </p>
+        <label class="form-check-label">
+          <input class="form-control form-check-input" type="checkbox" id="myopia" formControlName="myopia">
+          Myopia
+        </label>
+        <label class="form-check-label">
+          <input class="form-control form-check-input" type="checkbox" id="diabetes" formControlName="diabetes">
+          Diabetes
         </label>
       </div>
 

@@ -4,15 +4,43 @@
     <h3>Risk is {{riskQuiz.risk}}; meaning you're in the <strong>{{most_at_risk}}</strong> most at risk category <span
       *ngIf="riskQuiz.sibling || riskQuiz.parent">. Adding in <strong>family risk</strong>, and you're:</span></h3>
 
-    <ng-gauge
-      [bgRadius]=progressGraph.bgRadius
-      [bgColor]=progressGraph.bgColor
-      [rounded]=progressGraph.rounded
-      [reverse]=progressGraph.reverse
-      [animationSecs]=progressGraph.animationSecs
-      [labels]=progressGraph.labels
-      [segments]=progressGraph.segments>
-    </ng-gauge>
+    <div class="container-fluid">
+      <div class="row justify-content-md-center">
+        <div class="col">
+          <ng-gauge *ngIf="gauge"
+                    [bgRadius]=progressGraph.bgRadius
+                    [bgColor]=progressGraph.bgColor
+                    [rounded]=progressGraph.rounded
+                    [reverse]=progressGraph.reverse
+                    [animationSecs]=progressGraph.animationSecs
+                    [labels]=progressGraph.labels
+                    [segments]=progressGraph.segments>
+          </ng-gauge>
+        </div>
+        <div class="col">
+          <ngx-charts-advanced-pie-chart *ngIf="pie_adv"
+                                         [view]="pieAdvDim"
+                                         [scheme]="pieAdvColorScheme"
+                                         [results]="pieAdvData"
+                                         [gradient]="pieAdvGradient"
+                                         [total-label]="pieAdvLabel"
+                                         (select)="pieAdvOnSelect($event)">
+          </ngx-charts-advanced-pie-chart>
+        </div>
+      </div>
+    </div>
+    <ngx-charts-pie-grid *ngIf="pie_grid"
+                         [view]="pieView"
+                         [scheme]="colorScheme"
+                         [results]="pieData"
+                         autoScale="true"
+                         (select)="onPieGridSelect($event)">
+    </ngx-charts-pie-grid>
+
+
+    <div class="row">
+      <pre>multiplicative_risks = {{riskQuiz.multiplicative_risks|json}}</pre>
+    </div>
 
     <h3>{{recommendation}}</h3>
 
@@ -71,6 +99,9 @@
         <div class="row">
           <div class="col-xs-3">Parent with glaucoma</div>
           <div class="col-xs-9 pull-left">&nbsp;{{ riskQuiz.parent }}</div>
+        </div>
+        <div class="row">
+          <pre>{{riskQuiz|json}}</pre>
         </div>
         <h5>
           <small>References</small>
