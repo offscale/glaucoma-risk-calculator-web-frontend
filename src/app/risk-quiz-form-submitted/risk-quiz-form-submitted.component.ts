@@ -1,7 +1,12 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GaugeLabel, GaugeSegment } from 'ng-gauge';
-import { familial_risks_from_study, IMultiplicativeRisks, IRiskJson } from 'glaucoma-risk-calculator-engine';
+import {
+  calc_relative_risk,
+  familial_risks_from_study,
+  IMultiplicativeRisks,
+  IRiskJson
+} from 'glaucoma-risk-calculator-engine';
 import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
 import { IRiskQuiz, RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../api/risk_res/risk_res.service';
@@ -104,8 +109,11 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   // </advanced-pie-chart>
 
   pie_grid = false;
-  pie_adv = true;
+  show_pie_adv = false;
+  added_risk = false;
   gauge = false;
+
+  show_treemap = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -130,7 +138,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
           this.id = +params['id'];
           return this.riskResService.read(this.id)
         })
-        .subscribe((riskQuiz: IRiskQuiz) => {
+        .subscribe((riskQuiz: IRiskQuiz | any) => {
           this.riskQuiz = new RiskQuiz(riskQuiz);
           this.submitted = true;
           this.prepareView()
@@ -175,24 +183,31 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
            )*/;
         this.most_at_risk =
           `${this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1} / ${this.riskQuiz.risks.length}`;
+        this.riskQuiz.relative_risks = calc_relative_risk(this.riskStatsService.risk_json, this.riskQuiz.riskQuiz);
+        this.show_treemap = true;
 
         this.gaugeView(risk_pc, risk_pc_as_s);
         this.pieAdvView(this.riskQuiz.multiplicative_risks);
 
         this.riskQuiz.client_risk = risk_pc.valueOf();
 
-        this.recommendation = 'See an eye-health professional ';
-        if (risk_pc <= 25)
+        this.recommendation = 'We recommend you see an eye-health professional ';
+        if (risk_pc <= 25) {
           this.recommendation += ' in the next two years.';
-        else if (risk_pc <= 50)
+          this.recommendation += ' Unless you\'ve seen one in the last 2 years';
+        } else if (risk_pc <= 50) {
           this.recommendation += ' in the next year.';
-        else if (risk_pc <= 75)
+          this.recommendation += ' Unless you\'ve seen one in the last year';
+        } else if (risk_pc <= 75) {
           this.recommendation += ' in the next 6 months.';
-        else
+          this.recommendation += ' Unless you\'ve seen one recently.';
+        } else {
           this.recommendation += ' ASAP.';
+          this.recommendation += ' Unless you\'ve seen one recently.';
+        }
 
         if (this.id == null)
-          this.riskResService.create(this.riskQuiz.toJSON()).subscribe(r => {
+          this.riskResService.create(this.riskQuiz.toJSON() as any).subscribe(r => {
             this.id = r.id;
             this.share_url = this.idWithUrl()
           }, console.error);
@@ -239,6 +254,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   private pieAdvView(multiplicative_risks: IMultiplicativeRisks) {
     this.pieAdvData = Object.keys(multiplicative_risks).map(k => ({name: k, value: multiplicative_risks[k]})
     ).filter(o => o.value > 1);
+    this.show_pie_adv = this.added_risk = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
   }
 
   onPieGridSelect(event) {

@@ -1,20 +1,23 @@
 import {
   calc_default_multiplicative_risks,
-  ethnicity2study,
+  ethnicity2study, Gender,
   IInput,
   IMultiplicativeRisks,
+  IRelativeRisk,
   IRiskJson,
   risk_from_study,
-  risks_from_study
+  risks_from_study,
+  Study
 } from 'glaucoma-risk-calculator-engine';
 import { IItem } from '../risk-quiz-form-submitted/risk-quiz-form-submitted.component';
 
 export interface IRiskQuiz {
   age: number;
-  gender: string;
+  gender: Gender;
   ethnicity: string;
   myopia: boolean;
   diabetes: boolean;
+  study: Study;
   ocular_disease_history?: string[];
   ocular_surgery_history?: string[];
   other_info?: string;
@@ -30,6 +33,7 @@ interface IIRiskQuiz {
 
 export class RiskQuiz implements IIRiskQuiz {
   public risk: number;
+  public relative_risks: IRelativeRisk;
   public client_risk: number;
   public riskLength: number;
   public risks: number[];
@@ -38,16 +42,14 @@ export class RiskQuiz implements IIRiskQuiz {
   public multiplicative_risks: IMultiplicativeRisks;
 
   constructor(public riskQuiz: IRiskQuiz) {
-    console.info('RiskQuiz::riskQuiz =', riskQuiz);
   }
 
   calcRisk(risk_json: IRiskJson) {
-    console.info('calcRisk::this.riskQuiz =', this.riskQuiz);
     this.study = ethnicity2study(risk_json)[this.riskQuiz.ethnicity];
     const input: IInput = {
       study: this.study,
       age: this.riskQuiz.age,
-      gender: this.riskQuiz.gender
+      gender: this.riskQuiz.gender as any
     } as IInput;
     this.risk = risk_from_study(risk_json, input);
     this.risks = risks_from_study(risk_json, input);

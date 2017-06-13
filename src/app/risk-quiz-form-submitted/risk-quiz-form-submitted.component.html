@@ -1,9 +1,18 @@
 <div class="container">
   <div *ngIf="submitted">
     <h2>Risk calculation</h2>
-    <h3>Risk is {{riskQuiz.risk}}; meaning you're in the <strong>{{most_at_risk}}</strong> most at risk category <span
-      *ngIf="riskQuiz.sibling || riskQuiz.parent">. Adding in <strong>family risk</strong>, and you're:</span></h3>
+    <h2>Glaucoma prevalence in your population is: {{riskQuiz.risk}}%.</h2>
+    <h3>This puts you in the
+      <strong>{{most_at_risk}}</strong> most at risk subgroup.
+      <span *ngIf="added_risk">Adding in <strong>family risk</strong>, and you're:</span></h3>
+<!--
+__________
+|         |
+|  Medium |
+|         |
+|_________|
 
+-->
     <div class="container-fluid">
       <div class="row justify-content-md-center">
         <div class="col">
@@ -17,15 +26,15 @@
                     [segments]=progressGraph.segments>
           </ng-gauge>
         </div>
-        <div class="col">
-          <ngx-charts-advanced-pie-chart *ngIf="pie_adv"
-                                         [view]="pieAdvDim"
+        <div class="col" *ngIf="show_pie_adv">
+          <ngx-charts-advanced-pie-chart [view]="pieAdvDim"
                                          [scheme]="pieAdvColorScheme"
                                          [results]="pieAdvData"
                                          [gradient]="pieAdvGradient"
-                                         [total-label]="pieAdvLabel"
+
                                          (select)="pieAdvOnSelect($event)">
           </ngx-charts-advanced-pie-chart>
+          <!-- [total-label]="pieAdvLabel" -->
         </div>
       </div>
     </div>
@@ -37,12 +46,30 @@
                          (select)="onPieGridSelect($event)">
     </ngx-charts-pie-grid>
 
+    <h3 style="text-underline: single">{{recommendation}}</h3>
+    <hr>
 
+    <!--
+    (legendLabelClick)="onLegendLabelClick($event)"
+    [scheme]="colorScheme"
+    [gradient]="gradient"
+    (select)="treemapSelect($event)"-->
+    <h4>Risk compared with other ethnicities of same age and gender</h4>
+    <div class="row" *ngIf="show_treemap">
+      <ngx-charts-tree-map tooltipDisabled="true"
+                           [view]="[850, 300]"
+                           [results]="riskQuiz.relative_risks.graphed_rr">
+      </ngx-charts-tree-map>
+    </div>
+
+    <!--
     <div class="row">
       <pre>multiplicative_risks = {{riskQuiz.multiplicative_risks|json}}</pre>
     </div>
-
-    <h3>{{recommendation}}</h3>
+    <div class="row">
+      <pre>relative_risks = {{riskQuiz.relative_risks|json}}</pre>
+    </div>
+    -->
 
     <br>
     <button class="btn btn-default" (click)="redo()">Redo</button>
