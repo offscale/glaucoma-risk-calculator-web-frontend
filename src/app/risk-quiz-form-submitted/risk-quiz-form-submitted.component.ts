@@ -13,6 +13,13 @@ import { RiskResService } from '../api/risk_res/risk_res.service';
 import { MsAuthService } from '../ms-auth/ms-auth.service';
 import 'rxjs/add/operator/switchMap';
 
+const omit = (obj: {}, omitKeys: string[]): {} =>
+  Object.keys(obj).reduce((result, key) => {
+      if (omitKeys.indexOf(key) > -1)
+        result[key] = obj[key];
+      return result;
+    }, {}
+  );
 
 export interface IItem {
   id?: string;
@@ -115,6 +122,27 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
 
   show_treemap = false;
 
+  // <ng-table>
+  public entryRows: Array<any> = [];
+  public entryCols: Array<any> = [
+    { title: 'Salary ($)', name: 'salary' }
+  ];
+  public entryPage = 1;
+  public entryItemsPerPage = 10;
+  public entryMaxSize = 5;
+  public entryNumPages = 1;
+  public entryLength = 0;
+
+  public entryConfig: any = {
+    paging: true,
+    sorting: { columns: this.entryCols },
+    filtering: { filterString: '' },
+    className: ['table-striped', 'table-bordered']
+  };
+
+  private entryData: Array<any> = null;
+  // </ng-table>
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private riskStatsService: RiskStatsService,
@@ -160,9 +188,16 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   }
 
   private prepareView() {
-    console.info('this.riskQuiz.riskQuiz[\'ethnicity\'] =', this.riskQuiz.riskQuiz['ethnicity']);
     if (!(this.riskQuiz instanceof RiskQuiz))
       this.riskQuiz = new RiskQuiz(this.riskQuiz);
+
+    // <ng-table>
+    this.entryCols = Object.keys(this.riskQuiz.riskQuiz).filter(
+      k => ['createdAt', 'updatedAt', 'id', 'client_risk'].indexOf(k) === -1).map(k => ({ title: k, name: k }));
+    this.entryData = this.entryRows = [this.riskQuiz.riskQuiz];
+    this.entryLength = this.entryData.length;
+    // </ng-table>
+
     this.riskStatsService.read('latest').subscribe(
       content => {
         this.riskStatsService.risk_json = content.risk_json as IRiskJson;
@@ -252,7 +287,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   }
 
   private pieAdvView(multiplicative_risks: IMultiplicativeRisks) {
-    this.pieAdvData = Object.keys(multiplicative_risks).map(k => ({name: k, value: multiplicative_risks[k]})
+    this.pieAdvData = Object.keys(multiplicative_risks).map(k => ({ name: k, value: multiplicative_risks[k] })
     ).filter(o => o.value > 1);
     this.show_pie_adv = this.added_risk = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
   }

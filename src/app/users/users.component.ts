@@ -10,14 +10,14 @@ import { User } from '../api/auth/user';
 export class UsersComponent implements OnInit {
   public users: User[] = [];
   public columns: Array<any> = [
-    {title: 'email', name: 'email', filtering: {filterString: '', placeholder: 'Filter by email'}},
-    {title: 'updatedAt', className: ['office-header', 'text-success'], name: 'updatedAt', sort: 'asc'},
-    {title: 'createdAt.', name: 'createdAt'}
+    { title: 'email', name: 'email', filtering: { filterString: '', placeholder: 'Filter by email' } },
+    { title: 'updatedAt', className: ['office-header', 'text-success'], name: 'updatedAt', sort: 'asc' },
+    { title: 'createdAt.', name: 'createdAt' }
   ];
   public config: any = {
     paging: true,
-    sorting: {columns: this.columns},
-    filtering: {filterString: ''},
+    sorting: { columns: this.columns },
+    filtering: { filterString: '' },
     className: ['table-striped', 'table-bordered']
   };
   public page = 1;
@@ -109,7 +109,7 @@ export class UsersComponent implements OnInit {
     return filteredData;
   }
 
-  public onChangeTable(config: any, page: any = {page: this.page, itemsPerPage: this.itemsPerPage}): any {
+  public onChangeTable(config: any, page: any = { page: this.page, itemsPerPage: this.itemsPerPage }): any {
     if (config.filtering) {
       Object.assign(this.config.filtering, config.filtering);
     }

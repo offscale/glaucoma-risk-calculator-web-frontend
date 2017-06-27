@@ -1,14 +1,14 @@
-import { GlaucomaRiskCalcWebFrontendPage } from './app.po';
+import { GlaucomaRiskCalculatorWebFrontendPage } from './app.po';
 
 describe('glaucoma-risk-calculator-web-frontend App', () => {
-  let page: GlaucomaRiskCalcWebFrontendPage;
+  let page: GlaucomaRiskCalculatorWebFrontendPage;
 
   beforeEach(() => {
-    page = new GlaucomaRiskCalcWebFrontendPage();
+    page = new GlaucomaRiskCalculatorWebFrontendPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display welcome message', () => {
     page.navigateTo();
-    page.getParagraphText().then(res => expect(res).toEqual('app works!'));
+    page.getParagraphText().then(msg => expect(msg).toEqual('Welcome to app!!'));
   });
 });

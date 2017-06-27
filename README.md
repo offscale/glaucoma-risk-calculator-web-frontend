@@ -17,6 +17,11 @@ Requires a server with HTTPS—for Office 365 / Microsoft Graph auth—and the A
 
     sed -i "/this.serverStatus =/c\    this.serverStatus = {version: 'App $(jq -r .version package.json); '};" src/app/server-status/server-status.component.ts
 
+## Release new version of dist repo
+Assuming the -dist is in the directory above where this is cloned, in Bash just:
+
+    rm -rf dist; ng build -prod; d=../glaucoma-risk-calculator-web-frontend-dist; rm -rf "$d/dist"; mv "$PWD/dist" "$d"; cd "$d"; git add .; git status
+
 ## Development setup
 
 Install latest:

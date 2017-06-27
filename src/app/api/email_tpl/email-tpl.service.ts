@@ -22,7 +22,7 @@ export class EmailTplService {
 
   public setTpl(tpl: string) {
     this.hasTpl() ? this.email_tpl.tpl = tpl :
-      this.email_tpl = <IEmailTplBase>{tpl: tpl, createdAt: new Date().toISOString()}
+      this.email_tpl = <IEmailTplBase>{ tpl: tpl, createdAt: new Date().toISOString() }
   }
 
   create(email_tpl: IEmailTplBase): Observable<IEmailTpl> {

@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { GaugeModule } from 'ng-gauge';
-import { CollapseModule } from 'ngx-bootstrap';
+import { CollapseModule, PaginationModule } from 'ngx-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard/dist';
 import { SelectModule } from 'ng2-select';
+import { Ng2TableModule } from 'ng2-table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
@@ -21,7 +22,8 @@ import { RiskQuizFormComponent } from './risk-quiz-form.component';
   imports: [
     CommonModule, ReactiveFormsModule, BrowserAnimationsModule,
     RouterModule, RouterModule.forChild(riskQuizFormSubmittedRoutes),
-    GaugeModule, CollapseModule.forRoot(), ClipboardModule, SelectModule, NgxChartsModule
+    GaugeModule, CollapseModule.forRoot(), ClipboardModule, SelectModule, NgxChartsModule,
+    FormsModule, PaginationModule.forRoot(), Ng2TableModule
   ],
   providers: [RiskStatsService, RiskResService],
   declarations: [RiskQuizFormComponent, RiskQuizFormSubmittedComponent],

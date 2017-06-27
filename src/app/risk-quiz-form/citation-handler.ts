@@ -31,12 +31,12 @@ class CitationHandler {
 
     const getProcessor = (): { updateItems(ids): void, makeBibliography(): void } => {
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', 'https://raw.githubusercontent.com/citation-style-language/styles/master/ieee-with-url.csl', //'https://raw.githubusercontent.com/citation-style-language/styles/master/' + styleID + '.csl',
+      xhr.open('GET', 'https://raw.githubusercontent.com/citation-style-language/styles/master/ieee-with-url.csl', // 'https://raw.githubusercontent.com/citation-style-language/styles/master/' + styleID + '.csl',
         false);
       xhr.send(null);
       const styleAsText = xhr.responseText;
-      return {updateItems: (ids) => null, makeBibliography: () => null}
-      //return new CSL.Engine(citeprocSys, styleAsText);
+      return { updateItems: (ids) => null, makeBibliography: () => null }
+      // return new CSL.Engine(citeprocSys, styleAsText);
     };
 
     const processorOutput = () => {

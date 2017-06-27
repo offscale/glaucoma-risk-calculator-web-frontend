@@ -1,6 +1,6 @@
 import { browser, by, element } from 'protractor';
 
-export class GlaucomaRiskCalcWebFrontendPage {
+export class GlaucomaRiskCalculatorWebFrontendPage {
   navigateTo() {
     return browser.get('/');
   }

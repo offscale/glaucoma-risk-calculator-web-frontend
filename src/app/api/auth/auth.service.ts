@@ -14,7 +14,7 @@ import { User } from './user';
 
 @Injectable()
 export class AuthService {
-  private headers = new Headers({'Content-Type': 'application/json'});
+  private headers = new Headers({ 'Content-Type': 'application/json' });
   private redirect_uri: string;
   private _accessToken: AccessToken;
 
@@ -43,12 +43,12 @@ export class AuthService {
     /* tslint:disable:no-console */
     this.router.navigate(['login-signup']).then(
       success => success ? console.info('state changed') : this.alertsService.alerts.push(
-        {msg: 'state didn\'t change', type: 'warning'}),
-      err => this.alertsService.alerts.push({msg: err, type: 'danger'}));
+        { msg: 'state didn\'t change', type: 'warning' }),
+      err => this.alertsService.alerts.push({ msg: err, type: 'danger' }));
   }
 
   create_user(user: User): Observable<User> {
-    const options = new RequestOptions({headers: this.headers});
+    const options = new RequestOptions({ headers: this.headers });
     return this.http.post('/api/user', JSON.stringify(user), options)
       .map(response => {
         this.accessToken = response.headers.get('x-access-token');
@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   post(user: User): Observable<User> {
-    const options = new RequestOptions({headers: this.headers});
+    const options = new RequestOptions({ headers: this.headers });
     return this.http.post('/api/auth', JSON.stringify(user), options)
       .map(response => {
         this.accessToken = response.headers.get('x-access-token');
@@ -68,7 +68,7 @@ export class AuthService {
   }
 
   getAll(): Observable<{ users: User[] }> {
-    const options = new RequestOptions({headers: new Headers({'X-Access-Token': this.accessToken})});
+    const options = new RequestOptions({ headers: new Headers({ 'X-Access-Token': this.accessToken }) });
     return this.http.get('/api/users', options)
       .map(response => response.json())
       .catch(handleError);
@@ -86,7 +86,7 @@ export class AuthService {
     this.headers.set('x-access-token', this.accessToken);
     if (!this.headers.get('x-access-token')) return Observable.throw('No access token');
 
-    const options = new RequestOptions({headers: this.headers});
+    const options = new RequestOptions({ headers: this.headers });
     return this.http.delete('/api/auth', options)
       .map((response: Response) => {
         if (response.status === 204) {

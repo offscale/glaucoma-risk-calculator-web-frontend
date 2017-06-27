@@ -73,7 +73,7 @@ export class MsAuthComponent implements OnInit {
       tenant_id: this._tenant_id,
       access_token: this.msAuthService.access_token
     }).subscribe(
-      auth => console.info(auth) || this.alertsService.add({type: 'info', msg: 'Updated auth'}),
+      auth => console.info(auth) || this.alertsService.add({ type: 'info', msg: 'Updated auth' }),
       error => console.error(error) // this.authService.redirOnResIfUnauth(error)
     )
   }

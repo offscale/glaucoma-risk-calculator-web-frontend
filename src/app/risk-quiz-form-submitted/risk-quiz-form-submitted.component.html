@@ -1,6 +1,11 @@
 <div class="container">
   <div *ngIf="submitted">
     <h2>Risk calculation</h2>
+
+    <ng-table [config]="entryConfig"
+              [rows]="entryRows" [columns]="entryCols">
+    </ng-table>
+
     <h2>Glaucoma prevalence in your population is: {{riskQuiz.risk}}%.</h2>
     <h3>This puts you in the
       <strong>{{most_at_risk}}</strong> most at risk subgroup.
@@ -107,6 +112,7 @@ __________
     <div [collapse]="isCollapsed" class="card card-block card-header" *ngIf="!isCollapsed">
       <div class="well well-lg">
         <h6>Your submission</h6>
+
         <div class="row">
           <div class="col-xs-3">Age</div>
           <div class="col-xs-9  pull-left">&nbsp;{{ riskQuiz.age }}</div>

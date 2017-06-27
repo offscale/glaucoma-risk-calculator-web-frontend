@@ -30,7 +30,7 @@ export class EmailTplComponent implements OnInit {
       (email_tpl: IEmailTpl) =>
         this.emailTplService.email_tpl = email_tpl,
       error =>
-        this.alertsService.add({type: 'warning', msg: error})
+        this.alertsService.add({ type: 'warning', msg: error })
     )
   }
 
@@ -38,7 +38,7 @@ export class EmailTplComponent implements OnInit {
     new_email_tpl.createdAt = this.emailTplService.email_tpl.createdAt;
 
     this.emailTplService.update(
-      Object.assign({updatedAt: new Date()}, this.emailTplService.email_tpl),
+      Object.assign({ updatedAt: new Date() }, this.emailTplService.email_tpl),
       new_email_tpl
     ).subscribe(this.handleEmailTpl, this.handleError)
   }
@@ -53,11 +53,11 @@ export class EmailTplComponent implements OnInit {
   save() {
     /* tslint:disable:no-unused-expression */
     (this.emailTplService.hasTpl() ?
-      this.tplUpdate(Object.assign({tpl: this.emailTplService.email_tpl.tpl}, this.emailTplService.email_tpl))
+      this.tplUpdate(Object.assign({ tpl: this.emailTplService.email_tpl.tpl }, this.emailTplService.email_tpl))
       : this.tplCreate({
         tpl: this.emailTplService.email_tpl.tpl,
         createdAt: new Date().toISOString()
-      })) || this.alertsService.add({type: 'info', msg: 'Updated email template'})
+      })) || this.alertsService.add({ type: 'info', msg: 'Updated email template' })
   }
 
   private handleEmailTpl(email_tpl: IEmailTpl) {
@@ -65,6 +65,6 @@ export class EmailTplComponent implements OnInit {
   }
 
   private handleError(error: string) {
-    this.alertsService.add({type: 'warning', msg: error})
+    this.alertsService.add({ type: 'warning', msg: error })
   }
 }

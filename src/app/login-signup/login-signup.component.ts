@@ -26,7 +26,7 @@ export class LoginSignupComponent implements OnInit {
   onSubmit(user: User): void {
     const handleUser = _user => {
       if (!this.authService.isLoggedIn()) {
-        this.alertsService.alerts.push({msg: JSON.stringify(_user), type: 'warning'});
+        this.alertsService.alerts.push({ msg: JSON.stringify(_user), type: 'warning' });
         return;
       }
       /* tslint:disable:no-console */
@@ -47,8 +47,8 @@ export class LoginSignupComponent implements OnInit {
     /* tslint:disable:no-console */
     this.router.navigate(['/admin/dashboard']).then(success =>
         success ? console.info('state changed') : this.alertsService.alerts.push(
-          {msg: 'state didn\'t change', type: 'warning'}),
-      err => this.alertsService.alerts.push({msg: err, type: 'danger'})
+          { msg: 'state didn\'t change', type: 'warning' }),
+      err => this.alertsService.alerts.push({ msg: err, type: 'danger' })
     )
   }
 }
