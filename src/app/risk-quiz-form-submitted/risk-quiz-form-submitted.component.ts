@@ -1,17 +1,15 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import 'rxjs/add/operator/switchMap';
+import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GaugeLabel, GaugeSegment } from 'ng-gauge';
-import {
-  calc_relative_risk,
-  familial_risks_from_study,
-  IMultiplicativeRisks,
-  IRiskJson
-} from 'glaucoma-risk-calculator-engine';
+import { calc_relative_risk, familial_risks_from_study, IMultiplicativeRisks, IRiskJson } from 'glaucoma-risk-calculator-engine';
+
 import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
 import { IRiskQuiz, RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../api/risk_res/risk_res.service';
 import { MsAuthService } from '../ms-auth/ms-auth.service';
-import 'rxjs/add/operator/switchMap';
+
+import { colours, numToColour } from '../colours';
 
 const omit = (obj: {}, omitKeys: string[]): {} =>
   Object.keys(obj).reduce((result, key) => {
@@ -51,7 +49,7 @@ export interface IItem {
   templateUrl: './risk-quiz-form-submitted.component.html',
   styleUrls: ['./risk-quiz-form-submitted.component.css']
 })
-export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
+export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit {
   @Input() riskQuiz: RiskQuiz;
   @Input() submitted = false;
   most_at_risk = '';
@@ -60,20 +58,9 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   share_url: string;
   recommendation: string;
 
-  colors = {
-    indigo: '#14143e',
-    pink: '#fd1c49',
-    orange: '#ff6e00',
-    yellow: '#f0c800',
-    mint: '#00efab',
-    cyan: '#05d1ff',
-    purple: '#841386',
-    white: '#fff'
-  };
-
   progressGraph = {
     bgRadius: 60,
-    bgColor: this.colors.indigo,
+    bgColor: colours.indigo,
     rounded: false,
     reverse: false,
     animationSecs: 1,
@@ -84,18 +71,13 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   @Output() submittedChange: EventEmitter<boolean> = new EventEmitter();
 
   // <pie grid>
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
+  colorScheme = { domain: [colours.teal, colours.darkred, colours.gold, colours.grey] };
 
   // line, area
   autoScale = true;
 
   pieData = [
-    {
-      'name': 'France',
-      'value': 7200000
-    }
+    /* { 'name': 'France', 'value': 7200000 } */
   ];
   pieView: [760, 760];
 
@@ -105,9 +87,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
 
   pieAdvDim: any[] = [700, 400];
 
-  pieAdvColorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
+  pieAdvColorScheme = this.colorScheme;
 
   pieAdvData = [];
   pieAdvLabel = 'times more at risk';
@@ -124,9 +104,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
 
   // <ng-table>
   public entryRows: Array<any> = [];
-  public entryCols: Array<any> = [
-    { title: 'Salary ($)', name: 'salary' }
-  ];
+  public entryCols: Array<any> = [{ title: 'Salary ($)', name: 'salary' }];
   public entryPage = 1;
   public entryItemsPerPage = 10;
   public entryMaxSize = 5;
@@ -143,6 +121,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   private entryData: Array<any> = null;
   // </ng-table>
 
+  html_of_all_refs: HTMLAllCollection;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private riskStatsService: RiskStatsService,
@@ -157,7 +137,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   ngOnInit() {
   }
 
-  ngAfterViewInit() {
+  ngAfterContentInit() {
     if (this.submitted)
       this.prepareView();
     else
@@ -194,7 +174,9 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
     // <ng-table>
     this.entryCols = Object.keys(this.riskQuiz.riskQuiz).filter(
       k => ['createdAt', 'updatedAt', 'id', 'client_risk'].indexOf(k) === -1).map(k => ({ title: k, name: k }));
-    this.entryData = this.entryRows = [this.riskQuiz.riskQuiz];
+    this.entryData = this.entryRows = [Object.keys(this.riskQuiz.riskQuiz).map(k =>
+      ({ [k]: this.riskQuiz.riskQuiz[k] != null ? this.riskQuiz.riskQuiz[k] : false })).reduce(
+      (a, b) => Object.assign(a, b), {})];
     this.entryLength = this.entryData.length;
     // </ng-table>
 
@@ -202,6 +184,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
       content => {
         this.riskStatsService.risk_json = content.risk_json as IRiskJson;
         this.riskQuiz.calcRisk(this.riskStatsService.risk_json);
+        this.html_of_all_refs = JSON.parse(this.riskStatsService.risk_json.html_of_all_refs);
         this.riskStatsService.risk = this.riskQuiz.risk;
         this.riskQuiz.ref = this.riskStatsService.risk_json.studies[this.riskQuiz.study].ref;
         // this.riskQuiz.prepareRef();
@@ -253,36 +236,29 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterViewInit {
   }
 
   private gaugeView(risk_pc: number, risk_pc_as_s: string) {
-    const color = (() => {
-      if (math.compare(risk_pc, 25) < 1)
-        return this.colors.cyan;
-      else if (math.compare(risk_pc, 50) < 1)
-        return this.colors.mint;
-      else if (math.compare(risk_pc, 75) < 1)
-        return this.colors.orange;
-      return this.colors.pink;
-    })();
     this.progressGraph.labels.push(
       new GaugeLabel({
-        color: this.colors.white,
+        color: colours.white,
         text: 'most at risk',
         x: 0,
         y: 20,
         fontSize: '1em'
       }),
       new GaugeLabel({
-        color: color,
+        color: numToColour(risk_pc),
         text: risk_pc_as_s,
         x: 0,
         y: 0,
         fontSize: '2em'
       })
     );
-    this.progressGraph.segments.push(new GaugeSegment({
-      value: risk_pc as number,
-      color: color,
-      borderWidth: 20
-    }));
+    this.progressGraph.segments.push(
+      new GaugeSegment({
+        value: risk_pc as number,
+        color: numToColour(risk_pc),
+        borderWidth: 20
+      })
+    );
     this.gauge = true;
   }
 

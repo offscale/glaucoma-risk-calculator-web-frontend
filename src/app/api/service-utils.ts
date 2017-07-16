@@ -6,7 +6,7 @@ export interface IStatusBody {
   body: string;
   status: number;
   readonly _resp: Response;
-  readonly _parsed: JSON | string | { error: string, error_message: string } | any;
+  readonly _parsed: JSON | string | {error: string, error_message: string} | any;
 }
 
 export const handleError = (error: Response | any) => {

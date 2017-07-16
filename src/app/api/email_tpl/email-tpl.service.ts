@@ -50,7 +50,7 @@ export class EmailTplService {
     this.setReqOptions();
     return this.http.delete(`/api/email_tpl/${createdAt}`, this.req_options)
       .map((r: Response) => r.status === 204 ? Object.freeze({}) : Observable.throw(
-        new AssertionError(`Expected status of 204, got ${r.status}`)))
+        new AssertionError({ message: `Expected status of 204, got ${r.status}` })))
       .catch(handleError)
   }
 

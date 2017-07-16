@@ -10,7 +10,7 @@ import { AlertsService } from '../alerts/alerts.service';
 })
 export class MsAuthComponent implements OnInit {
   public isCollapsed = true;
-  mail_base: { recipient: string, subject: string } = {} as any;
+  mail_base: {recipient: string, subject: string} = {} as any;
   private _client_id: string;
   private _tenant_id: string;
 

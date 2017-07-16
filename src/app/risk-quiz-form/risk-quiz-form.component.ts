@@ -27,6 +27,7 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
 
   riskForm: FormGroup;
 
+  _ethnicity: string;
   ethnicities: string[];
   all_ethnicities: string[];
 
@@ -70,8 +71,6 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     this.submitted = true;
-    if (this.riskForm.value.ethnicity != null && this.riskForm.value.ethnicity.length)
-      this.riskForm.value.ethnicity = this.riskForm.value.ethnicity[0].id;
     this.riskQuiz = new RiskQuiz(this.riskForm.value);
   }
 
@@ -122,7 +121,7 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
     // if (!hasError) this.riskQuiz.calcRisk(risk_json)
   }
 
-  public selected_ethnicity(ethnicity: Array<{ id: string, text: string }>): void {
+  public selected_ethnicity(ethnicity: Array<{id: string, text: string}>): void {
     if (ethnicity == null || !ethnicity.length) return;
     this.riskQuiz.riskQuiz.ethnicity = this.riskForm.value.ethnicity = ethnicity[0].id;
   }

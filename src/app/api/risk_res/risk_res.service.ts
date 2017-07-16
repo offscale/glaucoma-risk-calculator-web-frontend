@@ -47,7 +47,7 @@ export class RiskResService {
     this.setReqOptions();
     return this.http.delete(`/api/risk_res/${id}`, this.req_options)
       .map((r: Response) => r.status === 204 ? Object.freeze({}) : Observable.throw(
-        new AssertionError(`Expected status of 204, got ${r.status}`)))
+        new AssertionError({ message: `Expected status of 204, got ${r.status}` })))
       .catch(handleError)
   }
 

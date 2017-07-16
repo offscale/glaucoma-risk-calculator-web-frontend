@@ -1,8 +1,8 @@
 <form>
-<a type="button" class="btn btn-lg btn-warning" (click)="login()" *ngIf="!loggedIn()">Authenticate with Office 365</a>
+  <a type="button" class="btn btn-lg btn-warning" (click)="login()" *ngIf="!loggedIn()">Authenticate with Office 365</a>
 </form>
 <form>
-<button class="btn btn-sm btn-outline-danger" (click)="logout()" *ngIf="loggedIn()">Office 365 logout</button>
+  <button class="btn btn-sm btn-outline-danger" (click)="logout()" *ngIf="loggedIn()">Office 365 logout</button>
 </form>
 
 <form *ngIf="loggedIn()" (ngSubmit)="sendTestEmail()">

@@ -67,7 +67,7 @@ export class AuthService {
       .catch(handleError);
   }
 
-  getAll(): Observable<{ users: User[] }> {
+  getAll(): Observable<{users: User[]}> {
     const options = new RequestOptions({ headers: new Headers({ 'X-Access-Token': this.accessToken }) });
     return this.http.get('/api/users', options)
       .map(response => response.json())

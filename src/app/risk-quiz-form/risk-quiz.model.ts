@@ -1,6 +1,7 @@
 import {
   calc_default_multiplicative_risks,
-  ethnicity2study, Gender,
+  ethnicity2study,
+  Gender,
   IInput,
   IMultiplicativeRisks,
   IRelativeRisk,
@@ -58,7 +59,7 @@ export class RiskQuiz implements IIRiskQuiz {
       diabetes: this.riskQuiz.diabetes,
       myopia: this.riskQuiz.myopia,
       family_history: this.riskQuiz.sibling || this.riskQuiz.parent
-    })
+    });
   }
 
   toJSON() {
