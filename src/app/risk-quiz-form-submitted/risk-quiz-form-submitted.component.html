@@ -36,7 +36,7 @@
       </div>
     </div>
     <hr>
-    <button class="btn btn-secondary" (click)="toggleCollapse()">
+    <button class="btn btn-secondary" (click)="toggleCollapse()" [class.btn-outline-secondary]="!isCollapsed">
       Review references and submission
     </button>
     <div [collapse]="isCollapsed" class="card card-block card-header" *ngIf="!isCollapsed">
