@@ -14,7 +14,7 @@ export class ServerStatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.serverStatus = { version: 'App 0.0.17; ' };
+    this.serverStatus = { version: 'App 0.0.18; ' };
     this.serverStatusService.get().subscribe(
       serverStatus => this.serverStatus.version += `API ${serverStatus.version}`,
       error => this.serverStatus.version += 'API server not available'

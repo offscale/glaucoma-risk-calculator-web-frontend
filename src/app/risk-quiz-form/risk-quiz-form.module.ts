@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GaugeModule } from 'ng-gauge';
 import { CollapseModule, PaginationModule, TypeaheadModule } from 'ngx-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard/dist';
-import { SelectModule } from 'ng2-select';
+import { SelectModule } from 'ng-next-select';
 import { Ng2TableModule } from 'ng2-table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 

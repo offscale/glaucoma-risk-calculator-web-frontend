@@ -1,6 +1,6 @@
 {
   "name": "glaucoma-risk-calculator-web-frontend",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "license": "MIT",
   "author": "Samuel Marks <samuel@offscale.io>",
   "angular-cli": {},
@@ -36,8 +36,8 @@
     "d3": "^4.10.0",
     "glaucoma-risk-calculator-engine": "https://api.github.com/repos/glaucoma-australia/glaucoma-risk-calculator-engine-dist/tarball",
     "mathjs": "^3.15.0",
-    "ng-gauge": "^1.0.0",
-    "ng2-select": "^1.2.0",
+    "ng-gauge": "https://api.github.com/repos/glaucoma-australia/ng-gauge/tarball",
+    "ng-next-select": "^1.3.12",
     "ng2-table": "^1.3.2",
     "ngx-bootstrap": "^1.8.1",
     "ngx-clipboard": "^8.0.3",

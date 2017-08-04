@@ -29,9 +29,17 @@
 
       <div class="form-group">
         <label for="ethnicity">Ethnicity</label>
+        <!--
         <input placeholder="Specify your closest ethnicity"
                [typeahead]="ethnicities"
                class="form-control" formControlName="ethnicity" id="ethnicity">
+        -->
+        <ng-select [items]="ethnicities"
+                   (selected)="selected_ethnicity($event)"
+                   (data)="selected_ethnicity($event)"
+                   id="ethnicity" formControlName="ethnicity"
+                   placeholder="Search for ethnicity">
+        </ng-select>
       </div>
 
       <div class="form-check">

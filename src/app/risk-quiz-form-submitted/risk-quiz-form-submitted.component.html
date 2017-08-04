@@ -1,7 +1,20 @@
 <div class="container">
   <div *ngIf="submitted">
+    <div class="col" *ngIf="gauge">
+      <ng-gauge [bgRadius]=progressGraph.bgRadius
+                [bgColor]=progressGraph.bgColor
+                [rounded]=progressGraph.rounded
+                [reverse]=progressGraph.reverse
+                [animationSecs]=progressGraph.animationSecs
+                [labels]=progressGraph.labels
+                [segments]=progressGraph.segments>
+      </ng-gauge>
+    </div>
     <h3 style="text-underline: single">{{recommendation}}</h3>
+    <h5 style="text-underline: single; font-style: italic;">({{recommendation_subtitle | lowercase}})</h5>
 
+    <hr>
+    <h6>Based off submission:</h6>
     <ng-table [config]="entryConfig"
               [rows]="entryRows" [columns]="entryCols">
     </ng-table>
@@ -69,17 +82,10 @@
 
         <h3>This puts you in the
           <strong>{{most_at_risk}}</strong> most at risk subgroup.
-          <span *ngIf="added_risk">Adding in <strong>family risk</strong>, and you're:</span></h3>
-        <!--
-        ___________
-        |         |
-        |  Medium |
-        |         |
-        |_________|
-
-        -->
-
-        <app-risk-pointer [risk_value]="riskQuiz.client_risk"></app-risk-pointer>
+          <span *ngIf="added_risk">Adding in <strong>family risk</strong>, and you have:
+          {{riskQuiz.client_risk}}% relative risk within your cohort.</span>
+        </h3>
+        <!--<app-risk-pointer [risk_value]="riskQuiz.client_risk"></app-risk-pointer>-->
 
         <ngx-charts-pie-grid *ngIf="pie_grid"
                              [view]="pieView"
@@ -113,21 +119,11 @@
         </div>
         -->
 
+        <!--
         <h4>Other charts</h4>
 
         <div class="container-fluid">
           <div class="row justify-content-md-center">
-            <div class="col">
-              <ng-gauge *ngIf="gauge"
-                        [bgRadius]=progressGraph.bgRadius
-                        [bgColor]=progressGraph.bgColor
-                        [rounded]=progressGraph.rounded
-                        [reverse]=progressGraph.reverse
-                        [animationSecs]=progressGraph.animationSecs
-                        [labels]=progressGraph.labels
-                        [segments]=progressGraph.segments>
-              </ng-gauge>
-            </div>
             <div class="col" *ngIf="show_pie_adv">
               <ngx-charts-advanced-pie-chart [view]="pieAdvDim"
                                              [scheme]="pieAdvColorScheme"
@@ -137,9 +133,11 @@
                                              (select)="pieAdvOnSelect($event)">
               </ngx-charts-advanced-pie-chart>
               <!-- [total-label]="pieAdvLabel" -->
+        <!--
             </div>
           </div>
         </div>
+        -->
 
         <h4>References</h4>
         <div [innerHTML]="html_of_all_refs">hello</div>

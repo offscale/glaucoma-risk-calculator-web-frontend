@@ -1,4 +1,5 @@
 import 'rxjs/add/operator/switchMap';
+import * as math from 'mathjs';
 import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GaugeLabel, GaugeSegment } from 'ng-gauge';
@@ -10,6 +11,14 @@ import { RiskResService } from '../api/risk_res/risk_res.service';
 import { MsAuthService } from '../ms-auth/ms-auth.service';
 
 import { colours, numToColour } from '../colours';
+
+
+math.config({
+  number: 'BigNumber',  // Default type of number:
+                        // 'number' (default), 'BigNumber', or 'Fraction'
+  precision: 20         // Number of significant digits for BigNumbers
+});
+
 
 const omit = (obj: {}, omitKeys: string[]): {} =>
   Object.keys(obj).reduce((result, key) => {
@@ -57,6 +66,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   id: number = undefined;
   share_url: string;
   recommendation: string;
+  recommendation_subtitle: string;
 
   progressGraph = {
     bgRadius: 60,
@@ -135,6 +145,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   }
 
   ngOnInit() {
+    if (!(this.riskQuiz instanceof RiskQuiz))
+      this.riskQuiz = new RiskQuiz(this.riskQuiz);
   }
 
   ngAfterContentInit() {
@@ -168,9 +180,6 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   }
 
   private prepareView() {
-    if (!(this.riskQuiz instanceof RiskQuiz))
-      this.riskQuiz = new RiskQuiz(this.riskQuiz);
-
     // <ng-table>
     this.entryCols = Object.keys(this.riskQuiz.riskQuiz).filter(
       k => ['createdAt', 'updatedAt', 'id', 'client_risk'].indexOf(k) === -1).map(k => ({ title: k, name: k }));
@@ -183,7 +192,12 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     this.riskStatsService.read('latest').subscribe(
       content => {
         this.riskStatsService.risk_json = content.risk_json as IRiskJson;
-        this.riskQuiz.calcRisk(this.riskStatsService.risk_json);
+        try {
+          this.riskQuiz.calcRisk(this.riskStatsService.risk_json);
+        } catch (e) {
+          this.router.navigate(['/']).catch(console.error);
+        }
+
         this.html_of_all_refs = JSON.parse(this.riskStatsService.risk_json.html_of_all_refs);
         this.riskStatsService.risk = this.riskQuiz.risk;
         this.riskQuiz.ref = this.riskStatsService.risk_json.studies[this.riskQuiz.study].ref;
@@ -195,10 +209,23 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
             math.divide(this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1, this.riskQuiz.risks.length), 100
           ));
         // const risk_pc = get_risk_pc.call(this);
-        const risk_pc_as_s: string = math.format(risk_pc, 6)
-          /*(fmt_s => `${fmt_s.lastIndexOf('.') > -1 && fmt_s.length > 3 ? fmt_s.slice(0, -1) : risk_pc}%`)(
-           math.format(risk_pc, 6)
-           )*/;
+        const risk_pc_as_s: string = (_risk_pc => {
+          switch (true) {
+            case math.smallerEq(_risk_pc, 25):
+              return 'least';
+            case math.smallerEq(_risk_pc, 50):
+              return 'average';
+            case math.smallerEq(_risk_pc, 75):
+              return '2nd greatest';
+            case math.larger(_risk_pc, 75):
+            default:
+              return 'greatest';
+          }
+        })(risk_pc);
+        /*math.format(risk_pc, 6)*/
+        /*(fmt_s => `${fmt_s.lastIndexOf('.') > -1 && fmt_s.length > 3 ? fmt_s.slice(0, -1) : risk_pc}%`)(
+         math.format(risk_pc, 6)
+         )*/
         this.most_at_risk =
           `${this.riskQuiz.risks.lastIndexOf(this.riskQuiz.risk) + 1} / ${this.riskQuiz.risks.length}`;
         this.riskQuiz.relative_risks = calc_relative_risk(this.riskStatsService.risk_json, this.riskQuiz.riskQuiz);
@@ -215,13 +242,13 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
           this.recommendation += ' Unless you\'ve seen one in the last 2 years';
         } else if (risk_pc <= 50) {
           this.recommendation += ' in the next year.';
-          this.recommendation += ' Unless you\'ve seen one in the last year';
+          this.recommendation_subtitle = 'Unless you\'ve seen one in the last year';
         } else if (risk_pc <= 75) {
           this.recommendation += ' in the next 6 months.';
-          this.recommendation += ' Unless you\'ve seen one recently.';
+          this.recommendation_subtitle = ' Unless you\'ve seen one recently.';
         } else {
           this.recommendation += ' ASAP.';
-          this.recommendation += ' Unless you\'ve seen one recently.';
+          this.recommendation_subtitle = ' Unless you\'ve seen one recently.';
         }
 
         if (this.id == null)
@@ -239,7 +266,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     this.progressGraph.labels.push(
       new GaugeLabel({
         color: colours.white,
-        text: 'most at risk',
+        text: 'risk',
         x: 0,
         y: 20,
         fontSize: '1em'

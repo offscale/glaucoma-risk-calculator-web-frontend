@@ -1,16 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import * as math from 'mathjs';
 import { ethnicity2study, IRiskJson } from 'glaucoma-risk-calculator-engine';
+
 import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
 import { RiskQuiz } from './risk-quiz.model';
 
-
-math.config({
-  number: 'BigNumber',  // Default type of number:
-                        // 'number' (default), 'BigNumber', or 'Fraction'
-  precision: 20         // Number of significant digits for BigNumbers
-});
 
 @Component({
   selector: 'app-risk-quiz-form',
@@ -71,6 +65,8 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     this.submitted = true;
+    if (this.riskForm.value.ethnicity != null && this.riskForm.value.ethnicity.length && this.riskForm.value.ethnicity instanceof Array)
+      this.riskForm.value.ethnicity = this.riskForm.value.ethnicity[0].id;
     this.riskQuiz = new RiskQuiz(this.riskForm.value);
   }
 
