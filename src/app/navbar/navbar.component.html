@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark navbar-fixed-top bg-inverse" style="margin-bottom: 1em">
+<nav class="navbar navbar-dark navbar-fixed-top bg-inverse">
   <!-- [style.margin-bottom.%]="appService.navbarPadding$ | async" -->
   <app-alerts></app-alerts>
   <button type="button" class="navbar-toggler hidden-sm-up" data-toggle="collapse" data-target="#navbar"
@@ -19,3 +19,30 @@
     </nav>
   </div>
 </nav>
+
+<!-- Bootstrap beta version -->
+<!--
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <a class="navbar-brand" routerLink="/" routerLinkActive="active"
+     [routerLinkActiveOptions]="{exact:true}">
+    Glaucoma Risk Calculator
+  </a>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto"></ul>
+    <form class="form-inline my-2 my-lg-0" *ngIf="authService.isLoggedIn()">
+      <a class="nav-item nav-link" routerLinkActive="active" routerLink="/admin/dashboard">
+        Dashboard
+      </a>
+      <button class="a nav-item nav-link" (click)="logout()">
+        Logout
+      </button>
+    </form>
+    <form class="form-inline my-2 my-lg-0" *ngIf="!authService.isLoggedIn()">
+      <a class="btn btn-outline-success my-2 my-sm-0" routerLink="/login-signup">
+        Login/signup
+      </a>
+    </form>
+  </div>
+</nav>
+-->
