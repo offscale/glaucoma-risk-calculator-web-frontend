@@ -39,7 +39,7 @@
     "ng-gauge": "https://api.github.com/repos/glaucoma-australia/ng-gauge/tarball",
     "ng-next-select": "^1.3.13",
     "ng2-table": "^1.3.2",
-    "ngx-bootstrap": "^1.9.1",
+    "ngx-bootstrap": "^1.9.3",
     "ngx-clipboard": "^8.0.4",
     "tinymce": "^4.6.6",
     "ts-helpers": "^1.1.2",
@@ -47,12 +47,12 @@
     "zone.js": "^0.8.17"
   },
   "devDependencies": {
-    "@angular/cli": "^1.3.2",
+    "@angular/cli": "^1.4.1",
     "@angular/compiler-cli": "^4.4.0-RC.0",
     "@microsoft/microsoft-graph-types": "^1.0.1",
     "@types/jasmine": "2.5.54",
     "@types/mathjs": "0.0.35",
-    "@types/node": "^8.0.27",
+    "@types/node": "^8.0.28",
     "angular2-load-children-loader": "^0.2.0",
     "codelyzer": "~3.1.2",
     "jasmine-core": "~2.8.0",

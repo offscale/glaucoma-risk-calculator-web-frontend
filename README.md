@@ -3,7 +3,7 @@
 For the files ready to deploy, see the [glaucoma-risk-calc-web-frontend-dist](https://github.com/glaucoma-australia/glaucoma-risk-calc-web-frontend-dist) repo.
 
 ## Technical details
-Built in TypeScript with Angular 2.4.7, following latest official standards for scaffolding.
+Built in TypeScript with Angular 4, following latest official standards for scaffolding.
 
 ## Deploy
 
@@ -25,9 +25,9 @@ Assuming the -dist is in the directory above where this is cloned, in Bash just:
 ## Development setup
 
 Install latest:
-  - Node.JS (tested with 7.5.0);
-  - npm (tested with 4.2.0); and
-  - `ng` with `npm install -g angular-cli`... (tested with 1.0.0-beta.32.3). 
+  - Node.JS (tested with 8.4.0);
+  - npm (tested with 5.4.1); and
+  - `ng` with `npm install -g @angular/cli`... (tested with 1.4.1). 
 
 ## Build
 
