@@ -54,7 +54,6 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
       content => {
         this.riskStatsService.risk_json = content.risk_json as IRiskJson;
         this.ethnicity2study = ethnicity2study(this.riskStatsService.risk_json);
-        console.info('this.ethnicity2study =', Object.keys(this.ethnicity2study).join('\n'), ';');
         this.all_ethnicities = this.ethnicities = Object.keys(this.ethnicity2study).sort();
       },
       console.error

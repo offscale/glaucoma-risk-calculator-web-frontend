@@ -82,23 +82,18 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
 
   // <pie grid>
   colorScheme = { domain: [colours.teal, colours.darkred, colours.gold, colours.grey] };
-
+  pieAdvColorScheme = this.colorScheme;
   // line, area
   autoScale = true;
-
   pieData = [
     /* { 'name': 'France', 'value': 7200000 } */
   ];
-  pieView: [760, 760];
 
   // </pie grid>
 
   // <advanced-pie-chart>
-
+  pieView: [760, 760];
   pieAdvDim: any[] = [700, 400];
-
-  pieAdvColorScheme = this.colorScheme;
-
   pieAdvData = [];
   pieAdvLabel = 'times more at risk';
   pieAdvGradient = true;
@@ -115,23 +110,22 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   // <ng-table>
   public entryRows: Array<any> = [];
   public entryCols: Array<any> = [{ title: 'Salary ($)', name: 'salary' }];
-  public entryPage = 1;
-  public entryItemsPerPage = 10;
-  public entryMaxSize = 5;
-  public entryNumPages = 1;
-  public entryLength = 0;
-
   public entryConfig: any = {
     paging: true,
     sorting: { columns: this.entryCols },
     filtering: { filterString: '' },
     className: ['table-striped', 'table-bordered']
   };
-
-  private entryData: Array<any> = null;
-  // </ng-table>
-
+  public entryPage = 1;
+  public entryItemsPerPage = 10;
+  public entryMaxSize = 5;
+  public entryNumPages = 1;
+  public entryLength = 0;
   html_of_all_refs: HTMLAllCollection;
+  // </ng-table>
+  html_of_last_note: HTMLAllCollection;
+  notes: string[];
+  private entryData: Array<any> = null;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -179,6 +173,14 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     return `${MsAuthService.getHostOrigin()}/results/${this.id}`;
   }
 
+  onPieGridSelect(event) {
+    console.log(event);
+  }
+
+  pieAdvOnSelect(event) {
+    console.log(event);
+  }
+
   private prepareView() {
     // <ng-table>
     this.entryCols = Object.keys(this.riskQuiz.riskQuiz).filter(
@@ -199,6 +201,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
         }
 
         this.html_of_all_refs = JSON.parse(this.riskStatsService.risk_json.html_of_all_refs);
+        this.html_of_last_note = this.riskStatsService.risk_json.global_notes.pop() as any;
+        this.notes = this.riskStatsService.risk_json.global_notes;
         this.riskStatsService.risk = this.riskQuiz.risk;
         this.riskQuiz.ref = this.riskStatsService.risk_json.studies[this.riskQuiz.study].ref;
         // this.riskQuiz.prepareRef();
@@ -239,16 +243,16 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
         this.recommendation = 'We recommend you see an eye-health professional ';
         if (risk_pc <= 25) {
           this.recommendation += ' in the next two years.';
-          this.recommendation += ' Unless you\'ve seen one in the last 2 years';
+          this.recommendation_subtitle += 'Unless you\'ve seen one in the last 2 years';
         } else if (risk_pc <= 50) {
           this.recommendation += ' in the next year.';
           this.recommendation_subtitle = 'Unless you\'ve seen one in the last year';
         } else if (risk_pc <= 75) {
           this.recommendation += ' in the next 6 months.';
-          this.recommendation_subtitle = ' Unless you\'ve seen one recently.';
+          this.recommendation_subtitle = 'Unless you\'ve seen one recently.';
         } else {
           this.recommendation += ' ASAP.';
-          this.recommendation_subtitle = ' Unless you\'ve seen one recently.';
+          this.recommendation_subtitle = 'Unless you\'ve seen one recently.';
         }
 
         if (this.id == null)
@@ -293,13 +297,5 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     this.pieAdvData = Object.keys(multiplicative_risks).map(k => ({ name: k, value: multiplicative_risks[k] })
     ).filter(o => o.value > 1);
     this.show_pie_adv = this.added_risk = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
-  }
-
-  onPieGridSelect(event) {
-    console.log(event);
-  }
-
-  pieAdvOnSelect(event) {
-    console.log(event);
   }
 }

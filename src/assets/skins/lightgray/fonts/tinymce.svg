@@ -205,10 +205,12 @@
              d="M992 576h-352v352c0 17.672-14.328 32-32 32h-192c-17.672 0-32-14.328-32-32v-352h-352c-17.672 0-32-14.328-32-32v-192c0-17.672 14.328-32 32-32h352v-352c0-17.672 14.328-32 32-32h192c17.672 0 32 14.328 32 32v352h352c17.672 0 32 14.328 32 32v192c0 17.672-14.328 32-32 32z"/>
       <glyph unicode="&#xe93b;" glyph-name="arrowup" d="M0 320l192-192 320 320 320-320 192 192-511.998 512z"/>
       <glyph unicode="&#xe93c;" glyph-name="arrowright" d="M384 960l-192-192 320-320-320-320 192-192 512 512z"/>
-      <glyph unicode="&#xe93d;" glyph-name="arrowdown" d="M1024 576l-192 192-320-320-320 320-192-192 512-511.998z"/>
+      <glyph unicode="&#xe93d;" glyph-name="arrowdown"
+             d="M1024 576l-192 192-320-320-320 320-192-192 512-511.998z"/>
       <glyph unicode="&#xe93f;" glyph-name="arrowup2" d="M768 320l-256 256-256-256z"/>
       <glyph unicode="&#xe940;" glyph-name="arrowdown2" d="M256 576l256-256 256 256z"/>
-      <glyph unicode="&#xe941;" glyph-name="menu2" d="M256 704l256-256 256 256zM255.996 384.004l256-256 256 256z"/>
+      <glyph unicode="&#xe941;" glyph-name="menu2"
+             d="M256 704l256-256 256 256zM255.996 384.004l256-256 256 256z"/>
       <glyph unicode="&#xe961;" glyph-name="newtab"
              d="M704 384l128 128v-512h-768v768h512l-128-128h-256v-512h512zM960 896v-352l-130.744 130.744-354.746-354.744h-90.51v90.512l354.744 354.744-130.744 130.744z"/>
       <glyph unicode="&#xeaa8;" glyph-name="rotateleft"

@@ -106,7 +106,7 @@ export class AuthService {
 
   redirOnResIfUnauth(error) {
     return error.error_message && error.error_message === 'Nothing associated with that access token' && this.del(
-        window.location.hash
-      ).subscribe(_ => this.router.navigateByUrl('/login-signup'), console.error)
+      window.location.hash
+    ).subscribe(_ => this.router.navigateByUrl('/login-signup'), console.error)
   }
 }

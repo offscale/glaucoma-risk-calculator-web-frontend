@@ -9,13 +9,16 @@
               [segments]=progressGraph.segments>
     </ng-gauge>
   </div>
-  <h3 style="text-underline: single">{{recommendation}}</h3>
-  <h5 style="text-underline: single; font-style: italic;">({{recommendation_subtitle | lowercase}})</h5>
+  <h3 style="text-underline: single">
+    {{recommendation}}
+  </h3>
+  <h5 style="text-underline: single; font-style: italic;">
+    ({{recommendation_subtitle | lowercase}})
+  </h5>
 
   <hr>
   <h6>Based off submission:</h6>
-  <ng-table [config]="entryConfig"
-            [rows]="entryRows" [columns]="entryCols">
+  <ng-table [config]="entryConfig" [rows]="entryRows" [columns]="entryCols">
   </ng-table>
 
   <br>
@@ -81,8 +84,10 @@
 
       <h3>This puts you in the
         <strong>{{most_at_risk}}</strong> most at risk subgroup.
-        <span *ngIf="added_risk">Adding in <strong>family risk</strong>, and you have:
-          {{riskQuiz.client_risk}}% relative risk within your cohort.</span>
+        <span *ngIf="added_risk">
+                    Adding in <strong>family risk</strong>, and you have:
+                    {{riskQuiz.client_risk}}% relative risk within your cohort.
+                </span>
       </h3>
       <!--<app-risk-pointer [risk_value]="riskQuiz.client_risk"></app-risk-pointer>-->
 
@@ -102,7 +107,6 @@
       [gradient]="gradient"
       (select)="treemapSelect($event)"-->
       <h4>Risk compared with other ethnicities of same age and gender</h4>
-      <pre>{{riskQuiz.relative_risks.graphed_rr|json}}</pre>
       <div class="row" *ngIf="show_treemap">
         <ngx-charts-tree-map tooltipDisabled="true"
                              [view]="[850, 300]"
@@ -138,6 +142,14 @@
         </div>
       </div>
       -->
+
+      <h4>Notes</h4>
+      <ul *ngFor="let note of notes">
+        <li>{{note}}</li>
+      </ul>
+      <ul>
+        <li [innerHTML]="html_of_last_note">hello</li>
+      </ul>
 
       <h4>References</h4>
       <div [innerHTML]="html_of_all_refs">hello</div>

@@ -4,7 +4,8 @@
     <fieldset class="form-group" id="gender" name="gender">
       <div class="form-check">
         <label class="form-check-label">
-          <input type="radio" class="form-check-input" name="gender" id="male" value="male" formControlName="gender">
+            <input type="radio" class="form-check-input" name="gender" id="male" value="male"
+                   formControlName="gender">
           Male
         </label>
       </div>
@@ -37,9 +38,7 @@
                  (selected)="selected_ethnicity($event)"
                  (data)="selected_ethnicity($event)"
                  id="ethnicity" formControlName="ethnicity"
-                 placeholder="Search for ethnicity"
-                 style="background-color: white"
-                 class="bg-white">
+                 placeholder="Search for ethnicity">
       </ng-select>
     </div>
 
@@ -71,7 +70,9 @@
       </label>
     </div>
 
-    <button type="submit" class="btn "
+      <pre>riskForm.valid = {{riskForm.valid|json}}</pre>
+
+      <button type="submit" class="btn "
             [class.btn-primary]="riskForm.valid"
             [class.btn-outline-secondary]="!riskForm.valid"
             [disabled]="!riskForm.valid">

@@ -11,13 +11,13 @@ import { AlertsService } from '../alerts/alerts.service';
 export class MsAuthComponent implements OnInit {
   public isCollapsed = true;
   mail_base: {recipient: string, subject: string} = {} as any;
-  private _client_id: string;
-  private _tenant_id: string;
 
   constructor(private alertsService: AlertsService,
               private msAuthService: MsAuthService,
               private emailTplService: EmailTplService) {
   }
+
+  private _client_id: string;
 
   public get client_id(): string {
     return this.msAuthService.email_conf.client_id;
@@ -26,6 +26,8 @@ export class MsAuthComponent implements OnInit {
   public set client_id(val: string) {
     this._client_id = val;
   }
+
+  private _tenant_id: string;
 
   public get tenant_id(): string {
     return this.msAuthService.email_conf.tenant_id;
