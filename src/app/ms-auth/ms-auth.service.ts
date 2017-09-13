@@ -58,7 +58,7 @@ export class MsAuthService {
   private _tenant_id: string;
   private _client_id: string;
   private _access_token: string;
-  
+
   static genNonce() {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz'; // '-._~';
     const result = [];
