@@ -11,7 +11,8 @@ export class ServerStatusService {
   }
 
   get(): Observable<ServerStatus> {
-    return this.http.get('/api')
+    return this.http
+      .get('/api')
       .map((r: Response) => r.json() as ServerStatus)
   }
 }

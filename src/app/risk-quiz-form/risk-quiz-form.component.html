@@ -4,8 +4,8 @@
     <fieldset class="form-group" id="gender" name="gender">
       <div class="form-check">
         <label class="form-check-label">
-            <input type="radio" class="form-check-input" name="gender" id="male" value="male"
-                   formControlName="gender">
+          <input type="radio" class="form-check-input" name="gender" id="male" value="male"
+                 formControlName="gender">
           Male
         </label>
       </div>
@@ -70,9 +70,7 @@
       </label>
     </div>
 
-      <pre>riskForm.valid = {{riskForm.valid|json}}</pre>
-
-      <button type="submit" class="btn "
+    <button type="submit" class="btn "
             [class.btn-primary]="riskForm.valid"
             [class.btn-outline-secondary]="!riskForm.valid"
             [disabled]="!riskForm.valid">

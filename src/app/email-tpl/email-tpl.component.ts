@@ -18,36 +18,44 @@ export class EmailTplComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.keyupHandlerFunction(this.emailTplService.hasTpl() ? this.emailTplService.email_tpl.tpl : '');
+    this.keyupHandlerFunction(
+      this.emailTplService.hasTpl() ?
+        this.emailTplService.email_tpl.tpl
+        : ''
+    );
   }
 
   tplCreate(new_email_tpl: IEmailTplBase) {
-    this.emailTplService.create(new_email_tpl).subscribe(this.handleEmailTpl, this.handleError)
+    this.emailTplService
+      .create(new_email_tpl)
+      .subscribe(this.handleEmailTpl, this.handleError)
   }
 
   tplRead(createdAt: string | Date) {
-    this.emailTplService.read(createdAt).subscribe(
-      (email_tpl: IEmailTpl) =>
-        this.emailTplService.email_tpl = email_tpl,
-      error =>
-        this.alertsService.add({ type: 'warning', msg: error })
-    )
+    this.emailTplService.read(createdAt)
+      .subscribe((email_tpl: IEmailTpl) =>
+          this.emailTplService.email_tpl = email_tpl,
+        error =>
+          this.alertsService.add({ type: 'warning', msg: error })
+      )
   }
 
   tplUpdate(new_email_tpl: IEmailTplBase) {
     new_email_tpl.createdAt = this.emailTplService.email_tpl.createdAt;
 
-    this.emailTplService.update(
-      Object.assign({ updatedAt: new Date() }, this.emailTplService.email_tpl),
-      new_email_tpl
-    ).subscribe(this.handleEmailTpl, this.handleError)
+    this.emailTplService
+      .update(
+        Object.assign({ updatedAt: new Date() }, this.emailTplService.email_tpl),
+        new_email_tpl)
+      .subscribe(this.handleEmailTpl, this.handleError)
   }
 
   tplDestroy(createdAt: string | Date) {
-    this.emailTplService.destroy(createdAt).subscribe(
-      _ => _,
-      this.handleError
-    )
+    this.emailTplService
+      .destroy(createdAt)
+      .subscribe(_ => _,
+        this.handleError
+      )
   }
 
   save() {

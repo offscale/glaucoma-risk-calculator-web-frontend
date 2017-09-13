@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response, URLSearchParams } from '@angular/http';
+
 import { Observable } from 'rxjs/Observable';
-import { AuthService } from '../api/auth/auth.service';
-import { handleError } from '../api/service-utils';
 import 'rxjs/add/operator/catch';
 
+import { AuthService } from '../api/auth/auth.service';
+import { handleError } from '../api/service-utils';
 
 interface ArrayBufferViewForEach extends ArrayBufferView {
   forEach(callbackfn: (value: number, index: number, array: Int8Array) => void, thisArg?: any): void;
@@ -54,45 +55,10 @@ export const parseQueryString = (url: string): ResHash => {
 export class MsAuthService {
   public email_conf: IEmailConf = {} as IEmailConf;
   private params: ResHash;
-
-  constructor(private http: Http, private authService: AuthService) {
-    this.params = parseQueryString(location.hash);
-  }
-
   private _tenant_id: string;
-
-  get tenant_id(): string {
-    if (!this._tenant_id) throw TypeError('tenant_id must be defined. Did you run MsAuthService.setup?');
-    return this._tenant_id;
-  }
-
-  set tenant_id(val: string) {
-    this._tenant_id = val;
-  }
-
   private _client_id: string;
-
-  get client_id(): string {
-    if (!this._client_id) throw TypeError('client_id must be defined. Did you run MsAuthService.setup?');
-    return this._client_id;
-  }
-
-  set client_id(val: string) {
-    this._client_id = val;
-  }
-
   private _access_token: string;
-
-  get access_token(): string {
-    if (!this._access_token) this._access_token = localStorage.getItem('ms-access-token');
-    return this._access_token;
-  }
-
-  set access_token(val: string) {
-    this._access_token = val;
-    localStorage.setItem('ms-access-token', val);
-  }
-
+  
   static genNonce() {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz'; // '-._~';
     const result = [];
@@ -104,6 +70,38 @@ export class MsAuthService {
   static getHostOrigin(): string {
     return `${window.location.protocol}//${window.location.hostname}${window.location.port ?
       ':' + window.location.port : ''}`;
+  }
+
+  constructor(private http: Http, private authService: AuthService) {
+    this.params = parseQueryString(location.hash);
+  }
+
+  get tenant_id(): string {
+    if (!this._tenant_id) throw TypeError('tenant_id must be defined. Did you run MsAuthService.setup?');
+    return this._tenant_id;
+  }
+
+  set tenant_id(val: string) {
+    this._tenant_id = val;
+  }
+
+  get client_id(): string {
+    if (!this._client_id) throw TypeError('client_id must be defined. Did you run MsAuthService.setup?');
+    return this._client_id;
+  }
+
+  set client_id(val: string) {
+    this._client_id = val;
+  }
+
+  get access_token(): string {
+    if (!this._access_token) this._access_token = localStorage.getItem('ms-access-token');
+    return this._access_token;
+  }
+
+  set access_token(val: string) {
+    this._access_token = val;
+    localStorage.setItem('ms-access-token', val);
   }
 
   setup(tenant_id: string, client_id: string) {
@@ -167,7 +165,8 @@ export class MsAuthService {
         }
       }
     };
-    return this.http.post('https://graph.microsoft.com/v1.0/users/me/sendMail', body, options)
+    return this.http
+      .post('https://graph.microsoft.com/v1.0/users/me/sendMail', body, options)
       .map((response: Response) => {
         if (response.status !== 202)
           Observable.throw(new Error(`Expected response.status of 202 got ${response.status}.
@@ -190,7 +189,8 @@ export class MsAuthService {
       })
     });
 
-    return this.http.get('/api/email_conf', options)
+    return this.http
+      .get('/api/email_conf', options)
       .map((response: Response) => {
         if (response.status !== 200)
           return Observable.throw(new Error(`Expected response.status of 200 got ${response.status}.
@@ -210,7 +210,8 @@ export class MsAuthService {
       })
     });
 
-    return this.http.post('/api/email_conf', conf, options)
+    return this.http
+      .post('/api/email_conf', conf, options)
       .map((response: Response) => {
         if (response.status === 200 || response.status === 201)
           return response.json();

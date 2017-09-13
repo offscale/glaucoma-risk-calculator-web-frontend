@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
+
 import { numToColour } from '../colours';
 
 @Component({

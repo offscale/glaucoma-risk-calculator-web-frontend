@@ -1,7 +1,9 @@
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/operator/filter';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+
+import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/operator/filter';
+
 import { AuthService } from '../api/auth/auth.service';
 import { User } from '../api/auth/user';
 import { AlertsService } from '../alerts/alerts.service';
@@ -15,7 +17,9 @@ import { IStatusBody, subHandleError } from '../api/service-utils';
 export class LoginSignupComponent implements OnInit {
   @ViewChild('formRef') form;
 
-  constructor(private router: Router, private authService: AuthService, private alertsService: AlertsService) {
+  constructor(private router: Router,
+              private authService: AuthService,
+              private alertsService: AlertsService) {
   }
 
   ngOnInit() {
@@ -35,20 +39,23 @@ export class LoginSignupComponent implements OnInit {
     };
 
     this.authService.post(user)
-      .subscribe(handleUser,
-        (error: IStatusBody) =>
-          console.error('error =', error) || error.status === 404 && error._parsed.error_message === 'User not found' ?
-            this.authService.create_user(user).subscribe(handleUser, subHandleError.bind(this))
-            : subHandleError.bind(this)
+      .subscribe(handleUser, (error: IStatusBody) =>
+        console.error('error =', error) || error.status === 404 && error._parsed.error_message === 'User not found' ?
+          this.authService
+            .create_user(user)
+            .subscribe(handleUser, subHandleError.bind(this))
+          : subHandleError.bind(this)
       );
   }
 
   private gotoDash() {
     /* tslint:disable:no-console */
-    this.router.navigate(['/admin/dashboard']).then(success =>
-        success ? console.info('state changed') : this.alertsService.alerts.push(
-          { msg: 'state didn\'t change', type: 'warning' }),
-      err => this.alertsService.alerts.push({ msg: err, type: 'danger' })
-    )
+    this.router
+      .navigate(['/admin/dashboard'])
+      .then(success =>
+          success ? console.info('state changed') : this.alertsService.alerts.push(
+            { msg: 'state didn\'t change', type: 'warning' }),
+        err => this.alertsService.alerts.push({ msg: err, type: 'danger' })
+      )
   }
 }

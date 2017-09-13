@@ -15,13 +15,17 @@ export class NavbarComponent {
   }
 
   logout() {
-    this.authService.del().subscribe(
-      response => !this.router.isActive('', true) && this.router.navigate(['login-signup']).then(success =>
-          success ? console.info('state changed') : this.alertsService.alerts.push(
-            { msg: 'state didn\'t change', type: 'warning' }),
-        err => this.alertsService.alerts.push({ msg: err, type: 'danger' })
-      ),
-      console.error
-    );
+    this.authService
+      .del()
+      .subscribe(
+        response => !this.router.isActive('', true)
+          && this.router
+            .navigate(['login-signup'])
+            .then(success => success ? console.info('state changed') : this.alertsService.alerts.push(
+              { msg: 'state didn\'t change', type: 'warning' }),
+              err => this.alertsService.alerts.push({ msg: err, type: 'danger' })
+            ),
+        console.error
+      );
   }
 }

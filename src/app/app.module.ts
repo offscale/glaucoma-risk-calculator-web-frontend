@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
 import { AlertsModule } from './alerts/alerts.module';
 import { AuthService } from './api/auth/auth.service';
 import { AuthGuard } from './api/auth/auth-guard.service';
@@ -16,15 +17,20 @@ import { FooterModule } from './footer/footer.module';
 import { rootRoutes } from './app.routes';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
+import { LoginSignupModule } from './login-signup/login-signup.module';
 
 @NgModule({
   imports: [
     RouterModule, RouterModule.forRoot(rootRoutes),
     BrowserModule, HttpModule, FormsModule,
     NavbarModule, FooterModule, HomeModule, UsersModule,
-    DashboardModule, EmailModule, AlertsModule],
+    DashboardModule, EmailModule, AlertsModule,
+    LoginSignupModule
+  ],
   declarations: [AppComponent],
-  providers: [AuthService, AuthGuard, AlertsService, AppService],
+  providers: [
+    AuthService, AuthGuard, AlertsService, AppService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

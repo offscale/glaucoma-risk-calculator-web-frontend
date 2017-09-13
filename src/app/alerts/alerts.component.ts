@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AlertComponent } from 'ngx-bootstrap';
 
+import { AlertComponent } from 'ngx-bootstrap';
 
 import { IAlert } from './alert';
 import { AlertsService } from './alerts.service';

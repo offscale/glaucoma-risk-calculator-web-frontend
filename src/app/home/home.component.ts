@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { Subscription } from 'rxjs/Subscription';
+
 import { AppService } from '../app.service';
 
 
@@ -11,8 +13,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   navbarPadding: number;
   subNavbarPadding: Subscription;
 
-  constructor(public appService: AppService) {
-  }
+  constructor(public appService: AppService) {}
 
   ngOnInit() {
     this.navbarPadding = this.appService.navbarPadding;

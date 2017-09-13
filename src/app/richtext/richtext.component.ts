@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
+
 import tinymce from 'tinymce/tinymce';
 import 'tinymce/themes/modern/theme';
 import 'tinymce/plugins/paste/plugin';
 import 'tinymce/plugins/link/plugin';
 import 'tinymce/plugins/autoresize/plugin';
+
 import { EmailTplService } from '../api/email_tpl/email-tpl.service';
 
 @Component({
@@ -23,13 +25,15 @@ export class RichTextComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.emailTplService.hasTpl() ? this.init() : this.emailTplService.read('latest').subscribe(
-      email_tpl => {
-        this.emailTplService.email_tpl = email_tpl;
-        this.init();
-      },
-      error => console.error(error) || this.init()
-    )
+    this.emailTplService.hasTpl() ? this.init()
+      : this.emailTplService
+        .read('latest')
+        .subscribe(email_tpl => {
+            this.emailTplService.email_tpl = email_tpl;
+            this.init();
+          },
+          error => console.error(error) || this.init()
+        )
   }
 
   ngOnDestroy() {

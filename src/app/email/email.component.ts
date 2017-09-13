@@ -6,6 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./email.component.css']
 })
 export class EmailComponent {
-  constructor() {
-  }
+  constructor() {}
 }

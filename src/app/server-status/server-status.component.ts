@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+
 import { ServerStatusService } from '../api/server-status.service';
 import { ServerStatus } from '../api/ServerStatus';
 
@@ -14,10 +15,11 @@ export class ServerStatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.serverStatus = { version: 'App 0.0.19; ' };
-    this.serverStatusService.get().subscribe(
-      serverStatus => this.serverStatus.version += `API ${serverStatus.version}`,
-      error => this.serverStatus.version += 'API server not available'
-    );
+    this.serverStatus = {version: 'App 0.0.20; '};
+    this.serverStatusService
+      .get()
+      .subscribe(serverStatus => this.serverStatus.version += `API ${serverStatus.version}`,
+        error => this.serverStatus.version += 'API server not available'
+      );
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Router } from '@angular/router';
+
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
@@ -18,7 +19,8 @@ export class AuthService {
   private redirect_uri: string;
   private _accessToken: AccessToken;
 
-  constructor(private http: Http, private router: Router,
+  constructor(private http: Http,
+              private router: Router,
               private alertsService: AlertsService) {
   }
 
@@ -41,15 +43,18 @@ export class AuthService {
 
     this.redirect_uri = redirect_uri;
     /* tslint:disable:no-console */
-    this.router.navigate(['login-signup']).then(
-      success => success ? console.info('state changed') : this.alertsService.alerts.push(
-        { msg: 'state didn\'t change', type: 'warning' }),
-      err => this.alertsService.alerts.push({ msg: err, type: 'danger' }));
+    this.router
+      .navigate(['login-signup'])
+      .then(success => success ?
+        console.info('state changed')
+        : this.alertsService.alerts.push({ msg: 'state didn\'t change', type: 'warning' }),
+        err => this.alertsService.alerts.push({ msg: err, type: 'danger' }));
   }
 
   create_user(user: User): Observable<User> {
     const options = new RequestOptions({ headers: this.headers });
-    return this.http.post('/api/user', JSON.stringify(user), options)
+    return this.http
+      .post('/api/user', JSON.stringify(user), options)
       .map(response => {
         this.accessToken = response.headers.get('x-access-token');
         return response.json()
@@ -59,7 +64,8 @@ export class AuthService {
 
   post(user: User): Observable<User> {
     const options = new RequestOptions({ headers: this.headers });
-    return this.http.post('/api/auth', JSON.stringify(user), options)
+    return this.http
+      .post('/api/auth', JSON.stringify(user), options)
       .map(response => {
         this.accessToken = response.headers.get('x-access-token');
         return response.json()
@@ -69,7 +75,8 @@ export class AuthService {
 
   getAll(): Observable<{users: User[]}> {
     const options = new RequestOptions({ headers: new Headers({ 'X-Access-Token': this.accessToken }) });
-    return this.http.get('/api/users', options)
+    return this.http
+      .get('/api/users', options)
       .map(response => response.json())
       .catch(handleError);
   }
@@ -87,7 +94,8 @@ export class AuthService {
     if (!this.headers.get('x-access-token')) return Observable.throw('No access token');
 
     const options = new RequestOptions({ headers: this.headers });
-    return this.http.delete('/api/auth', options)
+    return this.http
+      .delete('/api/auth', options)
       .map((response: Response) => {
         if (response.status === 204) {
           logout();
@@ -106,7 +114,7 @@ export class AuthService {
 
   redirOnResIfUnauth(error) {
     return error.error_message && error.error_message === 'Nothing associated with that access token' && this.del(
-      window.location.hash
-    ).subscribe(_ => this.router.navigateByUrl('/login-signup'), console.error)
+      window.location.hash)
+      .subscribe(_ => this.router.navigateByUrl('/login-signup'), console.error)
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { AuthService } from '../api/auth/auth.service';
 import { User } from '../api/auth/user';
 
@@ -30,10 +31,12 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.getAll().subscribe(
-      users => this.users = users.users,
-      console.error
-    );
+    this.authService
+      .getAll()
+      .map(user => user.users)
+      .subscribe(users => this.users = users,
+        console.error
+      );
     this.onChangeTable(this.config);
   }
 
@@ -78,9 +81,9 @@ export class UsersComponent implements OnInit {
     let filteredData: Array<any> = data;
     this.columns.forEach((column: any) => {
       if (column.filtering) {
-        filteredData = filteredData.filter((item: any) => {
-          return item[column.name].match(column.filtering.filterString);
-        });
+        filteredData = filteredData.filter((item: any) =>
+          item[column.name].match(column.filtering.filterString)
+        );
       }
     });
 
