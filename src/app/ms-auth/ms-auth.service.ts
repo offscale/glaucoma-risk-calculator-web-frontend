@@ -72,7 +72,8 @@ export class MsAuthService {
       ':' + window.location.port : ''}`;
   }
 
-  constructor(private http: Http, private authService: AuthService) {
+  constructor(private http: Http,
+              private authService: AuthService) {
     this.params = parseQueryString(location.hash);
   }
 
