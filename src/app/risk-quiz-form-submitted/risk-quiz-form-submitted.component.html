@@ -112,8 +112,7 @@
       (select)="treemapSelect($event)"-->
       <h4>Risk compared with other ethnicities of same age and gender</h4>
       <div class="row" *ngIf="show_treemap">
-        <ngx-charts-tree-map tooltipDisabled="true"
-                             [view]="[850, 300]"
+        <ngx-charts-tree-map [labelFormatting]="labelFormat"
                              [results]="riskQuiz.relative_risks.graphed_rr">
         </ngx-charts-tree-map>
       </div>

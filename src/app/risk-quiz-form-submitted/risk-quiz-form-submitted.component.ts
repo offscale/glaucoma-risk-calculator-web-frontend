@@ -318,4 +318,20 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
       .filter(o => o.value > 1);
     this.show_pie_adv = this.added_risk = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
   }
+
+  private labelFormat(label: {
+    data: {
+      data: {name: string, value: number},
+      x: number, y: number, width: number, height: number,
+      fill: string, label: string, value: number, valueType: undefined
+    },
+    label: string, value: number
+  }): string {
+    const m = {
+      'Chinese [Singapore: urban]': 'Chinese',
+      'White European (Canadian; Italian; Irish; Welsh; Scottish)': 'White (Can.)',
+      'White (Northern European: Australian)': 'White (Aus.)'
+    };
+    return m[label.data.data.name] || label.data.data.name;
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "glaucoma-risk-calculator-web-frontend",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "license": "MIT",
   "author": "Samuel Marks <samuel@offscale.io>",
   "angular-cli": {},
@@ -46,12 +46,12 @@
     "zone.js": "^0.8.17"
   },
   "devDependencies": {
-    "@angular/cli": "^1.4.2",
+    "@angular/cli": "^1.4.3",
     "@angular/compiler-cli": "^4.4.3",
     "@microsoft/microsoft-graph-types": "^1.0.1",
     "@types/jasmine": "2.6.0",
     "@types/mathjs": "0.0.35",
-    "@types/node": "^8.0.28",
+    "@types/node": "^8.0.29",
     "angular2-load-children-loader": "^0.2.0",
     "codelyzer": "~3.2.0",
     "jasmine-core": "~2.8.0",
