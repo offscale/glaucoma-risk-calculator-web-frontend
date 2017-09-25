@@ -17,7 +17,7 @@ import { colours, numToColour } from '../colours';
 math.config({
   number: 'BigNumber',  // Default type of number:
                         // 'number' (default), 'BigNumber', or 'Fraction'
-  precision: 20         // Number of significant digits for BigNumbers
+  precision: 5         // Number of significant digits for BigNumbers
 });
 
 
@@ -254,7 +254,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
           this.gaugeView(risk_pc, risk_pc_as_s);
           this.pieAdvView(this.riskQuiz.multiplicative_risks);
 
-          this.riskQuiz.client_risk = risk_pc.valueOf();
+          this.riskQuiz.client_risk = math.format(risk_pc.valueOf(), {precision: 4});
 
           this.recommendation = 'We recommend you see an eye-health professional ';
           if (risk_pc <= 25) {

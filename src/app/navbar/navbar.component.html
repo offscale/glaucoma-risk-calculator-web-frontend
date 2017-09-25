@@ -5,10 +5,18 @@
           aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation"></button>
   <a class="navbar-brand" routerLink="/" routerLinkActive="active"
      [routerLinkActiveOptions]="{exact:true}">Glaucoma Risk Calculator</a>
+
   <div id="navbar">
     <nav class="nav navbar-nav float-xs-left" *ngIf="!authService.isLoggedIn()">
       <a class="nav-item nav-link" routerLinkActive="active"
-         routerLink="/login-signup">Login/signup</a>
+         routerLink="/login-signup">-</a>
+    </nav>
+
+    <nav class="nav navbar-nav float-xs-right">
+      <a class="nav-item nav-link"
+         href="http://glaucoma.org.au">
+        <img src="../../assets/reversed-logo.png" alt="logo"/>
+      </a>
     </nav>
 
     <nav class="nav navbar-nav float-xs-left" *ngIf="authService.isLoggedIn()">

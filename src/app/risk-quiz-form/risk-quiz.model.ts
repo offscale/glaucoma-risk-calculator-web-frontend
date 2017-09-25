@@ -35,7 +35,7 @@ interface IIRiskQuiz {
 export class RiskQuiz implements IIRiskQuiz {
   public risk: number;
   public relative_risks: IRelativeRisk;
-  public client_risk: number;
+  public client_risk: string;
   public riskLength: number;
   public risks: number[];
   public ref: Array<IItem>;
