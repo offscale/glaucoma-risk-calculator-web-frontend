@@ -275,6 +275,7 @@ body > .ui-select-bootstrap.open {
 .ui-select-match[_ngcontent-c6] > .btn[_ngcontent-c6] {
   color: black;
   background-color: white;
+  border: 1px solid rgba(0,0,0,.15);
 }
 
 /*

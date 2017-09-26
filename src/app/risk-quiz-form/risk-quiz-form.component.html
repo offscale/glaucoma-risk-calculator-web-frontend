@@ -1,4 +1,6 @@
 <div [hidden]="submitted">
+  <h5>Complete the following to calculate your risk of developing glaucoma, and what to do about it.</h5>
+
   <form [formGroup]="riskForm" *ngIf="active" (ngSubmit)="onSubmit()">
     <span class="form-check-label" style="padding-left: 0">Gender</span>
     <fieldset class="form-group" id="gender" name="gender">

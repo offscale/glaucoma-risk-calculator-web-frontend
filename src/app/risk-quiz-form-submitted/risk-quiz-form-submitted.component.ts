@@ -109,6 +109,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   gauge = false;
 
   show_treemap = false;
+  treemap_legend: string[] = [];
 
   // <ng-table>
   public entryRows: Array<any> = [];
@@ -254,12 +255,12 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
           this.gaugeView(risk_pc, risk_pc_as_s);
           this.pieAdvView(this.riskQuiz.multiplicative_risks);
 
-          this.riskQuiz.client_risk = math.format(risk_pc.valueOf(), {precision: 4});
+          this.riskQuiz.client_risk = +risk_pc.toPrecision(4);
 
           this.recommendation = 'We recommend you see an eye-health professional ';
           if (risk_pc <= 25) {
             this.recommendation += ' in the next two years.';
-            this.recommendation_subtitle += 'Unless you\'ve seen one in the last 2 years';
+            this.recommendation_subtitle = 'Unless you\'ve seen one in the last 2 years';
           } else if (risk_pc <= 50) {
             this.recommendation += ' in the next year.';
             this.recommendation_subtitle = 'Unless you\'ve seen one in the last year';
@@ -273,7 +274,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
 
           if (this.id == null)
             this.riskResService
-              .create(this.riskQuiz.toJSON() as any)
+              .create(this.riskQuiz.toJSON())
               .subscribe(r => {
                 this.id = r.id;
                 this.share_url = this.idWithUrl()
@@ -303,7 +304,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     );
     this.progressGraph.segments.push(
       new GaugeSegment({
-        value: risk_pc as number,
+        value: risk_pc,
         color: numToColour(risk_pc),
         borderWidth: 20
       })
@@ -332,6 +333,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
       'White European (Canadian; Italian; Irish; Welsh; Scottish)': 'White (Can.)',
       'White (Northern European: Australian)': 'White (Aus.)'
     };
+    this.treemap_legend.push(`<span style="color: ${label.data.fill}">&#9642; ${label.data.data.name} ${label.data.data.value}`);
     return m[label.data.data.name] || label.data.data.name;
   }
 }

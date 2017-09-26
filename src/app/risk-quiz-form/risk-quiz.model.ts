@@ -35,11 +35,11 @@ interface IIRiskQuiz {
 export class RiskQuiz implements IIRiskQuiz {
   public risk: number;
   public relative_risks: IRelativeRisk;
-  public client_risk: string;
+  public client_risk: number;
   public riskLength: number;
   public risks: number[];
   public ref: Array<IItem>;
-  public study: string;
+  public study: Study;
   public multiplicative_risks: IMultiplicativeRisks;
 
   constructor(public riskQuiz: IRiskQuiz) {
@@ -52,7 +52,7 @@ export class RiskQuiz implements IIRiskQuiz {
       age: this.riskQuiz.age,
       gender: this.riskQuiz.gender as any
     } as IInput;
-    this.risk = risk_from_study(risk_json, input);
+    this.risk = +risk_from_study(risk_json, input).toPrecision(4);
     this.risks = risks_from_study(risk_json, input);
     this.multiplicative_risks = calc_default_multiplicative_risks(risk_json, {
       age: this.riskQuiz.age,
