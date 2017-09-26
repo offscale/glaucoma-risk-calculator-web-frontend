@@ -8,7 +8,6 @@ import { GaugeModule } from 'ng-gauge';
 import { CollapseModule, PaginationModule, TypeaheadModule } from 'ngx-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard/dist';
 import { SelectModule } from 'ng2-select-compat';
-import { Ng2TableModule } from 'ng2-table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
@@ -25,10 +24,12 @@ import { RiskPointerComponent } from '../risk-pointer/risk-pointer.component';
     RouterModule, RouterModule.forChild(riskQuizFormSubmittedRoutes),
     TypeaheadModule.forRoot(), GaugeModule, CollapseModule.forRoot(),
     ClipboardModule, SelectModule, NgxChartsModule,
-    PaginationModule.forRoot(), Ng2TableModule
+    PaginationModule.forRoot()
   ],
   providers: [RiskStatsService, RiskResService],
-  declarations: [RiskQuizFormComponent, RiskQuizFormSubmittedComponent, RiskPointerComponent],
+  declarations: [
+    RiskQuizFormComponent, RiskQuizFormSubmittedComponent, RiskPointerComponent
+  ],
   exports: [RiskQuizFormComponent]
 })
 export class RiskQuizFormModule {

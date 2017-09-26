@@ -192,8 +192,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     // <ng-table>
     this.entryCols = Object
       .keys(this.riskQuiz.riskQuiz)
-      .filter(k => ['createdAt', 'updatedAt', 'id', 'client_risk'].indexOf(k) === -1)
-      .map(k => ({ title: k, name: k }));
+      .filter(k => ['createdAt', 'updatedAt', 'id', 'client_risk'].indexOf(k) === -1);
+
     this.entryData = this.entryRows = [
       Object
         .keys(this.riskQuiz.riskQuiz)

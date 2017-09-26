@@ -32,8 +32,23 @@
   </div>
 
   <h6>Based off submission:</h6>
-  <ng-table [config]="entryConfig" [rows]="entryRows" [columns]="entryCols">
-  </ng-table>
+
+  <table class="table table-responsive table-striped">
+    <thead>
+    <tr>
+      <th *ngFor="let col of entryCols">
+        {{ col }}
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td *ngFor="let col of entryCols">
+        {{ entryRows[0][col] }}
+      </td>
+    </tr>
+    </tbody>
+  </table>
 
   <br>
   <button class="btn btn-default" (click)="redo()">Redo</button>
