@@ -109,7 +109,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   gauge = false;
 
   show_treemap = false;
-  treemap_legend: Array<{color: string, text: string}> = [];
+  treemap_legend: Array<{color: string, name: string, value: number}> = [];
 
   submissionRow: {};
   submissionHeader: string[] = [];
@@ -318,11 +318,11 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     };
     if (this.treemap_legend.findIndex(o => o.color === label.data.fill) < 0)
       this.treemap_legend.push({
-        color: label.data.fill, text: `${label.data.data.name} ${label.data.data.value}`
+        color: label.data.fill,
+        name: label.data.data.name,
+        value: label.data.data.value
       });
-    this.treemap_legend.sort((a, b) =>
-      parseFloat(a.text.slice(a.text.lastIndexOf(' '))) > parseFloat(b.text.slice(b.text.lastIndexOf(' '))) as any
-    );
+    this.treemap_legend.sort((a, b) => a.value < b.value as any);
     return m[label.data.data.name] || label.data.data.name;
   };
 }

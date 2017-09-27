@@ -131,11 +131,24 @@
                              [results]="riskQuiz.relative_risks.graphed_rr">
         </ngx-charts-tree-map>
 
-        <ul class="list-group" *ngFor="let leg of treemap_legend">
-          <li class="list-group-item" [style.background-color]="leg.color">
-            {{leg.text}}
-          </li>
-        </ul>
+        <table class="table table-responsive table-striped">
+          <thead>
+          <tr>
+            <th>Study</th>
+            <th>Prevalence</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let leg of treemap_legend" [style.background-color]="leg.color">
+            <td>
+              {{leg.name}}
+            </td>
+            <td>
+              {{leg.value}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
 
       <!--
