@@ -20,13 +20,12 @@
     <div class="card-block">
       <h2>Glaucoma prevalence in your population is: {{riskQuiz.risk}}%.</h2>
 
-
       <h3>This puts you in the
         <strong>{{most_at_risk}}</strong> most at risk subgroup.
         <span *ngIf="added_risk">
-                    Adding in <strong>family risk</strong>, and you have:
-                    {{riskQuiz.client_risk}}% relative risk within your cohort.
-                </span>
+          Adding in <strong>family risk</strong>, and you have:
+          {{riskQuiz.client_risk}}% relative risk within your cohort.
+        </span>
       </h3>
     </div>
   </div>
@@ -36,15 +35,15 @@
   <table class="table table-responsive table-striped">
     <thead>
     <tr>
-      <th *ngFor="let col of entryCols">
+      <th *ngFor="let col of submissionHeader">
         {{ col }}
       </th>
     </tr>
     </thead>
     <tbody>
     <tr>
-      <td *ngFor="let col of entryCols">
-        {{ entryRows[0][col] }}
+      <td *ngFor="let col of submissionHeader">
+        {{ submissionRow[col] }}
       </td>
     </tr>
     </tbody>
@@ -131,6 +130,12 @@
         <ngx-charts-tree-map [labelFormatting]="labelFormat"
                              [results]="riskQuiz.relative_risks.graphed_rr">
         </ngx-charts-tree-map>
+
+        <ul class="list-group" *ngFor="let leg of treemap_legend">
+          <li class="list-group-item" [style.background-color]="leg.color">
+            {{leg.text}}
+          </li>
+        </ul>
       </div>
 
       <!--

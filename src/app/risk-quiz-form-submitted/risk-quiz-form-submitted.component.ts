@@ -109,27 +109,14 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   gauge = false;
 
   show_treemap = false;
-  treemap_legend: string[] = [];
+  treemap_legend: Array<{color: string, text: string}> = [];
 
-  // <ng-table>
-  public entryRows: Array<any> = [];
-  public entryCols: Array<any> = [{ title: 'Salary ($)', name: 'salary' }];
-  public entryConfig: any = {
-    paging: true,
-    sorting: { columns: this.entryCols },
-    filtering: { filterString: '' },
-    className: ['table-striped', 'table-bordered']
-  };
-  public entryPage = 1;
-  public entryItemsPerPage = 10;
-  public entryMaxSize = 5;
-  public entryNumPages = 1;
-  public entryLength = 0;
+  submissionRow: {};
+  submissionHeader: string[] = [];
+
   html_of_all_refs: HTMLAllCollection;
-  // </ng-table>
   html_of_last_note: HTMLAllCollection;
   notes: string[];
-  private entryData: Array<any> = null;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -189,19 +176,15 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   }
 
   private prepareView() {
-    // <ng-table>
-    this.entryCols = Object
+    this.submissionHeader = Object
       .keys(this.riskQuiz.riskQuiz)
       .filter(k => ['createdAt', 'updatedAt', 'id', 'client_risk'].indexOf(k) === -1);
-
-    this.entryData = this.entryRows = [
+    this.submissionRow =
       Object
         .keys(this.riskQuiz.riskQuiz)
         .map(k => ({ [k]: this.riskQuiz.riskQuiz[k] != null ? this.riskQuiz.riskQuiz[k] : false }))
         .reduce((a, b) => Object.assign(a, b), {})
-    ];
-    this.entryLength = this.entryData.length;
-    // </ng-table>
+    ;
 
     this.riskStatsService
       .read('latest')
@@ -320,20 +303,26 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     this.show_pie_adv = this.added_risk = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
   }
 
-  private labelFormat(label: {
+  labelFormat = (label: {
     data: {
       data: {name: string, value: number},
       x: number, y: number, width: number, height: number,
       fill: string, label: string, value: number, valueType: undefined
     },
     label: string, value: number
-  }): string {
+  }): string => {
     const m = {
       'Chinese [Singapore: urban]': 'Chinese',
       'White European (Canadian; Italian; Irish; Welsh; Scottish)': 'White (Can.)',
       'White (Northern European: Australian)': 'White (Aus.)'
     };
-    this.treemap_legend.push(`<span style="color: ${label.data.fill}">&#9642; ${label.data.data.name} ${label.data.data.value}`);
+    if (this.treemap_legend.findIndex(o => o.color === label.data.fill) < 0)
+      this.treemap_legend.push({
+        color: label.data.fill, text: `${label.data.data.name} ${label.data.data.value}`
+      });
+    this.treemap_legend.sort((a, b) =>
+      parseFloat(a.text.slice(a.text.lastIndexOf(' '))) > parseFloat(b.text.slice(b.text.lastIndexOf(' '))) as any
+    );
     return m[label.data.data.name] || label.data.data.name;
-  }
+  };
 }
