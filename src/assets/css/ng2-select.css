@@ -272,11 +272,13 @@ body > .ui-select-bootstrap.open {
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.25);
 }
 
+
 .ui-select-match[_ngcontent-c6] > .btn[_ngcontent-c6] {
   color: black;
   background-color: white;
   border: 1px solid rgba(0,0,0,.15);
 }
+
 
 /*
 .open {
