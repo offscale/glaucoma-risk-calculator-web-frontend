@@ -59,12 +59,14 @@ export class MsAuthService {
   private _client_id: string;
   private _access_token: string;
 
+
   static genNonce() {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz'; // '-._~';
-    const result = [];
-    const g: ArrayBufferViewForEach = window.crypto.getRandomValues(new Uint8Array(32)) as ArrayBufferViewForEach;
-    g.forEach(c => result.push(charset[c % charset.length]));
-    return result.join('');
+    const rands = new Uint8Array(32);
+    const results = [];
+    window.crypto.getRandomValues(rands);
+    rands.forEach(c => results.push(charset[c % charset.length]));
+    return results.join('');
   }
 
   static getHostOrigin(): string {
