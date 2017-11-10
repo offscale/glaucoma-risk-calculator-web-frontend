@@ -7,11 +7,12 @@ import { calc_relative_risk, familial_risks_from_study, IMultiplicativeRisks, IR
 
 import 'rxjs/add/operator/switchMap';
 
-import { RiskStatsService } from 'app/api/risk_stats/risk-stats.service';
+
 import { IRiskQuiz, RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../api/risk_res/risk_res.service';
 import { MsAuthService } from '../ms-auth/ms-auth.service';
 import { colours, numToColour } from '../colours';
+import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
 
 
 math.config({
