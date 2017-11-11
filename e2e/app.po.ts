@@ -6,6 +6,6 @@ export class GlaucomaRiskCalculatorWebFrontendPage {
   }
 
   getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+    return element(by.css('glaucoma-risk-calculator h1')).getText();
   }
 }

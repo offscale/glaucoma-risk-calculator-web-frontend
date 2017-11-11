@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { GaugeModule } from 'ng-gauge/dist';
+import { GaugeModule } from 'ng-gauge';
 import { CollapseModule, PaginationModule, TypeaheadModule } from 'ngx-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard/dist';
 import { SelectModule } from 'ng2-select-compat';

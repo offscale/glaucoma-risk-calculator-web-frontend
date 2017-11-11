@@ -6,7 +6,8 @@ import { AppService } from './app.service';
 import { MsAuthService, parseQueryString } from './ms-auth/ms-auth.service';
 
 @Component({
-  selector: 'app-root',
+  /* tslint:disable:component-selector */
+  selector: 'glaucoma-risk-calculator',
   styleUrls: ['app.component.css'],
   templateUrl: 'app.component.html'
 })
