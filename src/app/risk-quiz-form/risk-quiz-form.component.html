@@ -2,7 +2,7 @@
   <h5>Complete the following to calculate your risk of developing glaucoma, and what to do about it.</h5>
 
   <form [formGroup]="riskForm" *ngIf="active" (ngSubmit)="onSubmit()">
-    <span class="form-check-label" style="padding-left: 0">Gender</span>
+    <span class="form-check-label label" style="padding-left: 0">Gender</span>
     <fieldset class="form-group" id="gender" name="gender">
       <div class="form-check">
         <label class="form-check-label">
@@ -31,11 +31,6 @@
 
     <div class="form-group">
       <label for="ethnicity">Ethnicity</label>
-      <!--
-      <input placeholder="Specify your closest ethnicity"
-             [typeahead]="ethnicities"
-             class="form-control" formControlName="ethnicity" id="ethnicity">
-      -->
       <ng-select [items]="ethnicities"
                  (selected)="selected_ethnicity($event)"
                  (data)="selected_ethnicity($event)"
@@ -44,40 +39,52 @@
       </ng-select>
     </div>
 
-    <div class="form-check form-check-inline">
-      <p class="form-text" style="margin-bottom: 2px">
-        Family history of glaucoma
-      </p>
-      <label class="form-check-label">
-        Sibling
-        <input class="form-control form-check-input" type="checkbox" id="sibling" formControlName="sibling">
-      </label>
-      <label class="form-check-label">
-        Parent
-        <input class="form-control form-check-input" type="checkbox" id="parent" formControlName="parent">
-      </label>
-    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <fieldset class="col-sm">
+          <legend>Family history of glaucoma</legend>
 
-    <div class="form-check form-check-inline">
-      <p class="form-text" style="margin-bottom: 2px">
-        Other health issues
-      </p>
-      <label class="form-check-label">
-        Myopia
-        <input class="form-control form-check-input" type="checkbox" id="myopia" formControlName="myopia">
-      </label>
-      <label class="form-check-label">
-        Diabetes
-        <input class="form-control form-check-input" type="checkbox" id="diabetes" formControlName="diabetes">
-      </label>
-    </div>
+          <div class="form-check form-check-inline container">
+            <div class="row">
+              <label class="form-check-label col col-sm">
+                Parent
+                <input class="form-control form-check-input" type="checkbox" id="parent" formControlName="parent">
+              </label>
+              <label class="form-check-label col col-sm">
+                Sibling
+                <input class="form-control form-check-input" type="checkbox" id="sibling" formControlName="sibling">
+              </label>
+            </div>
+          </div>
+        </fieldset>
 
-    <button type="submit" class="btn "
-            [class.btn-primary]="riskForm.valid"
-            [class.btn-outline-secondary]="!riskForm.valid"
-            [disabled]="!riskForm.valid">
-      Calculate risk
-    </button>
+        <fieldset class="col-sm">
+          <legend>Other health issues</legend>
+
+          <div class="form-check form-check-inline container">
+            <div class="row">
+              <label class="form-check-label col col-sm">
+                Myopia
+                <input class="form-control form-check-input" type="checkbox" id="myopia" formControlName="myopia">
+              </label>
+              <label class="form-check-label col col-sm">
+                Diabetes
+                <input class="form-control form-check-input" type="checkbox" id="diabetes" formControlName="diabetes">
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="col-sm" style="padding-top: 15px">
+          <button type="submit" class="btn "
+                  [class.btn-primary]="riskForm.valid"
+                  [class.btn-outline-secondary]="!riskForm.valid"
+                  [disabled]="!riskForm.valid">
+            Calculate risk
+          </button>
+        </div>
+      </div>
+    </div>
   </form>
 </div>
 

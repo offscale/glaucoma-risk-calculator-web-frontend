@@ -1,0 +1,12 @@
+label, .label {
+  font-weight: bold;
+}
+
+legend {
+  font-size: medium;
+  font-weight: bold;
+}
+
+.form-check-label {
+  font-weight: unset;
+}

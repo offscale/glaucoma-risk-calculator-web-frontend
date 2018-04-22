@@ -2,7 +2,8 @@ import * as math from 'mathjs';
 
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { GaugeLabel, GaugeSegment } from 'ng-gauge';
+
+import { GaugeLabel, GaugeSegment } from 'ng-gauge/dist';
 import { calc_relative_risk, familial_risks_from_study, IMultiplicativeRisks, IRiskJson } from 'glaucoma-risk-calculator-engine';
 
 import 'rxjs/add/operator/switchMap';

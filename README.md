@@ -1,13 +1,13 @@
 # Glaucoma risk calculator web-frontend
 
-For the files ready to deploy, see the [glaucoma-risk-calc-web-frontend-dist](https://github.com/glaucoma-australia/glaucoma-risk-calc-web-frontend-dist) repo.
+For the files ready to deploy, see the [glaucoma-risk-calculator-web-frontend-dist](https://github.com/glaucoma-australia/glaucoma-risk-calculator-web-frontend-dist) repo.
 
 ## Technical details
-Built in TypeScript with Angular 4, following latest official standards for scaffolding.
+Built in TypeScript with Angular 5, following latest official standards for scaffolding.
 
 ## Deploy
 
-Requires a server with HTTPS—for Office 365 / Microsoft Graph auth—and the API: [glaucoma-risk-calc-rest-api-dist](https://github.com/glaucoma-australia/glaucoma-risk-calc-rest-api-dist); be colocated so relative paths work, like `.get('/api')`. With nginx and other servers you can fake this with `proxy_pass`. Alternatively many servers allow you to actually run both side-by-side, e.g.: IIS.
+Requires a server with HTTPS—for Office 365 / Microsoft Graph auth—and the API: [glaucoma-risk-calculator-web-frontend-dist](https://github.com/glaucoma-australia/glaucoma-risk-calculator-web-frontend-dist); be colocated so relative paths work, like `.get('/api')`. With nginx and other servers you can fake this with `proxy_pass`. Alternatively many servers allow you to actually run both side-by-side, e.g.: IIS.
 
 ## Reuse directories with
 
@@ -20,14 +20,14 @@ Requires a server with HTTPS—for Office 365 / Microsoft Graph auth—and the A
 ## Release new version of dist repo
 Assuming the -dist is in the directory above where this is cloned, in Bash just:
 
-    rm -rf dist; ng build -prod; d=../glaucoma-risk-calculator-web-frontend-dist; rm -rf "$d/dist"; mv "$PWD/dist" "$d"; cd "$d"; git add .; git status
+    rm -rf dist; ng build -prod --aot=false && d=../glaucoma-risk-calculator-web-frontend-dist && rm -rf "$d/dist" && mv "$PWD/dist" "$d" && cd "$d" && (git add .; git status) || ( >&2 echo BUILD FAILED )
 
 ## Development setup
 
 Install latest:
-  - Node.JS (tested with 8.4.0);
-  - npm (tested with 5.4.1); and
-  - `ng` with `npm install -g @angular/cli`... (tested with 1.4.1). 
+  - Node.JS LTS (tested with 8.11.1);
+  - npm (tested with 5.8.0); and
+  - `ng` with `npm install -g @angular/cli`... (tested with 1.7.4). 
 
 ## Build
 
