@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IEmailTpl, IEmailTplBase } from '../api/email_tpl/email-tpl';
-import { EmailTplService } from '../api/email_tpl/email-tpl.service';
+
+import { EmailTplService } from '../../api/email_tpl/email-tpl.service';
+import { IEmailTpl, IEmailTplBase } from '../../api/email_tpl/email-tpl';
 import { AlertsService } from '../alerts/alerts.service';
 
 @Component({

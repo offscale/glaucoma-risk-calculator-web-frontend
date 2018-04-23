@@ -3,28 +3,10 @@ import { Headers, Http, RequestOptions, Response, URLSearchParams } from '@angul
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
-
-import { AuthService } from '../api/auth/auth.service';
-import { handleError } from '../api/service-utils';
+import { AuthService } from '../../api/auth/auth.service';
 
 interface ArrayBufferViewForEach extends ArrayBufferView {
   forEach(callbackfn: (value: number, index: number, array: Int8Array) => void, thisArg?: any): void;
-}
-
-export interface IEmailConf extends IEmailConfBase {
-  id?: number;
-  updatedAt: Date;
-  createdAt: Date;
-}
-
-export interface IEmailConfBase {
-  state?: string;
-  id_token?: string;
-  access_token?: string;
-  from?: string;
-  session_state?: string;
-  client_id: string;
-  tenant_id: string;
 }
 
 interface ResHash {
@@ -53,7 +35,6 @@ export const parseQueryString = (url: string): ResHash => {
 
 @Injectable()
 export class MsAuthService {
-  public email_conf: IEmailConf = {} as IEmailConf;
   private params: ResHash;
   private _tenant_id: string;
   private _client_id: string;
@@ -184,50 +165,7 @@ export class MsAuthService {
       });
   }
 
-  public getConf(): Observable<IEmailConf> {
-    const options = new RequestOptions({
-      headers: new Headers({
-        'X-Access-Token': this.authService.accessToken,
-        'Content-Type': 'application/json'
-      })
-    });
 
-    return this.http
-      .get('/api/email_conf', options)
-      .map((response: Response) => {
-        if (response.status !== 200)
-          return Observable.throw(new Error(`Expected response.status of 200 got ${response.status}.
-           Body: ${response.text()}`));
-        this.email_conf = response.json();
-        return this.email_conf;
-      })
-      .map((email_config: IEmailConf) => this.setup(email_config.tenant_id, email_config.client_id))
-      .catch(handleError);
-  }
-
-  public insertConf(conf: IEmailConfBase): Observable<IEmailConf> {
-    const options = new RequestOptions({
-      headers: new Headers({
-        'X-Access-Token': this.authService.accessToken,
-        'Content-Type': 'application/json'
-      })
-    });
-
-    return this.http
-      .post('/api/email_conf', conf, options)
-      .map((response: Response) => {
-        if (response.status === 200 || response.status === 201)
-          return response.json();
-
-        return Observable.throw(new Error(`Expected response.status of 201 got ${response.status}.
-           Body: ${response.text()}`));
-      })
-      .catch(error => {
-        if (error.message && error.error_message === 'Access token has expired.')
-          this.authService.redirOnResIfUnauth(error);
-        return Observable.throw(error);
-      });
-  }
 
   private genParams(state?: string): URLSearchParams {
     const params: URLSearchParams = new URLSearchParams();

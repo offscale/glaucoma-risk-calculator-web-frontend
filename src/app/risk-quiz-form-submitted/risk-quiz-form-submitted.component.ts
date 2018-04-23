@@ -10,10 +10,10 @@ import 'rxjs/add/operator/switchMap';
 
 
 import { IRiskQuiz, RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
-import { RiskResService } from '../api/risk_res/risk_res.service';
+import { RiskResService } from '../../api/risk_res/risk_res.service';
 import { MsAuthService } from '../ms-auth/ms-auth.service';
 import { colours, numToColour } from '../colours';
-import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
+import { RiskStatsService } from '../../api/risk_stats/risk-stats.service';
 
 
 math.config({

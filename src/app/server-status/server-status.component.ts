@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ServerStatusService } from '../api/server-status.service';
-import { ServerStatus } from '../api/ServerStatus';
+import { ServerStatusService } from '../../api/server-status/server-status.service';
+import { ServerStatus } from '../../api/ServerStatus';
+
 
 @Component({
   selector: 'app-api-version',
@@ -15,7 +16,7 @@ export class ServerStatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.serverStatus = { version: 'App 0.0.31; ' };
+    this.serverStatus = { version: 'App 0.0.32; ' };
     this.serverStatusService
       .get()
       .subscribe(serverStatus => this.serverStatus.version += `API ${serverStatus.version}`,

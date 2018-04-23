@@ -10,8 +10,8 @@ import { NgxSelectModule } from 'ngx-select-ex';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { GaugeModule } from 'ng-gauge/dist';
 
-import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
-import { RiskResService } from '../api/risk_res/risk_res.service';
+import { RiskStatsService } from '../../api/risk_stats/risk-stats.service';
+import { RiskResService } from '../../api/risk_res/risk_res.service';
 import { RiskQuizFormSubmittedComponent } from '../risk-quiz-form-submitted/risk-quiz-form-submitted.component';
 import { riskQuizFormSubmittedRoutes } from '../risk-quiz-form-submitted/risk-quiz-form-submitted.routes';
 import { RiskPointerComponent } from '../risk-pointer/risk-pointer.component';

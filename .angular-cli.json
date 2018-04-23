@@ -21,9 +21,8 @@
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap-reboot.min.css",
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-        "../node_modules/tinymce/skins/lightgray/skin.min.css",
-        "../node_modules/tinymce/skins/lightgray/content.min.css",
-        "../node_modules/tinymce/skins/lightgray/content.inline.min.css",
+        "../node_modules/quill/assets/bubble.styl",
+        "../node_modules/quill/assets/snow.styl",
         "../src/assets/fonts/css/animation.css",
         "../src/assets/fonts/css/fontello-codes.css",
         "../src/assets/fonts/css/fontello.css",

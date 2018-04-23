@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from '../api/auth/auth.service';
-import { User } from '../api/auth/user';
+import { UserService } from '../../api/user/user.service';
+import { IAuthReq } from '../../api/auth/auth.interfaces';
 
 @Component({
   selector: 'app-users',
@@ -9,7 +9,7 @@ import { User } from '../api/auth/user';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-  public users: User[] = [];
+  public users: IAuthReq[] = [];
   public columns: Array<any> = [
     { title: 'email', name: 'email', filtering: { filterString: '', placeholder: 'Filter by email' } },
     { title: 'updatedAt', className: ['office-header', 'text-success'], name: 'updatedAt', sort: 'asc' },
@@ -27,11 +27,11 @@ export class UsersComponent implements OnInit {
   public numPages = 1;
   public length = 0;
 
-  constructor(private authService: AuthService) {
+  constructor(private userService: UserService) {
   }
 
   ngOnInit() {
-    this.authService
+    this.userService
       .getAll()
       .map(user => user.users)
       .subscribe(users => this.users = users,

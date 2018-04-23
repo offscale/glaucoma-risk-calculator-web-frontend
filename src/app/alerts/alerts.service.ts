@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
 
-import { IAlert } from './alert';
 import { AppService } from '../app.service';
+import { TAlert } from './alert';
 
 @Injectable()
 export class AlertsService {
-  public alerts: Array<IAlert> = [];
+  public alerts: TAlert[] = [];
   private readonly _padding = 4.5;
 
   constructor(public appService: AppService) {
   }
 
-  public add(alert: IAlert): void {
-    this.alerts.push(alert);
+  public add(alert: TAlert | string): void {
+    const alert_s = alert && (typeof alert === 'string' ? alert
+      : (alert instanceof Error ? alert.message : Object
+        .keys(alert)
+        .map(k => alert[k])
+        .join('\t'))) || 'undefined alert';
+    this.alerts.push({ type: 'warning', msg: alert_s });
     this.appService.navbarPadding += this._padding;
   }
 

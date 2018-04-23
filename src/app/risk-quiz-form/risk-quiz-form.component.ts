@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ethnicity2study, IRiskJson } from 'glaucoma-risk-calculator-engine';
 
-import { RiskStatsService } from '../api/risk_stats/risk-stats.service';
+import { RiskStatsService } from '../../api/risk_stats/risk-stats.service';
 import { RiskQuiz } from './risk-quiz.model';
 
 

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ServerStatusService } from '../api/server-status.service';
+import { ServerStatusService } from '../../api/server-status/server-status.service';
 import { ServerStatusComponent } from './server-status.component';
 
 @NgModule({

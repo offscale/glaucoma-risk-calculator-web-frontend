@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { AlertComponent } from 'ngx-bootstrap';
 
-import { IAlert } from './alert';
+import { IAlert, TAlert } from './alert';
 import { AlertsService } from './alerts.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class AlertsComponent implements OnInit {
   @Input() public dismissible: boolean;
   @Input() public dismissOnTimeout: number;
 
-  public alerts: Array<IAlert>;
+  public alerts: Array<TAlert>;
 
   constructor(private readonly alertsService: AlertsService) {
   }

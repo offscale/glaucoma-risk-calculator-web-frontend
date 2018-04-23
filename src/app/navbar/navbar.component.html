@@ -5,7 +5,7 @@
   </a>
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <form class="form-inline col btn-group" *ngIf="authService.isLoggedIn()">
+    <form class="form-inline col btn-group" *ngIf="authService.loggedIn()">
       <a class="nav-item nav-link btn btn-outline-info" routerLinkActive="active" routerLink="/admin/dashboard">
         Dashboard
       </a>

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MsAuthService } from './ms-auth.service';
-import { EmailTplService } from '../api/email_tpl/email-tpl.service';
+
+import { EmailConfService } from '../../api/email_conf/email_conf.service';
+import { EmailTplService } from '../../api/email_tpl/email-tpl.service';
 import { AlertsService } from '../alerts/alerts.service';
+import { MsAuthService } from './ms-auth.service';
+import { IEmailConf } from '../../api/email_conf/email_conf.interfaces';
 
 @Component({
   selector: 'app-ms-auth',
@@ -11,16 +14,18 @@ import { AlertsService } from '../alerts/alerts.service';
 export class MsAuthComponent implements OnInit {
   public isCollapsed = true;
   mail_base: {recipient: string, subject: string} = {} as any;
+  email_conf: IEmailConf;
 
   constructor(private alertsService: AlertsService,
               private msAuthService: MsAuthService,
+              private emailConfService: EmailConfService,
               private emailTplService: EmailTplService) {
   }
 
   private _client_id: string;
 
   public get client_id(): string {
-    return this.msAuthService.email_conf.client_id;
+    return this.email_conf.client_id;
   }
 
   public set client_id(val: string) {
@@ -30,7 +35,7 @@ export class MsAuthComponent implements OnInit {
   private _tenant_id: string;
 
   public get tenant_id(): string {
-    return this.msAuthService.email_conf.tenant_id;
+    return this.email_conf.tenant_id;
   }
 
   public set tenant_id(val: string) {
@@ -38,7 +43,7 @@ export class MsAuthComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.msAuthService.getConf().subscribe(console.info, console.error)
+    this.emailConfService.getConf().subscribe(email_conf => this.email_conf = email_conf, console.error)
   }
 
   login() {
@@ -70,7 +75,7 @@ export class MsAuthComponent implements OnInit {
   }
 
   public updateAuth() {
-    this.msAuthService.insertConf({
+    this.emailConfService.insertConf({
       client_id: this._client_id,
       tenant_id: this._tenant_id,
       access_token: this.msAuthService.access_token

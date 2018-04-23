@@ -1,12 +1,16 @@
-import { AfterViewInit, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { QuillEditorComponent } from 'ngx-quill';
 
+import { EmailTplService } from '../../api/email_tpl/email-tpl.service';
+
+/*
 import tinymce from 'tinymce/tinymce';
 import 'tinymce/themes/modern/theme';
 import 'tinymce/plugins/paste/plugin';
 import 'tinymce/plugins/link/plugin';
 import 'tinymce/plugins/autoresize/plugin';
-
-import { EmailTplService } from '../api/email_tpl/email-tpl.service';
+*/
 
 @Component({
   selector: 'app-richtext',
@@ -15,13 +19,20 @@ import { EmailTplService } from '../api/email_tpl/email-tpl.service';
 })
 export class RichTextComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() elementId: String;
-  @Output() onEditorKeyup: EventEmitter<any> = new EventEmitter();
-  editor;
 
-  constructor(private zone: NgZone, private emailTplService: EmailTplService) {
+  // new
+  @ViewChild('editor') editor: QuillEditorComponent;
+  form: FormGroup;
+
+  constructor(private zone: NgZone,
+              private emailTplService: EmailTplService,
+              private fb: FormBuilder) {
   }
 
   ngOnInit() {
+    this.form = this.fb.group({
+      editor: ['test']
+    });
   }
 
   ngAfterViewInit() {
@@ -29,21 +40,35 @@ export class RichTextComponent implements AfterViewInit, OnInit, OnDestroy {
       : this.emailTplService
         .read('latest')
         .subscribe(email_tpl => {
+            console.info('email_tpl =', email_tpl, ';');
             this.emailTplService.email_tpl = email_tpl;
-            this.init();
+            // this.init();
           },
           error => console.error(error) || this.init()
         )
   }
 
   ngOnDestroy() {
-    tinymce.remove(this.editor);
+    // tinymce.remove(this.editor);
+  }
+
+  setFocus($event) {
+    $event.focus();
+  }
+
+  patchValue() {
+    this.form.controls['editor'].patchValue(`${this.form.controls['editor'].value} patched!`)
+  }
+
+  setControl() {
+    this.form.setControl('editor', new FormControl('test - new Control'))
   }
 
   private init() {
-    tinymce.init({
+    /*tinymce.init({
       selector: `#${this.elementId}`,
-      plugins: ['link', 'paste'/*, 'table'*/],
+      plugins: ['link', 'paste' //, 'table'
+      ],
       skin_url: 'assets/skins/lightgray',
       setup: editor => {
         this.editor = editor;
@@ -60,6 +85,6 @@ export class RichTextComponent implements AfterViewInit, OnInit, OnDestroy {
           });
         });
       },
-    });
+    });*/
   }
 }

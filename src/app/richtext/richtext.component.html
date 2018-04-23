@@ -1,1 +1,8 @@
-<textarea id="{{elementId}}" name="{{elementId}}"></textarea>
+<form [formGroup]="form">
+  {{form.controls.editor.value}}
+  <button type="button" class="btn" (click)="patchValue()">patchValue</button>
+  <button type="button" class="btn" (click)="setControl()">setControl</button>
+  <quill-editor #editor id="{{elementId}}" [style]="{height: '200px'}"
+                (onEditorCreated)="setFocus($event)"
+                [formControl]="form.controls['editor']"></quill-editor>
+</form>

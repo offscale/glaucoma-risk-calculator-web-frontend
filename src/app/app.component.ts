@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from './api/auth/auth.service';
+
 import { AppService } from './app.service';
 import { MsAuthService, parseQueryString } from './ms-auth/ms-auth.service';
+import { AuthService } from '../api/auth/auth.service';
+import { EmailConfService } from '../api/email_conf/email_conf.service';
 
 @Component({
   /* tslint:disable:component-selector */
@@ -14,6 +16,7 @@ import { MsAuthService, parseQueryString } from './ms-auth/ms-auth.service';
 export class AppComponent implements OnInit {
   constructor(public authService: AuthService,
               public appService: AppService,
+              private emailConfService: EmailConfService,
               private msAuthService: MsAuthService,
               private router: Router) {
   }
@@ -21,7 +24,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     const qs = parseQueryString(location.hash);
     if (Object.keys(qs).length > 0) {
-      this.msAuthService
+      this.emailConfService
         .getConf()
         .subscribe(conf => {
             /* tslint:disable:no-console */

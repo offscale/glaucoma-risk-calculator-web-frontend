@@ -10,6 +10,7 @@ export interface IStatusBody {
 }
 
 export const handleError = (error: Response | any) => {
+  console.info('handleError');
   if (!(error instanceof Response))
     throw TypeError(`error ${error} can't be handled as it's not Response type, it is: ${typeof error}`);
 

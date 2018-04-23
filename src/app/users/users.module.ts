@@ -8,6 +8,7 @@ import { PaginationModule, TabsModule } from 'ngx-bootstrap';
 
 import { dashboardRoutes } from '../dashboard/dashboard.routes';
 import { UsersComponent } from './users.component';
+import { UserService } from '../../api/user/user.service';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { UsersComponent } from './users.component';
     CommonModule, RouterModule.forChild(dashboardRoutes), FormsModule,
     PaginationModule.forRoot(), TabsModule, Ng2TableModule
   ],
+  providers: [UserService],
   declarations: [UsersComponent]
 })
 export class UsersModule {
