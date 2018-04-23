@@ -1,5 +1,3 @@
-<div class="row offset-sm-9">
-  <p *ngIf="serverStatus.version">
-    {{serverStatus.version}}
-  </p>
-</div>
+<ng-container *ngIf="serverStatus.version">
+  {{serverStatus.version}}
+</ng-container>

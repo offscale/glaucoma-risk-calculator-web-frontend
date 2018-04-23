@@ -1,7 +1,3 @@
-label, .label {
-  font-weight: bold;
-}
-
 legend {
   font-size: medium;
   font-weight: bold;
@@ -9,4 +5,12 @@ legend {
 
 .form-check-label {
   font-weight: unset;
+}
+
+label, .label {
+  font-weight: bold;
+}
+
+.btn:not(:disabled):not(.disabled) {
+  font-weight: bold;
 }

@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CollapseModule, PaginationModule, TypeaheadModule } from 'ngx-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
-import { SelectModule } from 'ng2-select-compat';
+import { NgxSelectModule } from 'ngx-select-ex';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { GaugeModule } from 'ng-gauge/dist';
 
@@ -23,7 +23,7 @@ import { RiskQuizFormComponent } from './risk-quiz-form.component';
     CommonModule, ReactiveFormsModule, BrowserAnimationsModule, FormsModule,
     RouterModule, RouterModule.forChild(riskQuizFormSubmittedRoutes),
     TypeaheadModule.forRoot(), GaugeModule, CollapseModule.forRoot(),
-    ClipboardModule, SelectModule, NgxChartsModule,
+    ClipboardModule, NgxSelectModule, NgxChartsModule,
     PaginationModule.forRoot()
   ],
   providers: [RiskStatsService, RiskResService],

@@ -5,3 +5,8 @@ a {
 a.active {
   font-weight: bold;
 }
+
+html {
+  position: relative;
+  min-height: 100%;
+}

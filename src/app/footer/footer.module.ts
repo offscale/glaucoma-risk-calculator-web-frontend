@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
-import { FooterComponent } from './footer.component';
 import { ServerStatusService } from '../api/server-status.service';
 import { ServerStatusModule } from '../server-status/server-status.module';
-
+import { FooterComponent } from './footer.component';
 
 @NgModule({
   imports: [
-    CommonModule, ServerStatusModule
+    CommonModule, RouterModule, ServerStatusModule
   ],
   providers: [ServerStatusService],
   declarations: [FooterComponent],

@@ -24,7 +24,6 @@
         "../node_modules/tinymce/skins/lightgray/skin.min.css",
         "../node_modules/tinymce/skins/lightgray/content.min.css",
         "../node_modules/tinymce/skins/lightgray/content.inline.min.css",
-        "../src/assets/css/ng2-select.css",
         "../src/assets/fonts/css/animation.css",
         "../src/assets/fonts/css/fontello-codes.css",
         "../src/assets/fonts/css/fontello.css",

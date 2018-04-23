@@ -17,12 +17,10 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
   isCopied = false;
   // TODO: Workaround until NgForm has a reset method (#6822)
   active = true;
-  result: number;
   ethnicity2study: {};
 
   riskForm: FormGroup;
 
-  _ethnicity: string;
   ethnicities: string[];
   all_ethnicities: string[];
 
@@ -122,4 +120,6 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
     if (ethnicity == null || !ethnicity.length) return;
     this.riskQuiz.riskQuiz.ethnicity = this.riskForm.value.ethnicity = ethnicity[0].id;
   }
+
+  public doClose = () => document.getElementById('parent').focus();
 }
