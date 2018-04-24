@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
     const qs = parseQueryString(location.hash);
     if (Object.keys(qs).length > 0) {
       this.emailConfService
-        .getConf()
+        .get()
         .subscribe(conf => {
             /* tslint:disable:no-console */
             console.info('AppComponent::conf', conf);

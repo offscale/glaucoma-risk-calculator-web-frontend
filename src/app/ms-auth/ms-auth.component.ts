@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { EmailConfService } from '../../api/email_conf/email_conf.service';
 import { EmailTplService } from '../../api/email_tpl/email-tpl.service';
 import { AlertsService } from '../alerts/alerts.service';
-import { IEmailConf } from '../../api/email_conf/email_conf.interfaces';
 import { MsAuthService } from './ms-auth.service';
 
 @Component({
@@ -14,7 +13,6 @@ import { MsAuthService } from './ms-auth.service';
 export class MsAuthComponent implements OnInit {
   public isCollapsed = true;
   mail_base: {recipient: string, subject: string} = {} as any;
-  email_conf: IEmailConf;
 
   constructor(private alertsService: AlertsService,
               private msAuthService: MsAuthService,
@@ -25,7 +23,7 @@ export class MsAuthComponent implements OnInit {
   private _client_id: string;
 
   public get client_id(): string {
-    return this.email_conf.client_id;
+    return this._client_id || this.emailConfService.email_conf ? this.emailConfService.email_conf.client_id : null;
   }
 
   public set client_id(val: string) {
@@ -35,7 +33,7 @@ export class MsAuthComponent implements OnInit {
   private _tenant_id: string;
 
   public get tenant_id(): string {
-    return this.email_conf.tenant_id;
+    return this._tenant_id || this.emailConfService.email_conf ? this.emailConfService.email_conf.tenant_id : null;
   }
 
   public set tenant_id(val: string) {
@@ -43,7 +41,9 @@ export class MsAuthComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.emailConfService.getConf().subscribe(email_conf => this.email_conf = email_conf, console.error)
+    this.emailConfService
+      .get()
+      .subscribe(email_conf => console.info('email_conf ', email_conf), console.error)
   }
 
   login() {
@@ -75,7 +75,7 @@ export class MsAuthComponent implements OnInit {
   }
 
   public updateAuth() {
-    this.emailConfService.insertConf({
+    this.emailConfService.post({
       client_id: this._client_id,
       tenant_id: this._tenant_id,
       access_token: this.msAuthService.access_token

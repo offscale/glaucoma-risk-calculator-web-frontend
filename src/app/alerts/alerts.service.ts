@@ -12,11 +12,14 @@ export class AlertsService {
   }
 
   public add(alert: TAlert | string): void {
-    const alert_s = alert && (typeof alert === 'string' ? alert
+    const alert_s = (s => typeof s === 'string' ?
+        s : Object.keys(s).map(k => `${k} => ${s[k]}`).join(' ')
+    )(alert && (typeof alert === 'string' ? alert
       : (alert instanceof Error ? alert.message : Object
         .keys(alert)
         .map(k => alert[k])
-        .join('\t'))) || 'undefined alert';
+        .join('\t'))) || 'undefined alert');
+    console.info('Alert =', alert);
     this.alerts.push({ type: 'warning', msg: alert_s });
     this.appService.navbarPadding += this._padding;
   }
