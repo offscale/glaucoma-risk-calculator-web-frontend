@@ -18,7 +18,7 @@ export class RiskStatsService {
               private http: HttpClient) {}
 
   create(risk_stats: IRiskStatsBase): Observable<IRiskStats> {
-    return this.http.post<IRiskStats>('/api/risk_stats', JSON.stringify(risk_stats))
+    return this.http.post<IRiskStats>('/api/risk_stats', risk_stats)
   }
 
   read(createdAt: string | 'latest' | Date): Observable<IRiskStats> {
@@ -26,7 +26,7 @@ export class RiskStatsService {
   }
 
   update(prevRecord: IRiskStats, newRecord: IRiskStatsBase): Observable<IRiskStats> {
-    return this.http.put<IRiskStats>(`/api/risk_stats/${prevRecord.createdAt}`, JSON.stringify(newRecord))
+    return this.http.put<IRiskStats>(`/api/risk_stats/${prevRecord.createdAt}`, newRecord)
   }
 
   destroy(createdAt: string | Date): Observable<{}> {

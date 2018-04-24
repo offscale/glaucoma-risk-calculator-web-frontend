@@ -159,12 +159,6 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     this.isCollapsed = !this.isCollapsed;
   }
 
-  parseRef(ref: IItem) {
-    /* tslint:disable:no-console */
-    console.info('ref keys =', Object.keys(ref));
-    return JSON.stringify(ref)
-  }
-
   idWithUrl(): string {
     return `${MsAuthService.getHostOrigin()}/results/${this.id}`;
   }

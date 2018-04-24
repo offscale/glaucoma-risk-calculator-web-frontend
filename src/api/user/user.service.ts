@@ -11,7 +11,7 @@ export class UserService {
   }
 
   post(user: IAuthReq): Observable<IAuthReq> {
-    return this.http.post<IAuthReq>('/api/user', JSON.stringify(user))
+    return this.http.post<IAuthReq>('/api/user', user)
   }
 
   getAll(): Observable<{users: IAuthReq[]}> {

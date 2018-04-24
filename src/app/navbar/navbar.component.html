@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" style="line-height: 2.68">
   <a class="navbar-brand" routerLink="/" routerLinkActive="active"
      [routerLinkActiveOptions]="{exact:true}">
     Glaucoma Risk Calculator
@@ -16,4 +16,10 @@
     <ul class="navbar-nav mr-auto"></ul>
     <a href="http://glaucoma.org.au"><img src="../../assets/reversed-logo.png" alt="logo"/></a>
   </div>
+
+</nav>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
+     *ngIf="alertsService.alerts">
+  <app-alerts style="width: 100%"></app-alerts>
 </nav>

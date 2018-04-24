@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { IEmailTpl, IEmailTplBase } from './email-tpl.d';
 
+
 @Injectable()
 export class EmailTplService {
   public email_tpl: IEmailTplBase;  // silly cache
@@ -23,7 +24,7 @@ export class EmailTplService {
   }
 
   create(email_tpl: IEmailTplBase): Observable<IEmailTpl> {
-    return this.http.post<IEmailTpl>('/api/email_tpl', JSON.stringify(email_tpl));
+    return this.http.post<IEmailTpl>('/api/email_tpl', email_tpl);
   }
 
   read(createdAt: string | 'latest' | Date): Observable<IEmailTpl> {
@@ -31,7 +32,7 @@ export class EmailTplService {
   }
 
   update(prevRecord: IEmailTpl, newRecord: IEmailTplBase): Observable<IEmailTpl> {
-    return this.http.put<IEmailTpl>(`/api/email_tpl/${prevRecord.createdAt}`, JSON.stringify(newRecord))
+    return this.http.put<IEmailTpl>(`/api/email_tpl/${prevRecord.createdAt}`, newRecord)
   }
 
   destroy(createdAt: string | Date): Observable<{}> {

@@ -11,8 +11,10 @@ import { AppService } from '../app.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  constructor(private router: Router, public appService: AppService,
-              public authService: AuthService, private alertsService: AlertsService) {
+  constructor(private router: Router,
+              public appService: AppService,
+              public authService: AuthService,
+              public alertsService: AlertsService) {
   }
 
   logout() {

@@ -1,2 +1,3 @@
-<app-richtext [elementId]="'tpl'" (onEditorKeyup)="keyupHandlerFunction($event)"></app-richtext>
+<app-richtext [elementId]="'tpl'" (onEdited)="onEdited($event)" #editor>
+</app-richtext>
 <button type="submit" class="btn btn-info btn-lg" (click)="save()">Save</button>

@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { AuthService } from '../auth/auth.service';
 import { IRiskQuiz } from '../../app/risk-quiz-form/risk-quiz.model';
 
 import { IRiskRes, IRiskResBase } from './risk_res';
@@ -15,7 +14,7 @@ import { IRiskRes, IRiskResBase } from './risk_res';
 export class RiskResService {
   public risk;
 
-  constructor(private authService: AuthService, private http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   create(risk_res: IRiskQuiz): Observable<IRiskRes> {
@@ -27,7 +26,7 @@ export class RiskResService {
   }
 
   update(id: number | 'latest', newRecord: IRiskResBase): Observable<IRiskRes> {
-    return this.http.put<IRiskRes>(`/api/risk_res/${id}`, JSON.stringify(newRecord))
+    return this.http.put<IRiskRes>(`/api/risk_res/${id}`, newRecord)
   }
 
   destroy(id: number | 'latest'): Observable<{}> {

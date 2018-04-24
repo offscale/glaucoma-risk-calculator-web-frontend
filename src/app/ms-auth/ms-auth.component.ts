@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { EmailConfService } from '../../api/email_conf/email_conf.service';
 import { EmailTplService } from '../../api/email_tpl/email-tpl.service';
 import { AlertsService } from '../alerts/alerts.service';
-import { MsAuthService } from './ms-auth.service';
 import { IEmailConf } from '../../api/email_conf/email_conf.interfaces';
+import { MsAuthService } from './ms-auth.service';
 
 @Component({
   selector: 'app-ms-auth',

@@ -7,9 +7,11 @@ import { RichTextModule } from '../richtext/richtext.module';
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule, RichTextModule
+    CommonModule, FormsModule, RichTextModule,
+
   ],
   declarations: [EmailTplComponent],
+
   exports: [EmailTplComponent]
 })
 export class EmailTplModule {

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-
-import { AppService } from './app.service';
 import { MsAuthService, parseQueryString } from './ms-auth/ms-auth.service';
 import { AuthService } from '../api/auth/auth.service';
 import { EmailConfService } from '../api/email_conf/email_conf.service';
+import { AlertsService } from './alerts/alerts.service';
+import { AppService } from './app.service';
+
 
 @Component({
   /* tslint:disable:component-selector */
@@ -18,6 +19,7 @@ export class AppComponent implements OnInit {
               public appService: AppService,
               private emailConfService: EmailConfService,
               private msAuthService: MsAuthService,
+              private alertsService: AlertsService,
               private router: Router) {
   }
 
@@ -28,7 +30,7 @@ export class AppComponent implements OnInit {
         .getConf()
         .subscribe(conf => {
             /* tslint:disable:no-console */
-            console.info(conf);
+            console.info('AppComponent::conf', conf);
             /* tslint:disable:no-unused-expression */
             !!qs.id_token && this.msAuthService.getAccessToken(qs.state);
             this.msAuthService.access_token = qs.access_token;
@@ -37,5 +39,9 @@ export class AppComponent implements OnInit {
           console.error
         );
     }
+  }
+
+  getBottom() {
+    return { 'margin-bottom': `${this.alertsService.alerts.length ? this.alertsService.alerts.length * 6 : 6}em` }
   }
 }

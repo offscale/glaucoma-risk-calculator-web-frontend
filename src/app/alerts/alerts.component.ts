@@ -18,11 +18,10 @@ export class AlertsComponent implements OnInit {
 
   public alerts: Array<TAlert>;
 
-  constructor(private readonly alertsService: AlertsService) {
+  constructor(public readonly alertsService: AlertsService) {
   }
 
   ngOnInit() {
-    this.alerts = this.alertsService.alerts;
   }
 
   addAlert(alert: IAlert) {
