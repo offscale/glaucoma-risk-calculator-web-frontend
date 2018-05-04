@@ -43,6 +43,7 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
       'required': 'Ethnicity is required.'
     }
   };
+  public doClose = () => document.getElementById('parent').focus();
 
   constructor(private fb: FormBuilder, private riskStatsService: RiskStatsService) {
   }
@@ -120,6 +121,4 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
     if (ethnicity == null || !ethnicity.length) return;
     this.riskQuiz.riskQuiz.ethnicity = this.riskForm.value.ethnicity = ethnicity[0].id;
   }
-
-  public doClose = () => document.getElementById('parent').focus();
 }

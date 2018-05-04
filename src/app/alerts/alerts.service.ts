@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Response } from '@angular/http';
 
 import { AppService } from '../app.service';
-import { TAlert } from './alert';
+import { IAlert, TAlert } from './alert';
 
 @Injectable()
 export class AlertsService {
@@ -12,15 +13,22 @@ export class AlertsService {
   }
 
   public add(alert: TAlert | string): void {
-    const alert_s = (s => typeof s === 'string' ?
-        s : Object.keys(s).map(k => `${k} => ${s[k]}`).join(' ')
-    )(alert && (typeof alert === 'string' ? alert
-      : (alert instanceof Error ? alert.message : Object
-        .keys(alert)
-        .map(k => alert[k])
-        .join('\t'))) || 'undefined alert');
-    console.info('Alert =', alert);
-    this.alerts.push({ type: 'warning', msg: alert_s });
+    if (alert == null) return;
+    else if ((alert as IAlert).type && (alert as IAlert).msg)
+      this.alerts.push({
+        type: (alert as IAlert).type,
+        msg: (s => typeof s === 'string' ? s : `${(s as Response).status}: ${(s as Response).statusText} on ${(s as Response).url}`)(
+          (alert as IAlert).msg as any as string | object
+        )
+      });
+    else this.alerts.push({
+        type: 'warning',
+        msg: typeof alert === 'string' ? alert : (alert.hasOwnProperty('error') && alert.hasOwnProperty('error_message') ?
+          Object.values(alert).join(': ') : Object
+            .keys(alert)
+            .map(k => alert[k])
+            .join('\t'))
+      });
     this.appService.navbarPadding += this._padding;
   }
 

@@ -1,10 +1,10 @@
-export interface IEmailConf extends IEmailConfBase {
+export interface IConfig extends IConfigBase {
   id?: number;
   updatedAt: Date;
   createdAt: Date;
 }
 
-export interface IEmailConfBase {
+export interface IConfigBase {
   state?: string;
   id_token?: string;
   access_token?: string;

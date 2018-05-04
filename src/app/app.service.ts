@@ -4,13 +4,15 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AppService {
-  private _navbarPadding = 16;
   navbarPaddingChange: Subject<number> = new Subject();
-  navbarPadding$: BehaviorSubject<number> = new BehaviorSubject(this._navbarPadding);
 
   constructor() {
     // this.navbarPadding = this._navbarPadding;
   }
+
+  private _navbarPadding = 16;
+
+  navbarPadding$: BehaviorSubject<number> = new BehaviorSubject(this._navbarPadding);
 
   get navbarPadding(): number {
     return this._navbarPadding;

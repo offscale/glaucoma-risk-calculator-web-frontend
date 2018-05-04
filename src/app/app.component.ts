@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { MsAuthService, parseQueryString } from './ms-auth/ms-auth.service';
 import { AuthService } from '../api/auth/auth.service';
-import { EmailConfService } from '../api/email_conf/email_conf.service';
+import { ConfigService } from '../api/config/config.service';
 import { AlertsService } from './alerts/alerts.service';
 import { AppService } from './app.service';
 
@@ -17,7 +17,7 @@ import { AppService } from './app.service';
 export class AppComponent implements OnInit {
   constructor(public authService: AuthService,
               public appService: AppService,
-              private emailConfService: EmailConfService,
+              private confService: ConfigService,
               private msAuthService: MsAuthService,
               private alertsService: AlertsService,
               private router: Router) {
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     const qs = parseQueryString(location.hash);
     if (Object.keys(qs).length > 0) {
-      this.emailConfService
+      this.confService
         .get()
         .subscribe(conf => {
             /* tslint:disable:no-console */

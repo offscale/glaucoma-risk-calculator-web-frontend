@@ -3,19 +3,19 @@ import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
-import { EmailTplService } from '../../api/email_tpl/email-tpl.service';
-import { EmailConfService } from '../../api/email_conf/email_conf.service';
-import { EmailTplModule } from '../email-tpl/email-tpl.module';
+import { TemplateService } from '../../api/template/template.service';
+import { ConfigService } from '../../api/config/config.service';
+import { TemplateModule } from '../template/template.module';
 import { MsAuthModule } from '../ms-auth/ms-auth.module';
 import { EmailComponent } from './email.component';
 
 
 @NgModule({
   imports: [
-    CommonModule, HttpModule, FormsModule, EmailTplModule, MsAuthModule
+    CommonModule, HttpModule, FormsModule, TemplateModule, MsAuthModule
   ],
   declarations: [EmailComponent],
-  providers: [EmailTplService, EmailConfService]
+  providers: [TemplateService, ConfigService]
 })
 export class EmailModule {
 }

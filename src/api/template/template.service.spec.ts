@@ -2,16 +2,16 @@
 
 import { inject, TestBed } from '@angular/core/testing';
 
-import { EmailTplService } from './email-tpl.service';
+import { TemplateService } from './template.service';
 
-describe('EmailTplService', () => {
+describe('TemplateService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [EmailTplService]
+      providers: [TemplateService]
     });
   });
 
-  it('should ...', inject([EmailTplService], (service: EmailTplService) => {
+  it('should ...', inject([TemplateService], (service: TemplateService) => {
     expect(service).toBeTruthy();
   }));
 });

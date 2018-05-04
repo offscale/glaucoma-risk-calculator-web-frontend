@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AlertModule } from 'ngx-bootstrap';
 
 import { AlertsComponent } from './alerts.component';
+import { AlertsService } from './alerts.service';
 
 @NgModule({
   imports: [
@@ -13,4 +14,7 @@ import { AlertsComponent } from './alerts.component';
   exports: [AlertsComponent]
 })
 export class AlertsModule {
+  public static forRoot(): ModuleWithProviders {
+    return { ngModule: AlertModule, providers: [AlertsService] };
+  }
 }

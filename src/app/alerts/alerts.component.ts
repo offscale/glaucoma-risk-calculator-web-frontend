@@ -1,14 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { AlertComponent } from 'ngx-bootstrap';
-
 import { IAlert, TAlert } from './alert';
 import { AlertsService } from './alerts.service';
 
 @Component({
   selector: 'app-alerts',
   templateUrl: './alerts.component.html',
-  providers: [AlertComponent],
   styleUrls: ['./alerts.component.css']
 })
 export class AlertsComponent implements OnInit {

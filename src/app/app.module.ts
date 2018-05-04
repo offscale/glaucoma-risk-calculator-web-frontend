@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { AlertsModule } from './alerts/alerts.module';
-import { AlertsService } from './alerts/alerts.service';
 import { NavbarModule } from './navbar/navbar.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { UsersModule } from './users/users.module';
@@ -27,12 +26,12 @@ import { AppService } from './app.service';
     RouterModule, RouterModule.forRoot(rootRoutes),
     BrowserModule, HttpClientModule, FormsModule,
     NavbarModule, FooterModule, UsersModule,
-    EmailModule, AlertsModule,
+    EmailModule, AlertsModule.forRoot(),
     RiskQuizFormModule, AuthModule, DashboardModule
   ],
   declarations: [AppComponent],
   providers: [
-    AlertsService, AppService, AuthService, AuthGuard,
+    AppService, AuthService, AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
