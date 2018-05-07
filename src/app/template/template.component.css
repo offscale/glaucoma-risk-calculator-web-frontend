@@ -1,3 +1,8 @@
 .red-border {
   border: solid 0.1em red !important;
 }
+
+.btn-info.disabled, .btn-info:disabled {
+  background-color: darkgrey;
+  border-color: #9E9E9E;
+}

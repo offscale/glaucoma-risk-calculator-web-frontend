@@ -65,8 +65,8 @@
       </a>
     </div>
     <div class="btn-group mr-2" role="group" aria-label="twitter">
-      <a target="_blank" class="btn btn-lg btn-info"
-         [href]="'https://twitter.com/intent/tweet?text='+'Be glaucoma aware, assess your own risk. Here’s what I got: '+share_url"
+      <a target="_blank" class="btn btn-lg btn-info" id="tweet" #tweet
+         [href]="'https://twitter.com/intent/tweet?text='+getTemplate('twitter')+' '+share_url"
          data-size="large">
         Tweet
       </a>

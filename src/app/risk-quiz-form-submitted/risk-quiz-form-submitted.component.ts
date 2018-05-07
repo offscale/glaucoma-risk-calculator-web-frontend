@@ -1,7 +1,7 @@
 import * as math from 'mathjs';
 
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import { GaugeLabel, GaugeSegment } from 'ng-gauge/dist';
 import { calc_relative_risk, familial_risks_from_study, IMultiplicativeRisks, IRiskJson } from 'glaucoma-risk-calculator-engine';
@@ -14,6 +14,7 @@ import { RiskResService } from '../../api/risk_res/risk_res.service';
 import { MsAuthService } from '../ms-auth/ms-auth.service';
 import { colours, numToColour } from '../colours';
 import { RiskStatsService } from '../../api/risk_stats/risk-stats.service';
+import { TemplateService } from '../../api/template/template.service';
 
 
 math.config({
@@ -64,6 +65,7 @@ export interface IItem {
   styleUrls: ['./risk-quiz-form-submitted.component.css']
 })
 export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit {
+  @ViewChild('tweet') tweet: HTMLAnchorElement;
   @Input() riskQuiz: RiskQuiz;
   @Input() submitted = false;
   most_at_risk = '';
@@ -145,7 +147,15 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private riskStatsService: RiskStatsService,
-              private riskResService: RiskResService) {
+              private riskResService: RiskResService,
+              private templateService: TemplateService) {
+
+  }
+
+  getTemplate(kind: string) {
+    return this.templateService.templates.has(kind) ?
+      this.templateService.templates.get(kind).contents
+      : '';
   }
 
   redo() {
@@ -158,6 +168,9 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   ngOnInit() {
     if (!(this.riskQuiz instanceof RiskQuiz))
       this.riskQuiz = new RiskQuiz(this.riskQuiz);
+    this.templateService
+      .readBatch()
+      .subscribe(() => this.tweet.href = this.getTemplate('twitter'));
   }
 
   ngAfterContentInit() {

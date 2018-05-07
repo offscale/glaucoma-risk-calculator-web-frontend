@@ -15,20 +15,26 @@ import { RichTextComponent } from '../richtext/richtext.component';
 export class TemplateComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') editor: RichTextComponent;
   form: FormGroup;
-  tplCreate = (new_template: ITemplateBase, cb) => {
+
+  tplCreate(new_template: ITemplateBase, cb) {
     if (
       new_template == null) return cb(new TypeError('new_template must be defined'));
     this.templateService
       .create(new_template)
-      .subscribe(template => this.handleTemplate(template, template.kind, cb), this.handleError)
+      .subscribe(template => this.handleTemplate(template, template.kind, cb), this.handleError.bind(this))
   };
-  tplBatchCreate = (new_templates: ITemplateBase[], cb) => {
+
+  tplBatchCreate(new_templates: ITemplateBase[], cb) {
     if (new_templates == null) return cb(new TypeError('new_templates must be defined'));
     this.templateService
       .createBatch(new_templates)
-      .subscribe(templates => templates.templates.map(template => this.handleTemplate(template, template.kind)), this.handleError)
+      .subscribe(
+        templates => templates.templates.map(template => this.handleTemplate(template, template.kind)),
+        this.handleError.bind(this)
+      )
   };
-  tplRead = (createdAt: string | Date, kind: string, cb: (Error, string?) => void) => {
+
+  tplRead(createdAt: string | Date, kind: string, cb: (Error, string?) => void) {
     this.templateService.read(createdAt, kind)
       .subscribe((template: ITemplate) => {
           this.templateService.templates.set(kind, template);
@@ -40,11 +46,13 @@ export class TemplateComponent implements OnInit, AfterViewInit {
         }
       )
   };
-  save = () => {
+
+  save() {
     // novalidate [ngClass]="{'was-validated': (form.touched || form.dirty) && !form.valid }"
 
     const now = new Date().toISOString();
-    this.tplBatchCreate([
+
+    const templates: ITemplateBase[] = [
       {
         contents: this.templateService.templates.get('email').contents,
         kind: 'email',
@@ -60,20 +68,44 @@ export class TemplateComponent implements OnInit, AfterViewInit {
         kind: 'facebook',
         createdAt: now
       },
-    ], (err, template) => {
-      if (err) this.alertsService.add(err);
-      else this.alertsService.add({ type: 'info', msg: 'Updated email templates' })
-    });
+    ];
+
+    // reactive forms should validate, but doesn't, so here is a hack:
+    let invalid = false;
+    for (const template of templates) {
+      if ((!template.contents || template.contents.length < 1)) {
+        if (template.kind !== 'email')
+          this.form.controls[template.kind].setErrors({ 'incorrect': true });
+        invalid = true;
+      }
+    }
+    if (invalid) {
+      this.alertsService.add({ type: 'warning', msg: 'Add template for each' });
+      this.form.markAsDirty();
+    } else
+      this.tplBatchCreate(templates, (err, created_templates) => {
+        if (err != null) this.alertsService.add(err);
+        else this.alertsService.add({ type: 'info', msg: 'Updated templates' })
+      });
   };
-  private handleError = (error: string) => {
-    console.error('error =', error, ';');
-    this.alertsService.add({ type: 'warning', msg: error })
-  };
+
+  ngAfterViewInit() {
+    this.templateService
+      .readBatch()
+      .subscribe(() => {
+          this.form.setValue(Array.from(this.templateService.templates.keys())
+            .filter(kind => kind !== 'email')
+            .reduce(
+              (obj, kind) => Object.assign(obj, { [kind]: this.templateService.templates.get(kind).contents }), {})
+          );
+          this.editor.setValue(this.templateService.templates.get('email').contents);
+        }
+      )
+  }
 
   constructor(private fb: FormBuilder,
               private alertsService: AlertsService,
               private templateService: TemplateService) {
-    this.alertsService.add('constructor');
     this.form = this.fb.group({
       twitter: ['', [Validators.required, Validators.maxLength(240)]],
       facebook: ['', Validators.required]
@@ -92,28 +124,23 @@ export class TemplateComponent implements OnInit, AfterViewInit {
       .update(
         Object.assign({ updatedAt: new Date() }, this.templateService.templates),
         new_template)
-      .subscribe(this.handleTemplate, this.handleError)
+      .subscribe(this.handleTemplate, this.handleError.bind(this))
   }*/
 
   ngOnInit() {
-    this.init('email');
-  }
-
-  ngAfterViewInit() {
-    this.onEdited(
-      this.templateService.hasTpl() ?
-        this.templateService.templates.get('email').contents
-        : ''
-    )
   }
 
   tplDestroy(createdAt: string | Date) {
     this.templateService
       .destroy(createdAt)
       .subscribe(_ => _,
-        this.handleError
+        this.handleError.bind(this)
       )
   }
+
+  private handleError(error: string) {
+    this.alertsService.add({ type: 'warning', msg: error })
+  };
 
   validTwitterLength(): boolean {
     return this.form.value.twitter.length < 240

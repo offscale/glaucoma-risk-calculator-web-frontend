@@ -21,7 +21,7 @@ export class RichTextComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      editor: ['test']
+      editor: ''
     });
   }
 
@@ -33,9 +33,15 @@ export class RichTextComponent implements AfterViewInit, OnInit {
     $event.focus();
   }
 
-  patchValue(content?: string) {
+  public patchValue(content?: string) {
     this.form.controls['editor'].patchValue(
       content ? content : `${this.form.controls['editor'].value} patched!`
     )
+  }
+
+  public setValue(content: string) {
+    this.form.setValue({
+      editor: content || ''
+    })
   }
 }

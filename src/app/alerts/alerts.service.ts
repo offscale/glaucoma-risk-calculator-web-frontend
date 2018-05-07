@@ -17,7 +17,10 @@ export class AlertsService {
     else if ((alert as IAlert).type && (alert as IAlert).msg)
       this.alerts.push({
         type: (alert as IAlert).type,
-        msg: (s => typeof s === 'string' ? s : `${(s as Response).status}: ${(s as Response).statusText} on ${(s as Response).url}`)(
+        msg: (
+          s => typeof s === 'string' ? s
+            : `${(s as Response).status}: ${(s as Response).statusText} on ${(s as Response).url}`
+        )(
           (alert as IAlert).msg as any as string | object
         )
       });

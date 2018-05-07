@@ -12,7 +12,9 @@ import { EmailModule } from './email/email.module';
 import { FooterModule } from './footer/footer.module';
 import { RiskQuizFormModule } from './risk-quiz-form/risk-quiz-form.module';
 
+import { TemplateService } from '../api/template/template.service';
 import { AuthService } from '../api/auth/auth.service';
+
 import { AuthGuard } from './auth/auth.guard';
 import { AuthInterceptor } from './auth/auth.interceptors';
 import { AuthModule } from './auth/auth.module';
@@ -20,6 +22,7 @@ import { AuthModule } from './auth/auth.module';
 import { rootRoutes } from './app.routes';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
+
 
 @NgModule({
   imports: [
@@ -36,7 +39,8 @@ import { AppService } from './app.service';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    }
+    },
+    TemplateService
   ],
   bootstrap: [AppComponent]
 })
