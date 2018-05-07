@@ -24,10 +24,9 @@ export interface IMail {
 
 export const parseQueryString = (url: string): ResHash => {
   const params: ResHash = {} as ResHash;
-  const queryString = url.substring(1);
   const regex = /([^&=]+)=([^&]*)/g;
   let m: RegExpExecArray;
-  while (m = regex.exec(queryString)) {
+  while (m = regex.exec(url)) {
     params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
   }
   return params;
@@ -106,13 +105,12 @@ export class MsAuthService {
       this.access_token = this.params['access_token'];
 
     // redirect to get id_token
-    // console.info('this.genParams() =', this.genParams())
-    /*
-     const params = new URLSearchParams();
-     params.set('response_type', 'id_token');
-     params.appendAll(this.genParams());
-     window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
-     */
+    console.info('MsAuthService::genParams() =', this.genParams());
+
+    const params = new URLSearchParams();
+    params.set('response_type', 'id_token');
+    params.appendAll(this.genParams());
+    window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
   }
 
   logout() {

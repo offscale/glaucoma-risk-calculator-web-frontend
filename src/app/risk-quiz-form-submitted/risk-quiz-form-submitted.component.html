@@ -56,7 +56,29 @@
   <h5>Share with family and friends to calculate their own risk</h5>
   <div class="btn-toolbar" role="toolbar" aria-label="Share">
     <div class="btn-group mr-2" role="group" aria-label="email">
-      <button class="btn btn-lg btn-warning">Share as email</button>
+      <button class="btn btn-lg btn-warning" (click)="openModal(sendEmailTemplate)">Share as email</button>
+      <ng-template #sendEmailTemplate>
+        <div class="modal-body text-center">
+          <form class="container form-group">
+            <div class="row">
+              <div class="col-2">
+                <label class="col-form-label" for="email">
+                  To:
+                </label>
+              </div>
+              <div class="col-auto">
+                <input class="form-check-input" placeholder="Email" id="email" #toEmail>
+              </div>
+            </div>
+
+            <div class="row" [innerHtml]="getTemplate('email') + ' ' + share_url"></div>
+            <button type="submit" class="btn" (click)="sendEmail(toEmail.value)"
+                    [disabled]="!toEmail.value.length" [ngClass]="{'btn-outline-success': toEmail.value.length}">
+              Send email
+            </button>
+          </form>
+        </div>
+      </ng-template>
     </div>
     <div class="btn-group mr-2" role="group" aria-label="facebook">
       <a class="btn btn-lg btn-primary" [href]="'https://www.facebook.com/sharer/sharer.php?u='+share_url"
@@ -185,11 +207,11 @@
         <li>{{note}}</li>
       </ul>
       <ul>
-        <li [innerHTML]="html_of_last_note">hello</li>
+        <li [innerHTML]="html_of_last_note"></li>
       </ul>
 
       <h4>References</h4>
-      <div [innerHTML]="html_of_all_refs">hello</div>
+      <div [innerHTML]="html_of_all_refs"></div>
     </div>
   </div>
 </div>

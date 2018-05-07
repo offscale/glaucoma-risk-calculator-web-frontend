@@ -1,13 +1,12 @@
 import * as math from 'mathjs';
 
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 
 import { GaugeLabel, GaugeSegment } from 'ng-gauge/dist';
 import { calc_relative_risk, familial_risks_from_study, IMultiplicativeRisks, IRiskJson } from 'glaucoma-risk-calculator-engine';
 
 import 'rxjs/add/operator/switchMap';
-
 
 import { IRiskQuiz, RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../../api/risk_res/risk_res.service';
@@ -15,6 +14,8 @@ import { MsAuthService } from '../ms-auth/ms-auth.service';
 import { colours, numToColour } from '../colours';
 import { RiskStatsService } from '../../api/risk_stats/risk-stats.service';
 import { TemplateService } from '../../api/template/template.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { AlertsService } from '../alerts/alerts.service';
 
 
 math.config({
@@ -144,11 +145,16 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     return m[label.data.data.name] || label.data.data.name;
   };
 
+  modalRef: BsModalRef;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
+              private modalService: BsModalService,
               private riskStatsService: RiskStatsService,
               private riskResService: RiskResService,
-              private templateService: TemplateService) {
+              private templateService: TemplateService,
+              private alertsService: AlertsService,
+              private msAuthService: MsAuthService) {
 
   }
 
@@ -332,5 +338,22 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
       .map(k => ({ name: k, value: multiplicative_risks[k] }))
       .filter(o => o.value > 1);
     this.show_pie_adv = this.added_risk = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
+  }
+
+  // modal
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
+  }
+
+  sendEmail(recipient: string) {
+    this.msAuthService.sendEmail({
+      recipient: recipient,
+      subject: this.getTemplate('email_subject'),
+      content: this.getTemplate('email') + ' ' + this.share_url
+    }).subscribe(email => console.info(email) || this.alertsService.add({
+      type: 'info', msg: 'Sent email'
+    }), console.error);
+    this.modalRef.hide();
   }
 }

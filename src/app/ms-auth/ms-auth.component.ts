@@ -5,6 +5,7 @@ import { TemplateService } from '../../api/template/template.service';
 import { AlertsService } from '../alerts/alerts.service';
 import { MsAuthService } from './ms-auth.service';
 
+
 @Component({
   selector: 'app-ms-auth',
   templateUrl: './ms-auth.component.html',
@@ -43,7 +44,7 @@ export class MsAuthComponent implements OnInit {
   ngOnInit() {
     this.confService
       .get()
-      .subscribe(config => console.info('config ', config), console.error)
+      .subscribe(() => {});
   }
 
   login() {

@@ -2,6 +2,10 @@
 </app-richtext>
 
 <form class="form-group" [formGroup]="form">
+  <label for="email_subject">Email subject</label>
+  <input class="form-control"
+         placeholder="Email subject" id="email_subject" formControlName="email_subject" required/>
+
   <label for="twitter">Twitter</label>
   <textarea class="form-control" [ngClass]="{'red-border': !validTwitterLength()}"
             placeholder="Twitter" id="twitter" formControlName="twitter" required>

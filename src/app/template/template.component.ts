@@ -107,6 +107,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
               private alertsService: AlertsService,
               private templateService: TemplateService) {
     this.form = this.fb.group({
+      email_subject: ['', Validators.required],
       twitter: ['', [Validators.required, Validators.maxLength(240)]],
       facebook: ['', Validators.required]
     });

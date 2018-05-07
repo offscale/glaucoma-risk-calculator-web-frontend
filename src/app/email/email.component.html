@@ -1,4 +1,9 @@
 <div class="container-fluid">
+  <div class="row" *ngIf="error">
+    <h3>Trace</h3>
+    <pre>{{error}}</pre>
+  </div>
+
   <div class="row">
     <div class="col-9">
       <app-template></app-template>
