@@ -57,18 +57,11 @@ export class TemplateComponent implements OnInit, AfterViewInit {
         contents: this.templateService.templates.get('email').contents,
         kind: 'email',
         createdAt: now
-      },
-      {
-        contents: this.form.value.twitter,
-        kind: 'twitter',
-        createdAt: now
-      },
-      {
-        contents: this.form.value.facebook,
-        kind: 'facebook',
-        createdAt: now
-      },
-    ];
+      }].concat(
+      Object
+        .keys(this.form.value)
+        .map(k => ({ kind: k, contents: this.form.value[k], createdAt: now }))
+    );
 
     // reactive forms should validate, but doesn't, so here is a hack:
     let invalid = false;
@@ -76,6 +69,8 @@ export class TemplateComponent implements OnInit, AfterViewInit {
       if ((!template.contents || template.contents.length < 1)) {
         if (template.kind !== 'email')
           this.form.controls[template.kind].setErrors({ 'incorrect': true });
+        else
+          this.editor.form.setErrors({ 'incorrect': true });
         invalid = true;
       }
     }

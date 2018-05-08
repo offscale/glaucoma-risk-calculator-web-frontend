@@ -34,9 +34,6 @@ export class AppComponent implements OnInit {
 
     this.route.queryParams.subscribe(
       (params: Params & {id_token: string, state: string, access_token: string}) => {
-        if (Object.keys(params).length === 0 && params.constructor === Object)
-          return;
-
         /* tslint:disable:no-console */
         console.info('AppComponent::params', params, ';');
         // this.handleParams(params);
@@ -44,6 +41,9 @@ export class AppComponent implements OnInit {
   }
 
   private handleParams(params: Params) {
+    if (Object.keys(params).length === 0 && params.constructor === Object)
+      return;
+
     this.confService
       .get()
       .subscribe(conf => {
