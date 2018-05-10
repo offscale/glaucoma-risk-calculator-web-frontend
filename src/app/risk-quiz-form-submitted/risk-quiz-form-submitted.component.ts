@@ -186,7 +186,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
       this.route
         .params
         .switchMap((params: Params) => {
-          this.id = +params['id'];
+          this.id = this.riskResService.id = +params['id'];
           return this.riskResService.read(this.id)
         })
         .subscribe((riskQuiz: IRiskQuiz | any) => {
@@ -210,6 +210,58 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
 
   pieAdvOnSelect(event) {
     console.log(event);
+  }
+
+  sendEmail(recipient: string) {
+    this.msAuthService.remoteSendEmail(this.id, {
+      recipient: recipient,
+      subject: this.getTemplate('email_subject'),
+      content: this.getTemplate('email') + ' ' + this.share_url
+    }).subscribe(email => console.info(email) || this.alertsService.add({
+      type: 'info', msg: 'Sent email'
+    }), console.error);
+    this.modalRef.hide();
+  }
+
+  private gaugeView(risk_pc: number, risk_pc_as_s: string) {
+    this.progressGraph.labels.push(
+      new GaugeLabel({
+        color: colours.white,
+        text: 'risk',
+        x: 0,
+        y: 20,
+        fontSize: '1em'
+      }),
+      new GaugeLabel({
+        color: numToColour(risk_pc),
+        text: risk_pc_as_s,
+        x: 0,
+        y: 0,
+        fontSize: '2em'
+      })
+    );
+    this.progressGraph.segments.push(
+      new GaugeSegment({
+        value: risk_pc,
+        color: numToColour(risk_pc),
+        borderWidth: 20
+      })
+    );
+    this.gauge = true;
+  }
+
+  private pieAdvView(multiplicative_risks: IMultiplicativeRisks) {
+    this.pieAdvData = Object
+      .keys(multiplicative_risks)
+      .map(k => ({ name: k, value: multiplicative_risks[k] }))
+      .filter(o => o.value > 1);
+    this.show_pie_adv = this.added_risk = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
+  }
+
+  // modal
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
   }
 
   private prepareView() {
@@ -296,64 +348,12 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
             this.riskResService
               .create(this.riskQuiz.toJSON())
               .subscribe(r => {
-                this.id = r.id;
+                this.id = this.riskResService.id = r.id;
                 this.share_url = this.idWithUrl()
               }, console.error);
           else this.share_url = this.idWithUrl();
         },
         console.error
       );
-  }
-
-  private gaugeView(risk_pc: number, risk_pc_as_s: string) {
-    this.progressGraph.labels.push(
-      new GaugeLabel({
-        color: colours.white,
-        text: 'risk',
-        x: 0,
-        y: 20,
-        fontSize: '1em'
-      }),
-      new GaugeLabel({
-        color: numToColour(risk_pc),
-        text: risk_pc_as_s,
-        x: 0,
-        y: 0,
-        fontSize: '2em'
-      })
-    );
-    this.progressGraph.segments.push(
-      new GaugeSegment({
-        value: risk_pc,
-        color: numToColour(risk_pc),
-        borderWidth: 20
-      })
-    );
-    this.gauge = true;
-  }
-
-  private pieAdvView(multiplicative_risks: IMultiplicativeRisks) {
-    this.pieAdvData = Object
-      .keys(multiplicative_risks)
-      .map(k => ({ name: k, value: multiplicative_risks[k] }))
-      .filter(o => o.value > 1);
-    this.show_pie_adv = this.added_risk = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
-  }
-
-  // modal
-
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
-  }
-
-  sendEmail(recipient: string) {
-    this.msAuthService.sendEmail({
-      recipient: recipient,
-      subject: this.getTemplate('email_subject'),
-      content: this.getTemplate('email') + ' ' + this.share_url
-    }).subscribe(email => console.info(email) || this.alertsService.add({
-      type: 'info', msg: 'Sent email'
-    }), console.error);
-    this.modalRef.hide();
   }
 }

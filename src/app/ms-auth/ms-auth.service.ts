@@ -3,7 +3,8 @@ import { Headers, Http, RequestOptions, Response, URLSearchParams } from '@angul
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
-import { AuthService } from '../../api/auth/auth.service';
+import { ConfigService } from '../../api/config/config.service';
+import { HttpClient } from '@angular/common/http';
 
 interface ArrayBufferViewForEach extends ArrayBufferView {
   forEach(callbackfn: (value: number, index: number, array: Int8Array) => void, thisArg?: any): void;
@@ -37,7 +38,8 @@ export class MsAuthService {
   private params: ResHash;
 
   constructor(private http: Http,
-              private authService: AuthService) {
+              private httpClient: HttpClient,
+              private configService: ConfigService) {
     this.params = parseQueryString(location.hash);
   }
 
@@ -128,7 +130,12 @@ export class MsAuthService {
     window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
   }
 
-  public sendEmail(mail: IMail): Observable<IMail> {
+  public remoteSendEmail(risk_id: number, mail: IMail): Observable<IMail> {
+    return this.httpClient
+      .post<IMail>(`/api/email/${mail.recipient}/${risk_id}`, void 0);
+  }
+
+  public localSendEmail(mail: IMail): Observable<IMail> {
     const options = new RequestOptions({
       headers: new Headers({
         'Authorization': `Bearer ${this.access_token}`,

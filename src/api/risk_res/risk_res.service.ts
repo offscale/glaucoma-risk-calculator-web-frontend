@@ -13,6 +13,7 @@ import { IRiskRes, IRiskResBase } from './risk_res';
 @Injectable()
 export class RiskResService {
   public risk;
+  public id;
 
   constructor(private http: HttpClient) {
   }

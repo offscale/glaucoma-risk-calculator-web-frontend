@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Params } from '@angular/router/src/shared';
+import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/observable/merge';
 
 import { AuthService } from '../api/auth/auth.service';
 import { ConfigService } from '../api/config/config.service';
@@ -26,6 +28,21 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.info('this.route.fragment =', this.route.fragment, ';');
+    console.info('this.route.queryParams =', this.route.queryParams, ';');
+
+    /*
+    Observable.merge(this.route.fragment, this.route.queryParams)
+      .subscribe((allParams) => {
+        console.info('typeof allParams =', typeof allParams, 'isobject',
+         Object.keys(allParams).length === 0 && allParams.constructor === Object, ';');
+        if (typeof allParams === 'string')
+          allParams = parseQueryString(allParams);
+        console.info('NOW typeof allParams =', typeof allParams, 'isobject',
+        Object.keys(allParams).length === 0 && allParams.constructor === Object, ';');
+        this.handleParams(allParams);
+      });
+      */
     this.route.fragment.subscribe((fragment: string) => {
       const qs = parseQueryString(fragment);
       console.log('AppComponent::hash_fragment', qs, ';');
@@ -34,9 +51,9 @@ export class AppComponent implements OnInit {
 
     this.route.queryParams.subscribe(
       (params: Params & {id_token: string, state: string, access_token: string}) => {
-        /* tslint:disable:no-console */
+        // tslint:disable:no-console
         console.info('AppComponent::params', params, ';');
-        // this.handleParams(params);
+        this.handleParams(params);
       });
   }
 
