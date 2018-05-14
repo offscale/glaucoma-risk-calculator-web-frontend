@@ -62,7 +62,7 @@ export class MsAuthComponent implements OnInit {
   sendTestEmail() {
     /* tslint:disable:no-console */
     console.info('MsAuthComponent::sendTestEmail');
-    this.msAuthService.sendEmail({
+    this.msAuthService.localSendEmail({
       recipient: this.mail_base.recipient,
       subject: this.mail_base.subject,
       content: this.templateService.templates.get('email').contents

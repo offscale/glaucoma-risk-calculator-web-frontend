@@ -72,7 +72,9 @@ export class AppComponent implements OnInit {
           const fin = () => !!params.state && this.router.navigateByUrl(decodeURIComponent(params.state));
 
           /* tslint:disable:no-unused-expression */
-          !!params.id_token && this.msAuthService.getAccessToken(params.state);
+          !!params.refresh_token && this.msAuthService.getRefreshToken(params.state);
+
+          // if (!!params.refresh_token) this.msAuthService.getRefreshToken(params.state)
           if (!!params.access_token) {
             this.msAuthService.access_token = this.confService.config.access_token = params.access_token;
             this.confService.post(this.confService.config).subscribe(() => fin());

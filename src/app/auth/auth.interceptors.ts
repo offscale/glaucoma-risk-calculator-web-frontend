@@ -18,7 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>,
             next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(AuthService.loggedIn() ?
+    return next.handle(AuthService.loggedIn() && !req.url.startsWith('https://graph.microsoft.com') ?
       req.clone({ headers: req.headers.set('X-Access-Token', AuthService.getAccessToken()) })
       : req)
       .catch((err: any, caught) => {
