@@ -72,16 +72,17 @@ export class AppComponent implements OnInit {
 
           this.msAuthService.init();
 
-          const fin = () => !!params.state && this.router.navigateByUrl(decodeURIComponent(params.state));
+          const fin = () => this.router.navigateByUrl(params.hasOwnProperty('state') ? decodeURIComponent(params.state) : '/');
 
-          /* tslint:disable:no-unused-expression */
-          !!params.refresh_token && this.msAuthService.getRefreshToken(params.state);
-
-          // if (!!params.refresh_token) this.msAuthService.getRefreshToken(params.state)
-          if (!!params.access_token) {
+          if (params.hasOwnProperty('code'))
+            this.msAuthService.login('code', params.code, params.state);
+          else if (params.hasOwnProperty('refresh_token'))
+            this.msAuthService.login( 'refresh_token', params.refresh_token, params.state);
+          else if (params.hasOwnProperty('access_token')) {
             this.msAuthService.access_token = this.confService.config.access_token = params.access_token;
+            localStorage.setItem('ms-access-token', this.msAuthService.access_token);
             this.confService.post(this.confService.config).subscribe(() => fin());
-          } else if (params.error) {
+          } else if (params.hasOwnProperty('error')) {
             this.alertsService.add([params.error, params.error_description].join(': '));
             console.error(params);
           } else fin();

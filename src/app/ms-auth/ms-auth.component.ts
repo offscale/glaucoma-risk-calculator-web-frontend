@@ -46,7 +46,7 @@ export class MsAuthComponent implements OnInit {
   }
 
   login() {
-    this.msAuthService.login();
+    this.msAuthService.login('code');
   }
 
   loggedIn(): boolean {

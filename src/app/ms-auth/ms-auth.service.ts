@@ -91,19 +91,36 @@ export class MsAuthService {
     this.configService.get().subscribe(() => {});
   }
 
-  public login() {
+  public login(token_type: 'refresh_token' | 'code' | 'access_token', token?: string, state?: string) {
     // check for id_token or access_token in url
     /* tslint:disable:no-console */
-    console.info('MsAuthService::login::params[\'id_token\'] =', this.params['id_token']);
-    console.info('MsAuthService::login::params[\'access_token\'] =', this.params['access_token']);
-    if (this.params['access_token'] !== null)
-      this.access_token = this.params['access_token'];
+    console.info('MsAuthService::login::params[\'id_token\'] =', this.params['id_token'], ';');
+    console.info('MsAuthService::login::params[\'access_token\'] =', this.params['access_token'], ';');
 
-    // redirect to get id_token
-    console.info('MsAuthService::getTokenParams() =', this.getTokenParams());
+    if (token_type != null)
+      switch (token_type) {
+        case 'code':
+          if (token == null) this.msAuthRedir(this.getCode(state));
+          localStorage.setItem('ms-code', token);
+          this.login('refresh_token', void 0, state);
+          break;
+        case 'access_token':
+          if (token == null) this.msAuthRedir(this.getAccessToken(state));
+          else {
+            this.access_token = this.params['access_token'] = token;
+            localStorage.setItem('ms-access-token', this.access_token);
+          }
+          break;
+        case 'refresh_token':
+          if (token == null) this.msAuthRedir(this.getRefreshToken());
+          localStorage.setItem('ms-refresh-token', token);
+          this.login( 'access_token', void 0, state);
+      }
+  }
 
-    const params = this.getRefreshToken();
-    console.info('MsAuthService::login::params', params, ';');
+  private msAuthRedir(params) {
+    console.info('MsAuthService::getTokenParams() =', this.getTokenParams(), ';');
+    console.info('MsAuthService::msAuthRedir::params', params, ';');
     window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/authorize?${params}`;
   }
 
@@ -123,15 +140,40 @@ export class MsAuthService {
     return params;
   }
 
-  public getRefreshToken(state?: string): HttpParams {
-    // redirect to get refresh_token
+  public getCode(state?: string): HttpParams {
+    // https://github.com/microsoftgraph/microsoft-graph-docs/blob/master/concepts/auth_v2_user.md#authorization-request
 
-    const params = new HttpParams({ fromObject: MsAuthService.paramsToObject(this.getTokenParams(state)) })
+    const default_params = MsAuthService.paramsToObject(this.getTokenParams(state));
+    const params = new HttpParams({
+      fromObject:
+        Object
+          .keys(default_params)
+          .filter(k => ['client_id', 'response_type', 'redirect_uri', 'scope', 'response_mode', 'state'].indexOf(k) > -1)
+          .reduce((a, b) => Object.assign(a, { [b]: default_params[b] }), {})
+    })
+      .set('response_type', 'code');
+    console.info('MsAuthService::getCode::params', params, ';');
+    return params;
+  }
+
+  public getRefreshToken(state?: string): HttpParams {
+    // https://github.com/microsoftgraph/microsoft-graph-docs/blob/master/concepts/auth_v2_user.md#token-request
+
+    const default_params = MsAuthService.paramsToObject(this.getTokenParams(state));
+    const params = new HttpParams({
+      fromObject:
+        Object
+          .keys(default_params)
+          .filter(k => ['client_id', 'grant_type', 'scope', 'code', 'redirect_uri', 'client_secret'].indexOf(k) > -1)
+          .reduce((a, b) => Object.assign(a, { [b]: default_params[b] }), {})
+    })
       .set('grant_type', 'authorization_code')
-      .set('resource', 'https://graph.microsoft.com')
-      .set('prompt', 'none')
-      .set('client_secret', this.configService.config.client_secret)
-      .set('scope', 'https://graph.microsoft.com/mail.send https://graph.microsoft.com/offline_access');
+      .set('scope', 'https://graph.microsoft.com/mail.send https://graph.microsoft.com/offline_access')
+      // .set('resource', 'https://graph.microsoft.com')
+      // .set('prompt', 'none')
+      .set('code', localStorage.getItem('ms-code'))
+      .set('client_secret', this.configService.config.client_secret);
+    // .set('response_type', 'code');
 
     console.info('MsAuthService::getRefreshToken::params', params, ';');
     return params;
