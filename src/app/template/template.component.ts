@@ -16,36 +16,37 @@ export class TemplateComponent implements OnInit, AfterViewInit {
   @ViewChild('editor') editor: RichTextComponent;
   form: FormGroup;
 
-  tplCreate(new_template: ITemplateBase, cb) {
-    if (
-      new_template == null) return cb(new TypeError('new_template must be defined'));
-    this.templateService
-      .create(new_template)
-      .subscribe(template => this.handleTemplate(template, template.kind, cb), this.handleError.bind(this))
-  };
+  constructor(private fb: FormBuilder,
+              private alertsService: AlertsService,
+              private templateService: TemplateService) {
+    this.form = this.fb.group({
+      email_subject: ['', Validators.required],
+      twitter: ['', [Validators.required, Validators.maxLength(240)]],
+      facebook: ['', Validators.required],
+      // email: this.editor.form.controls
+      // editor: this.editor.form.controls
+    });
+  }
 
-  tplBatchCreate(new_templates: ITemplateBase[], cb) {
-    if (new_templates == null) return cb(new TypeError('new_templates must be defined'));
-    this.templateService
-      .createBatch(new_templates)
-      .subscribe(
-        templates => templates.templates.map(template => this.handleTemplate(template, template.kind)),
-        this.handleError.bind(this)
-      )
-  };
+  ngOnInit() {
+  }
 
-  tplRead(createdAt: string | Date, kind: string, cb: (Error, string?) => void) {
-    this.templateService.read(createdAt, kind)
-      .subscribe((template: ITemplate) => {
-          this.templateService.templates.set(kind, template);
-          return cb(void 0, template);
-        },
-        error => {
-          this.alertsService.add({ type: 'warning', msg: error });
-          return cb(error);
+  ngAfterViewInit() {
+    this.templateService
+      .readBatch()
+      .subscribe(() => {
+        const values = Array.from(this.templateService.templates.keys())
+          .filter(kind => kind !== 'email')
+          .reduce(
+            (obj, kind) => Object.assign(obj, { [kind]: this.templateService.getTpl(kind) }), {})
+        ;
+        if (Object.keys(values).length) {
+          this.editor.setValue(this.templateService.getTpl('email'));
+          this.form.setValue(values);
+        }
         }
       )
-  };
+  }
 
   save() {
     // novalidate [ngClass]="{'was-validated': (form.touched || form.dirty) && !form.valid }"
@@ -54,10 +55,11 @@ export class TemplateComponent implements OnInit, AfterViewInit {
 
     const templates: ITemplateBase[] = [
       {
-        contents: this.templateService.templates.get('email').contents,
+        contents: this.templateService.getTpl('email'),
         kind: 'email',
         createdAt: now
-      }].concat(
+      }
+    ].concat(
       Object
         .keys(this.form.value)
         .map(k => ({ kind: k, contents: this.form.value[k], createdAt: now }))
@@ -74,9 +76,10 @@ export class TemplateComponent implements OnInit, AfterViewInit {
         invalid = true;
       }
     }
+    console.info('invalid', invalid, ';');
     if (invalid) {
-      this.alertsService.add({ type: 'warning', msg: 'Add template for each' });
       this.form.markAsDirty();
+      this.alertsService.add({ type: 'warning', msg: 'Add template for each' });
     } else
       this.tplBatchCreate(templates, (err, created_templates) => {
         if (err != null) this.alertsService.add(err);
@@ -84,32 +87,53 @@ export class TemplateComponent implements OnInit, AfterViewInit {
       });
   };
 
-  ngAfterViewInit() {
+  tplCreate(new_template: ITemplateBase, cb) {
+    if (
+      new_template == null) return cb(new TypeError('new_template must be defined'));
     this.templateService
-      .readBatch()
-      .subscribe(() => {
-          this.form.setValue(Array.from(this.templateService.templates.keys())
-            .filter(kind => kind !== 'email')
-            .reduce(
-              (obj, kind) => Object.assign(obj, { [kind]: this.templateService.templates.get(kind).contents }), {})
-          );
-          this.editor.setValue(this.templateService.templates.get('email').contents);
+      .create(new_template)
+      .subscribe(template => this.handleTemplate(template, template.kind, cb), this.handleError.bind(this))
+  };
+
+  tplBatchCreate(new_templates: ITemplateBase[], cb) {
+    if (new_templates == null) return cb(new TypeError('new_templates must be defined'));
+    this.templateService
+      .createBatch(new_templates)
+      .subscribe(templates => {
+          templates.templates
+            .forEach(template => this.handleTemplate(template, template.kind));
+          return cb(void 0, templates)
+        },
+        cb
+      )
+  };
+
+  tplRead(createdAt: string | Date, kind: string, cb: (Error, string?) => void) {
+    this.templateService.read(createdAt, kind)
+      .subscribe((template: ITemplate) => {
+          this.templateService.templates.set(kind, template);
+          return cb(void 0, template);
+        },
+        error => {
+          this.alertsService.add({ type: 'warning', msg: error });
+          return cb(error);
         }
       )
-  }
-
-  constructor(private fb: FormBuilder,
-              private alertsService: AlertsService,
-              private templateService: TemplateService) {
-    this.form = this.fb.group({
-      email_subject: ['', Validators.required],
-      twitter: ['', [Validators.required, Validators.maxLength(240)]],
-      facebook: ['', Validators.required]
-    });
-  }
+  };
 
   onEdited(content: string) {
     this.templateService.setTpl(content);
+  }
+
+  private init(kind: string) {
+    this.tplRead('latest', kind, (err, template) =>
+      !err && template && this.editor.patchValue(template.contents)
+    );
+  }
+
+  private handleTemplate(template: ITemplate, kind: string, cb?: (Error, string) => void) {
+    this.templateService.templates.set(kind, template);
+    if (cb) return cb(void 0, template);
   }
 
   /* // Would be better to not update, in case drafts are introduced
@@ -123,9 +147,6 @@ export class TemplateComponent implements OnInit, AfterViewInit {
       .subscribe(this.handleTemplate, this.handleError.bind(this))
   }*/
 
-  ngOnInit() {
-  }
-
   tplDestroy(createdAt: string | Date) {
     this.templateService
       .destroy(createdAt)
@@ -136,20 +157,9 @@ export class TemplateComponent implements OnInit, AfterViewInit {
 
   private handleError(error: string) {
     this.alertsService.add({ type: 'warning', msg: error })
-  };
+  }
 
   validTwitterLength(): boolean {
     return this.form.value.twitter.length < 240
-  }
-
-  private init(kind: string) {
-    this.tplRead('latest', kind, (err, template) =>
-      !err && template && this.editor.patchValue(template.contents)
-    );
-  }
-
-  private handleTemplate(template: ITemplate, kind: string, cb?: (Error, string) => void) {
-    this.templateService.templates.set(kind, template);
-    if (cb) return cb(void 0, template);
   }
 }

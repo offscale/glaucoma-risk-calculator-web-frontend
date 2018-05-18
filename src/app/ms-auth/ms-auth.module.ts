@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { CollapseModule } from 'ngx-bootstrap';
 
@@ -10,7 +10,7 @@ import { MsAuthService } from './ms-auth.service';
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule,
+    CommonModule, FormsModule, ReactiveFormsModule,
     CollapseModule.forRoot()
   ],
   providers: [MsAuthService],

@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
           /* tslint:disable:no-console */
           console.info('AppComponent::conf', conf, ';');
 
-          this.msAuthService.setup(conf.tenant_id, conf.client_id);
+          this.msAuthService.init();
 
           const fin = () => !!params.state && this.router.navigateByUrl(decodeURIComponent(params.state));
 

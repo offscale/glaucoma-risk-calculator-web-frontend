@@ -12,18 +12,18 @@
   </div>
 </div>
 
-<form *ngIf="loggedIn()" (ngSubmit)="sendTestEmail()">
+<form *ngIf="loggedIn() && email_form" (ngSubmit)="sendTestEmail()" [formGroup]="email_form">
   <div class="form-group">
-    <label for="recipient">Recipient</label>
-    <input type="email" class="form-control" id="recipient" name="recipient"
-           aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="mail_base.recipient">
+    <label for="test_recipient">Recipient</label>
+    <input type="email" id="test_recipient" name="test_recipient" formControlName="test_recipient"
+           aria-describedby="emailHelp" placeholder="Enter email address">
     <small id="emailHelp" class="form-text text-muted">Address to send email</small>
   </div>
 
   <div class="form-group">
-    <label for="subject">Subject</label>
-    <input type="text" class="form-control" id="subject" name="subject"
-           aria-describedby="subjectHelp" placeholder="Enter subject" [(ngModel)]="mail_base.subject">
+    <label for="test_subject">Subject</label>
+    <input type="text" id="test_subject" name="test_subject" formControlName="test_subject"
+           aria-describedby="subjectHelp" placeholder="Enter subject">
     <small id="subjectHelp" class="form-text text-muted">Subject of email</small>
   </div>
 
@@ -38,17 +38,26 @@
     <a href="https://graph.microsoft.io/en-us/docs/authorization/app_authorization" target="_blank">
       Microsoft Graph app authorisation
     </a>
-    <form (ngSubmit)="updateAuth()">
+    <form (ngSubmit)="updateAuth()" [formGroup]="advanced_form" *ngIf="advanced_form">
       <div class="form-group">
-        <label for="recipient">Client ID</label>
-        <input type="text" class="form-control" id="client_id" name="client_id"
-               placeholder="Enter client_id" [(ngModel)]="client_id">
+        <label for="client_id">Client ID</label>
+        <input type="text" class="form-control"
+               id="client_id" name="client_id" formControlName="client_id"
+               placeholder="Enter client_id">
       </div>
 
       <div class="form-group">
-        <label for="recipient">Tenant ID</label>
-        <input type="text" class="form-control" id="tenant_id" name="tenant_id"
-               placeholder="Enter tenant_id" [(ngModel)]="tenant_id">
+        <label for="client_secret">Client Secret</label>
+        <input type="text" class="form-control"
+               id="client_secret" name="client_secret" formControlName="client_secret"
+               placeholder="Enter client_secret">
+      </div>
+
+      <div class="form-group">
+        <label for="tenant_id">Tenant ID</label>
+        <input type="text" class="form-control"
+               id="tenant_id" name="tenant_id" formControlName="tenant_id"
+               placeholder="Enter tenant_id">
       </div>
 
       <button class="btn btn-outline-warning" type="submit">Update auth</button>

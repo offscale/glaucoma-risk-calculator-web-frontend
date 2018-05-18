@@ -3,8 +3,8 @@
 
 <form class="form-group" [formGroup]="form">
   <label for="email_subject">Email subject</label>
-  <input class="form-control"
-         placeholder="Email subject" id="email_subject" formControlName="email_subject" required/>
+  <input placeholder="Email subject" id="email_subject" name="email_subject" formControlName="email_subject"
+         class="form-control" required/>
 
   <label for="twitter">Twitter</label>
   <textarea class="form-control" [ngClass]="{'red-border': !validTwitterLength()}"

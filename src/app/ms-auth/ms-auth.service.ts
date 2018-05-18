@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { HttpParams } from '@angular/common/http/src/params';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 
 import { ConfigService } from '../../api/config/config.service';
+
 
 interface ArrayBufferViewForEach extends ArrayBufferView {
   forEach(callbackfn: (value: number, index: number, array: Int8Array) => void, thisArg?: any): void;
@@ -47,45 +47,7 @@ export const parseQueryString = (url: string): ResHash => {
 @Injectable()
 export class MsAuthService {
   private params: ResHash;
-
-  constructor(private http: HttpClient,
-              private configService: ConfigService) {
-    this.params = parseQueryString(location.hash);
-  }
-
-  private _tenant_id: string;
-
-  get tenant_id(): string {
-    if (!this._tenant_id) throw TypeError('tenant_id must be defined. Did you run MsAuthService.setup?');
-    return this._tenant_id;
-  }
-
-  set tenant_id(val: string) {
-    this._tenant_id = val;
-  }
-
-  private _client_id: string;
-
-  get client_id(): string {
-    if (!this._client_id) throw TypeError('client_id must be defined. Did you run MsAuthService.setup?');
-    return this._client_id;
-  }
-
-  set client_id(val: string) {
-    this._client_id = val;
-  }
-
   private _access_token: string;
-
-  get access_token(): string {
-    if (!this._access_token) this._access_token = localStorage.getItem('ms-access-token');
-    return this._access_token;
-  }
-
-  set access_token(val: string) {
-    this._access_token = val;
-    localStorage.setItem('ms-access-token', val);
-  }
 
   static genNonce() {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz'; // '-._~';
@@ -101,54 +63,92 @@ export class MsAuthService {
       ':' + window.location.port : ''}`;
   }
 
-  setup(tenant_id: string, client_id: string) {
-    this.tenant_id = tenant_id;
-    this.client_id = client_id;
+  static paramsToObject(params: HttpParams): {} {
+    const o = {};
+    for (const key of params.keys())
+      o[key] = params.get(key);
+    console.info('params:', params, ';\ntoObject:', o, ';');
+    return o;
   }
 
-  login() {
+  constructor(private http: HttpClient,
+              private configService: ConfigService) {
+    this.params = parseQueryString(location.hash);
+    this.init();
+  }
+
+  public get access_token(): string {
+    if (!this._access_token) this._access_token = localStorage.getItem('ms-access-token');
+    return this._access_token;
+  }
+
+  public set access_token(val: string) {
+    this._access_token = val;
+    localStorage.setItem('ms-access-token', val);
+  }
+
+  public init() {
+    this.configService.get().subscribe(() => {});
+  }
+
+  public login() {
     // check for id_token or access_token in url
     /* tslint:disable:no-console */
     console.info('this.params[\'id_token\'] =', this.params['id_token']);
     console.info('this.params[\'access_token\'] =', this.params['access_token']);
     if (this.params['id_token'] !== null)
-      this.getAccessToken();
+      this.getRefreshToken();
     else if (this.params['access_token'] !== null)
       this.access_token = this.params['access_token'];
 
     // redirect to get id_token
-    console.info('MsAuthService::getAccessTokenParams() =', this.getAccessTokenParams());
+    console.info('MsAuthService::getTokenParams() =', this.getTokenParams());
 
-    const params = new HttpParams();
-    params.set('response_type', 'id_token');
-    params.appendAll(this.getAccessTokenParams());
-    window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
+    const params = new HttpParams({ fromObject: MsAuthService.paramsToObject(this.getTokenParams()) })
+      .set('response_type', 'id_token');
+    console.info('login', params, ';');
+    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/authorize?${params.toString()}`;
   }
 
-  logout() {
+  public logout() {
     localStorage.removeItem('ms-access-token');
     this._access_token = null;
   }
 
   public getAccessToken(state?: string) {
     // redirect to get access_token
-    const params = new HttpParams();
-    params.set('response_type', 'token');
-    params.appendAll(this.getAccessTokenParams(state));
-    params.set('resource', 'https://graph.microsoft.com');
-    params.set('prompt', 'none');
-    window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${params}`;
+
+    const params = new HttpParams({ fromObject: MsAuthService.paramsToObject(this.getTokenParams(state)) })
+      .set('response_type', 'token')
+      .set('resource', 'https://graph.microsoft.com')
+      .set('prompt', 'none');
+    console.info('getAccessToken::params', params, ';');
+    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/authorize?${params.toString()}`;
   }
 
   public getRefreshToken(state?: string) {
     // redirect to get refresh_token
-    /*
-    const params = new HttpParams();
-    params.appendAll(this.getAccessTokenParams(state));
-    params.set('resource', 'https://graph.microsoft.com');
-    params.set('prompt', 'none');
-    */
-    window.location.href = `https://login.microsoftonline.com/${this.tenant_id}/oauth2/authorize?${this.getRefreshTokenParams(state)}`;
+
+    const params = new HttpParams({ fromObject: MsAuthService.paramsToObject(this.getTokenParams(state)) })
+      .set('grant_type', 'authorization_code')
+      .set('resource', 'https://graph.microsoft.com')
+      .set('prompt', 'none')
+      .set('client_secret', this.configService.config.client_secret)
+      .set('scope', 'https://graph.microsoft.com/mail.send https://graph.microsoft.com/offline_access');
+
+    console.info('getRefreshToken::params', params, ';');
+    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/authorize?${params.toString()}`;
+  }
+
+  private getTokenParams(state?: string): HttpParams {
+    /* tslint:disable:no-console */
+    console.info('getTokenParams::client_id =', this.configService.config.client_id, ';');
+
+    return new HttpParams()
+      .set('client_id', this.configService.config.client_id)
+      .set('redirect_uri', MsAuthService.getHostOrigin())
+      .set('state', state || window.location.pathname) // redirect_uri doesn't work with angular for some reason?
+      .set('nonce', MsAuthService.genNonce());
   }
 
   public remoteSendEmail(risk_id: number, mail: IMail): Observable<IMail> {
@@ -204,29 +204,5 @@ export class MsAuthService {
           this.getAccessToken();
         return Observable.throw(err);
       });
-  }
-
-
-  private getAccessTokenParams(state?: string): HttpParams {
-    const params: HttpParams = new HttpParams();
-    params.set('client_id', this.client_id);
-    /* tslint:disable:no-console */
-    console.info('getAccessTokenParams::client_id =', this.client_id);
-    params.set('redirect_uri', MsAuthService.getHostOrigin());
-    params.set('state', state || window.location.pathname); // redirect_uri doesn't work with angular for some reason?
-    params.set('nonce', MsAuthService.genNonce());
-    return params;
-  }
-
-  private getRefreshTokenParams(state?: string): HttpParams {
-    const params: HttpParams = new HttpParams();
-    params.set('client_id', this.client_id);
-    /* tslint:disable:no-console */
-    console.info('getRefreshTokenParams::client_id =', this.client_id);
-    params.set('redirect_uri', MsAuthService.getHostOrigin());
-    params.set('state', state || window.location.pathname); // redirect_uri doesn't work with angular for some reason?
-    // params.set('nonce', MsAuthService.genNonce());
-    params.set('grant_type', 'authorization_code');
-    return params;
   }
 }

@@ -27,6 +27,10 @@ export class TemplateService {
       : this.templates.set(kind, { contents: contents, createdAt: new Date().toISOString() });
   }
 
+  public getTpl(kind: string = 'email'): string {
+    return this.templates.has(kind) ? this.templates.get(kind).contents : void 0;
+  }
+
   create(template: ITemplateBase): Observable<ITemplate> {
     return this.http.post<ITemplate>('/api/template', template);
   }

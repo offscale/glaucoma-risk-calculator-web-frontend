@@ -11,5 +11,6 @@ export interface IConfigBase {
   from?: string;
   session_state?: string;
   client_id: string;
+  client_secret?: string;
   tenant_id: string;
 }

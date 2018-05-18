@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ConfigService } from '../../api/config/config.service';
 import { TemplateService } from '../../api/template/template.service';
 import { AlertsService } from '../alerts/alerts.service';
-import { MsAuthService } from './ms-auth.service';
+import { IMail, MsAuthService } from './ms-auth.service';
+import { deleteServerKeys } from '../../utils';
 
 
 @Component({
@@ -13,38 +15,33 @@ import { MsAuthService } from './ms-auth.service';
 })
 export class MsAuthComponent implements OnInit {
   public isCollapsed = true;
-  mail_base: {recipient: string, subject: string} = {} as any;
 
-  constructor(private alertsService: AlertsService,
+  email_form: FormGroup;
+  advanced_form: FormGroup;
+
+  constructor(private fb: FormBuilder,
+              private alertsService: AlertsService,
               private msAuthService: MsAuthService,
               private confService: ConfigService,
               private templateService: TemplateService) {
-  }
-
-  private _client_id: string;
-
-  public get client_id(): string {
-    return this._client_id || this.confService.config ? this.confService.config.client_id : null;
-  }
-
-  public set client_id(val: string) {
-    this._client_id = val;
-  }
-
-  private _tenant_id: string;
-
-  public get tenant_id(): string {
-    return this._tenant_id || this.confService.config ? this.confService.config.tenant_id : null;
-  }
-
-  public set tenant_id(val: string) {
-    this._tenant_id = val;
+    this.email_form = this.fb.group({
+      test_recipient: ['', Validators.required],
+      test_subject: ['', Validators.required]
+    });
+    this.advanced_form = this.fb.group({
+      client_id: ['', Validators.required],
+      client_secret: '',
+      tenant_id: ['', Validators.required]
+    });
   }
 
   ngOnInit() {
     this.confService
       .get()
-      .subscribe(() => {});
+      .subscribe(conf =>
+        conf && Object.keys(conf).length &&
+        this.advanced_form.setValue(deleteServerKeys(conf))
+      );
   }
 
   login() {
@@ -62,13 +59,19 @@ export class MsAuthComponent implements OnInit {
   sendTestEmail() {
     /* tslint:disable:no-console */
     console.info('MsAuthComponent::sendTestEmail');
-    this.msAuthService.localSendEmail({
-      recipient: this.mail_base.recipient,
-      subject: this.mail_base.subject,
-      content: this.templateService.templates.get('email').contents
-    }).subscribe(email => console.info(email) || this.alertsService.add({
-      type: 'info', msg: 'Sent email'
-    }), console.error);
+    this.msAuthService.localSendEmail(Object.assign(
+      { content: this.templateService.getTpl('email') },
+      Object
+        .keys(this.email_form.value)
+        .map(k => {
+          const sw = 'test_';
+          return { [k.startsWith(sw) ? k.slice('sw'.length) : k]: this.email_form.value[k] }
+        })
+        .reduce((a, b) => Object.assign(a, b), {}) as IMail
+    )).subscribe(email => console.info(email) || this.alertsService.add({
+        type: 'info', msg: 'Sent email'
+      }), console.error
+    );
   }
 
   public toggleCollapse() {
@@ -76,13 +79,12 @@ export class MsAuthComponent implements OnInit {
   }
 
   public updateAuth() {
-    this.confService.post({
-      client_id: this._client_id,
-      tenant_id: this._tenant_id,
-      access_token: this.msAuthService.access_token
-    }).subscribe(
+    this.confService.post(Object.assign(
+      { access_token: this.msAuthService.access_token },
+      this.advanced_form.value
+    )).subscribe(
       auth => console.info(auth) || this.alertsService.add({ type: 'info', msg: 'Updated auth' }),
-      error => console.error(error) // this.authService.redirOnResIfUnauth(error)
+      console.error.bind(console) // error => this.authService.redirOnResIfUnauth(error)
     )
   }
 }

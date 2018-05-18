@@ -158,12 +158,6 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
 
   }
 
-  getTemplate(kind: string) {
-    return this.templateService.templates.has(kind) ?
-      this.templateService.templates.get(kind).contents
-      : '';
-  }
-
   redo() {
     this.submittedChange.emit(false);
     this.router
@@ -176,7 +170,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
       this.riskQuiz = new RiskQuiz(this.riskQuiz);
     this.templateService
       .readBatch()
-      .subscribe(() => this.tweet.href = this.getTemplate('twitter'));
+      .subscribe(() => this.tweet.href = this.templateService.getTpl('twitter'));
   }
 
   ngAfterContentInit() {
@@ -215,8 +209,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   sendEmail(recipient: string) {
     this.msAuthService.remoteSendEmail(this.id, {
       recipient: recipient,
-      subject: this.getTemplate('email_subject'),
-      content: this.getTemplate('email') + ' ' + this.share_url
+      subject: this.templateService.getTpl('email_subject'),
+      content: this.templateService.getTpl('email') + ' ' + this.share_url
     }).subscribe(email => console.info(email) || this.alertsService.add({
       type: 'info', msg: 'Sent email'
     }), console.error);
