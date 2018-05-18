@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Params } from '@angular/router/src/shared';
+
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/merge';
 
@@ -45,21 +46,23 @@ export class AppComponent implements OnInit {
       */
     this.route.fragment.subscribe((fragment: string) => {
       const qs = parseQueryString(fragment);
-      console.log('AppComponent::hash_fragment', qs, ';');
+      console.log('AppComponent::ngOnInit::ngOnInit::hash_fragment', qs, ';');
       this.handleParams(qs);
     });
 
     this.route.queryParams.subscribe(
       (params: Params & {id_token: string, state: string, access_token: string}) => {
         // tslint:disable:no-console
-        console.info('AppComponent::params', params, ';');
+        console.info('AppComponent::ngOnInit::queryParams::params', params, ';');
         this.handleParams(params);
       });
   }
 
   private handleParams(params: Params) {
-    if (Object.keys(params).length === 0 && params.constructor === Object)
+    if (Object.keys(params).length === 0 && params.constructor === Object || !params.value)
       return;
+
+    console.info('AppComponent::handleParams::params:', params, ';');
 
     this.confService
       .get()

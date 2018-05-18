@@ -29,7 +29,7 @@ import { AppService } from './app.service';
     RouterModule, RouterModule.forRoot(rootRoutes),
     BrowserModule, HttpClientModule, FormsModule,
     NavbarModule, FooterModule, UsersModule,
-    EmailModule, AlertsModule.forRoot(),
+    AlertsModule.forRoot(),
     RiskQuizFormModule, AuthModule, DashboardModule
   ],
   declarations: [AppComponent],
