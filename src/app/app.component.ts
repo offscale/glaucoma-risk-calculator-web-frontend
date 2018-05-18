@@ -28,8 +28,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.info('this.route.fragment =', this.route.fragment, ';');
-    console.info('this.route.queryParams =', this.route.queryParams, ';');
+    console.info('AppComponent::route.fragment =', this.route.fragment, ';');
+    console.info('AppComponent::route.queryParams =', this.route.queryParams, ';');
 
     /*
     Observable.merge(this.route.fragment, this.route.queryParams)

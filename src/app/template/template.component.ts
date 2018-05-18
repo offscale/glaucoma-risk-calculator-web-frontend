@@ -76,7 +76,6 @@ export class TemplateComponent implements OnInit, AfterViewInit {
         invalid = true;
       }
     }
-    console.info('invalid', invalid, ';');
     if (invalid) {
       this.form.markAsDirty();
       this.alertsService.add({ type: 'warning', msg: 'Add template for each' });

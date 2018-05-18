@@ -211,7 +211,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
       recipient: recipient,
       subject: this.templateService.getTpl('email_subject'),
       content: this.templateService.getTpl('email') + ' ' + this.share_url
-    }).subscribe(email => console.info(email) || this.alertsService.add({
+    }).subscribe(email => console.info('RiskQuizFormSubmittedComponent::sendEmail::email', email) || this.alertsService.add({
       type: 'info', msg: 'Sent email'
     }), console.error);
     this.modalRef.hide();

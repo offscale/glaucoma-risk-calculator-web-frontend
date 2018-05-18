@@ -38,7 +38,7 @@
     <a href="https://graph.microsoft.io/en-us/docs/authorization/app_authorization" target="_blank">
       Microsoft Graph app authorisation
     </a>
-    <form (ngSubmit)="updateAuth()" [formGroup]="advanced_form" *ngIf="advanced_form">
+    <form (ngSubmit)="updateAuth()" [formGroup]="advanced_form">
       <div class="form-group">
         <label for="client_id">Client ID</label>
         <input type="text" class="form-control"

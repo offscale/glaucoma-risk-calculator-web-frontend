@@ -67,7 +67,7 @@ export class MsAuthService {
     const o = {};
     for (const key of params.keys())
       o[key] = params.get(key);
-    console.info('params:', params, ';\ntoObject:', o, ';');
+    console.info('paramsToObject::params:', params, ';\ntoObject:', o, ';');
     return o;
   }
 
@@ -94,20 +94,17 @@ export class MsAuthService {
   public login() {
     // check for id_token or access_token in url
     /* tslint:disable:no-console */
-    console.info('this.params[\'id_token\'] =', this.params['id_token']);
-    console.info('this.params[\'access_token\'] =', this.params['access_token']);
-    if (this.params['id_token'] !== null)
-      this.getRefreshToken();
-    else if (this.params['access_token'] !== null)
+    console.info('MsAuthService::login::params[\'id_token\'] =', this.params['id_token']);
+    console.info('MsAuthService::login::params[\'access_token\'] =', this.params['access_token']);
+    if (this.params['access_token'] !== null)
       this.access_token = this.params['access_token'];
 
     // redirect to get id_token
     console.info('MsAuthService::getTokenParams() =', this.getTokenParams());
 
-    const params = new HttpParams({ fromObject: MsAuthService.paramsToObject(this.getTokenParams()) })
-      .set('response_type', 'id_token');
-    console.info('login', params, ';');
-    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/authorize?${params.toString()}`;
+    const params = this.getRefreshToken();
+    console.info('MsAuthService::login::params', params, ';');
+    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/authorize?${params}`;
   }
 
   public logout() {
@@ -115,18 +112,18 @@ export class MsAuthService {
     this._access_token = null;
   }
 
-  public getAccessToken(state?: string) {
+  public getAccessToken(state?: string): HttpParams {
     // redirect to get access_token
 
     const params = new HttpParams({ fromObject: MsAuthService.paramsToObject(this.getTokenParams(state)) })
       .set('response_type', 'token')
       .set('resource', 'https://graph.microsoft.com')
       .set('prompt', 'none');
-    console.info('getAccessToken::params', params, ';');
-    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/authorize?${params.toString()}`;
+    console.info('MsAuthService::getAccessToken::params', params, ';');
+    return params;
   }
 
-  public getRefreshToken(state?: string) {
+  public getRefreshToken(state?: string): HttpParams {
     // redirect to get refresh_token
 
     const params = new HttpParams({ fromObject: MsAuthService.paramsToObject(this.getTokenParams(state)) })
@@ -136,13 +133,13 @@ export class MsAuthService {
       .set('client_secret', this.configService.config.client_secret)
       .set('scope', 'https://graph.microsoft.com/mail.send https://graph.microsoft.com/offline_access');
 
-    console.info('getRefreshToken::params', params, ';');
-    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/authorize?${params.toString()}`;
+    console.info('MsAuthService::getRefreshToken::params', params, ';');
+    return params;
   }
 
   private getTokenParams(state?: string): HttpParams {
     /* tslint:disable:no-console */
-    console.info('getTokenParams::client_id =', this.configService.config.client_id, ';');
+    console.info('MsAuthService::getTokenParams::client_id =', this.configService.config.client_id, ';');
 
     return new HttpParams()
       .set('client_id', this.configService.config.client_id)

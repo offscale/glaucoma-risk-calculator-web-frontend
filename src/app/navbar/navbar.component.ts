@@ -20,7 +20,7 @@ export class NavbarComponent {
   logout() {
     this.router
       .navigate(['auth/logout'])
-      .then(success => success ? console.info('state changed') : this.alertsService.alerts.push(
+      .then(success => success ? console.info('NavbarComponent::state changed') : this.alertsService.alerts.push(
         { msg: 'state didn\'t change', type: 'warning' }),
         err => this.alertsService.alerts.push({ msg: err, type: 'danger' })
       )

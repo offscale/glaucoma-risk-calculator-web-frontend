@@ -28,6 +28,7 @@ export class MsAuthComponent implements OnInit {
       test_recipient: ['', Validators.required],
       test_subject: ['', Validators.required]
     });
+
     this.advanced_form = this.fb.group({
       client_id: ['', Validators.required],
       client_secret: '',
