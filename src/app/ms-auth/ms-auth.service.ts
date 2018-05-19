@@ -75,7 +75,7 @@ export class MsAuthService {
   private msAuthRedir(params) {
     console.info('MsAuthService::getTokenParams() =', this.getTokenParams(), ';');
     console.info('MsAuthService::msAuthRedir::params', params, ';');
-    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/authorize?${params}`;
+    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/v2.0/authorize?${params}`;
   }
 
   private getTokenParams(state?: string): HttpParams {
@@ -104,6 +104,7 @@ export class MsAuthService {
     /* tslint:disable:no-console */
     console.info('MsAuthService::login::params =', this.params, ';');
     console.info('MsAuthService::login::token_type', token_type, ';');
+    console.info('MsAuthService::login::token:', token, 'of type', typeof token, ';');
 
     switch (token_type) {
       case 'code':
@@ -127,7 +128,7 @@ export class MsAuthService {
   public logout() {
     Object
       .keys(localStorage)
-      .forEach(key => key.startsWith('ms::') && delete localStorage[key]);
+      .forEach(key => key.startsWith('ms::') && localStorage.removeItem(key));
   }
 
   public init() {
@@ -226,10 +227,14 @@ export class MsAuthService {
       fromObject:
         Object
           .keys(default_params)
-          .filter(k => ['client_id', 'response_type', 'redirect_uri', 'scope', 'response_mode', 'state'].indexOf(k) > -1)
+          .filter(k => [
+            'client_id', 'response_type', 'redirect_uri', 'scope', 'response_mode', 'state'
+          ].indexOf(k) > -1)
           .reduce((a, b) => Object.assign(a, { [b]: default_params[b] }), {})
     })
-      .set('response_type', 'code');
+      .set('response_type', 'code')
+      .set('response_mode', 'query')
+      .set('scope', 'offline_access mail.send');
     console.info('MsAuthService::getCode::params', params, ';');
     return params;
   }

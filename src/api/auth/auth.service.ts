@@ -7,20 +7,13 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 
-import { IAuthReq, ILoginResp } from './auth.interfaces';
 import { AlertsService } from '../../app/alerts/alerts.service';
+import { IAuthReq, ILoginResp } from './auth.interfaces';
 
 @Injectable()
 export class AuthService {
   public access_token: string;
   public loggedIn = AuthService.loggedIn;
-
-  constructor(private http: HttpClient,
-              private router: Router,
-              private alertsService: AlertsService) {
-    const at = localStorage.getItem('access-token');
-    if (at != null) this.access_token = at;
-  }
 
   static loggedIn(): boolean {
     return localStorage.getItem('access-token') !== null;
@@ -30,16 +23,19 @@ export class AuthService {
     return localStorage.getItem('access-token');
   }
 
-  logout() {
-    localStorage.removeItem('access-token');
-    localStorage.removeItem('user');
-    this.router
-      .navigate(['/'], this.router.url === '/auth/logout' ? {} : { queryParams: { redirectUrl: this.router.url } });
+  constructor(private http: HttpClient,
+              private router: Router,
+              private alertsService: AlertsService) {
+    const at = localStorage.getItem('access-token');
+    if (at != null) this.access_token = at;
   }
 
-  _login(login_resp: ILoginResp) {
-    this.access_token = login_resp.access_token;
-    localStorage.setItem('access-token', this.access_token);
+  public logout() {
+    ['access-token', 'user'].forEach(k => localStorage.removeItem(k));
+
+    this.router
+      .navigate(['/'],
+        this.router.url === '/auth/logout' ? {} : { queryParams: { redirectUrl: this.router.url } });
   }
 
   public login(user: IAuthReq): Observable<ILoginResp> | /*ObservableInput<{}> |*/ void {
