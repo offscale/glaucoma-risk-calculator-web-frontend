@@ -15,14 +15,14 @@
 <form *ngIf="loggedIn() && email_form" (ngSubmit)="sendTestEmail()" [formGroup]="email_form">
   <div class="form-group">
     <label for="test_recipient">Recipient</label>
-    <input type="email" id="test_recipient" name="test_recipient" formControlName="test_recipient"
+    <input type="email" class="form-control" id="test_recipient" name="test_recipient" formControlName="test_recipient"
            aria-describedby="emailHelp" placeholder="Enter email address">
     <small id="emailHelp" class="form-text text-muted">Address to send email</small>
   </div>
 
   <div class="form-group">
     <label for="test_subject">Subject</label>
-    <input type="text" id="test_subject" name="test_subject" formControlName="test_subject"
+    <input type="text" class="form-control" id="test_subject" name="test_subject" formControlName="test_subject"
            aria-describedby="subjectHelp" placeholder="Enter subject">
     <small id="subjectHelp" class="form-text text-muted">Subject of email</small>
   </div>

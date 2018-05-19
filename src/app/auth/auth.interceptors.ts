@@ -21,11 +21,11 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(AuthService.loggedIn() && !req.url.startsWith('https://graph.microsoft.com') ?
       req.clone({ headers: req.headers.set('X-Access-Token', AuthService.getAccessToken()) })
       : req)
-      .catch((err: any, caught) => {
+      .catch((err: any/*, caught*/) => {
         if (err instanceof HttpErrorResponse)
           switch (err.status) {
             case 403:
-              if (!this.router.isActive('auth', false) && !this.router.isActive('/', false)
+              if (!this.router.isActive('auth', false) && !this.router.isActive('/', true)
               /*err.error.message === 'NotFound: X-Access-Token header must be included'*/) {
                 this.alertsService.add('Authentication required');
 

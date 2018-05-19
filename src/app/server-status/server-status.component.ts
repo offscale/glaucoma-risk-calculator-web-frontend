@@ -16,11 +16,11 @@ export class ServerStatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.serverStatus = { version: 'App 0.0.35-Ω; ' };
+    this.serverStatus = { version: 'App 0.0.35; ' };
     this.serverStatusService
       .get()
       .subscribe(serverStatus => this.serverStatus.version += `API ${serverStatus.version}`,
-        error => this.serverStatus.version += 'API server not available'
+        () => this.serverStatus.version += 'API server not available'
       );
   }
 }

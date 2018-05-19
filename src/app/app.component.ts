@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    /* tslint:disable:no-console */
     console.info('AppComponent::route.fragment =', this.route.fragment, ';');
     console.info('AppComponent::route.queryParams =', this.route.queryParams, ';');
 
@@ -46,6 +47,7 @@ export class AppComponent implements OnInit {
       */
     this.route.fragment.subscribe((fragment: string) => {
       const qs = parseQueryString(fragment);
+      /* tslint:disable:no-console */
       console.log('AppComponent::ngOnInit::ngOnInit::hash_fragment', qs, ';');
       this.handleParams(qs);
     });
@@ -59,7 +61,7 @@ export class AppComponent implements OnInit {
   }
 
   private handleParams(params: Params) {
-    if (Object.keys(params).length === 0 && params.constructor === Object || !params.value)
+    if (!params || Object.keys(params).length === 0 && params.constructor === Object)
       return;
 
     console.info('AppComponent::handleParams::params:', params, ';');
@@ -79,8 +81,8 @@ export class AppComponent implements OnInit {
           else if (params.hasOwnProperty('refresh_token'))
             this.msAuthService.login( 'refresh_token', params.refresh_token, params.state);
           else if (params.hasOwnProperty('access_token')) {
-            this.msAuthService.access_token = this.confService.config.access_token = params.access_token;
-            localStorage.setItem('ms-access-token', this.msAuthService.access_token);
+            this.confService.config.access_token = params.access_token;
+            localStorage.setItem('ms::access_token', params.access_token);
             this.confService.post(this.confService.config).subscribe(() => fin());
           } else if (params.hasOwnProperty('error')) {
             this.alertsService.add([params.error, params.error_description].join(': '));
