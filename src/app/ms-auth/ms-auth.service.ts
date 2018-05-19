@@ -249,14 +249,7 @@ export class MsAuthService {
     console.info('MsAuthService::getTokens::params', params, ';');
 
     return this.http
-      .post<ITokenResponse>(
-        'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-        params,
-        {
-          headers: new HttpHeaders()
-            .set('Content-Type', 'application/x-www-form-urlencoded')
-        }
-      );
+      .post<ITokenResponse>('/api/email/ms-auth', MsAuthService.paramsToObject(params));
   }
 
   /*
