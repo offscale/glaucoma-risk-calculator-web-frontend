@@ -232,7 +232,7 @@ export class MsAuthService {
   }
 
   public getTokens(state?: string): Observable<ITokenResponse> {
-    // https://github.com/microsoftgraph/microsoft-graph-docs/blob/master/concepts/auth_v2_user.md#token-request
+    // https://docs.microsoft.com/en-us/onedrive/developer/rest-api/getting-started/graph-oauth#step-2-redeem-the-code-for-access-tokens
 
     const default_params = MsAuthService.paramsToObject(this.getTokenParams(state));
     const params = new HttpParams({
@@ -250,8 +250,12 @@ export class MsAuthService {
 
     return this.http
       .post<ITokenResponse>(
-        `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/v2.0/token`,
-        MsAuthService.paramsToObject(params)
+        'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        params,
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+        }
       );
   }
 
