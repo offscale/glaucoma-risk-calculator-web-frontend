@@ -12,11 +12,26 @@ interface ArrayBufferViewForEach extends ArrayBufferView {
   forEach(callbackfn: (value: number, index: number, array: Int8Array) => void, thisArg?: any): void;
 }
 
+// old endpoint
 interface ResHash {
   id_token?: string;
   access_token?: string;
   state: string;
   session_state: string;
+}
+
+interface IUrlParams {
+  url: string;
+  params: HttpParams;
+}
+
+// new endpoint: https://github.com/microsoftgraph/microsoft-graph-docs/blob/master/concepts/auth_v2_user.md#token-response
+interface ITokenResponse {
+  token_type: 'Bearer';
+  scope: string;
+  expires_in: number;
+  access_token: string;
+  refresh_token: string;
 }
 
 export interface IMail {
@@ -72,10 +87,10 @@ export class MsAuthService {
     return o;
   }
 
-  private msAuthRedir(params) {
+  private msAuthRedir(url_params: IUrlParams) {
     console.info('MsAuthService::getTokenParams() =', this.getTokenParams(), ';');
-    console.info('MsAuthService::msAuthRedir::params', params, ';');
-    window.location.href = `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/v2.0/authorize?${params}`;
+    console.info('MsAuthService::msAuthRedir::params', url_params.params, ';');
+    window.location.href = `${url_params.url}${url_params.params}`;
   }
 
   private getTokenParams(state?: string): HttpParams {
@@ -96,7 +111,8 @@ export class MsAuthService {
     this.init();
   }
 
-  public login(token_type: 'refresh_token' | 'code' | 'access_token', token?: string, state?: string) {
+  public login(token_type: 'refresh_token' | 'code' | 'access_token',
+               token?: string, state?: string) {
     if (token_type == null) return;
 
     this.params[token_type] = token;
@@ -113,13 +129,15 @@ export class MsAuthService {
         this.login('refresh_token', void 0, state);
         break;
       case 'access_token':
-        if (token == null || token === 'undefined') this.msAuthRedir(this.getAccessToken(state));
-        localStorage.setItem(`ms::${token_type}`, token);
-        break;
       case 'refresh_token':
-        if (token == null || token === 'undefined') this.msAuthRedir(this.getRefreshToken());
-        localStorage.setItem(`ms::${token_type}`, token);
-        this.login('access_token', void 0, state);
+        if (token == null || token === 'undefined')
+          this.getTokens().subscribe(
+            tokens =>
+              Object.keys(tokens).forEach(key =>
+                localStorage.setItem(`ms::#${key}`, tokens[key])
+              ),
+            console.error.bind(console)
+          );
     }
 
     this.router.navigateByUrl(state == null ? '/' : decodeURIComponent(state));
@@ -133,29 +151,6 @@ export class MsAuthService {
 
   public init() {
     this.configService.get().subscribe(() => {});
-  }
-
-  public getRefreshToken(state?: string): HttpParams {
-    // https://github.com/microsoftgraph/microsoft-graph-docs/blob/master/concepts/auth_v2_user.md#token-request
-
-    const default_params = MsAuthService.paramsToObject(this.getTokenParams(state));
-    const params = new HttpParams({
-      fromObject:
-        Object
-          .keys(default_params)
-          .filter(k => ['client_id', 'grant_type', 'scope', 'code', 'redirect_uri', 'client_secret'].indexOf(k) > -1)
-          .reduce((a, b) => Object.assign(a, { [b]: default_params[b] }), {})
-    })
-      .set('grant_type', 'authorization_code')
-      .set('scope', 'https://graph.microsoft.com/mail.send https://graph.microsoft.com/offline_access')
-      // .set('resource', 'https://graph.microsoft.com')
-      // .set('prompt', 'none')
-      .set('code', localStorage.getItem('ms::code'))
-      .set('client_secret', this.configService.config.client_secret);
-    // .set('response_type', 'code');
-
-    console.info('MsAuthService::getRefreshToken::params', params, ';');
-    return params;
   }
 
   public localSendEmail(mail: IMail): Observable<IMail> {
@@ -203,11 +198,64 @@ export class MsAuthService {
       .catch(error => {
         const err = JSON.parse(error._body).error;
         if (err.message === 'Access token has expired.')
-          this.getAccessToken();
+          this.login('code');
         return Observable.throw(err);
       });
   }
 
+  public getCode(state?: string): IUrlParams {
+    // https://github.com/microsoftgraph/microsoft-graph-docs/blob/master/concepts/auth_v2_user.md#authorization-request
+
+    /*
+    // After redirect, successful response is:
+    interface ICodeResponse {
+      code: string;
+      state: string;
+    }
+    */
+
+    const default_params = MsAuthService.paramsToObject(this.getTokenParams(state));
+    const params = new HttpParams({
+      fromObject:
+        Object
+          .keys(default_params)
+          .filter(k => [
+            'client_id', 'response_type', 'redirect_uri', 'response_mode', 'scope', 'state'
+          ].indexOf(k) > -1)
+          .reduce((a, b) => Object.assign(a, { [b]: default_params[b] }), {})
+    })
+      .set('response_type', 'code')
+      .set('response_mode', 'query')
+      .set('scope', 'offline_access mail.send');
+    console.info('MsAuthService::getCode::params', params, ';');
+    return { params, url: `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/v2.0/authorize?` };
+  }
+
+  public getTokens(state?: string): Observable<ITokenResponse> {
+    // https://github.com/microsoftgraph/microsoft-graph-docs/blob/master/concepts/auth_v2_user.md#token-request
+
+    const default_params = MsAuthService.paramsToObject(this.getTokenParams(state));
+    const params = new HttpParams({
+      fromObject:
+        Object
+          .keys(default_params)
+          .filter(k => ['client_id', 'grant_type', 'scope', 'code', 'redirect_uri', 'client_secret'].indexOf(k) > -1)
+          .reduce((a, b) => Object.assign(a, { [b]: default_params[b] }), {})
+    })
+      .set('grant_type', 'authorization_code')
+      .set('scope', 'https://graph.microsoft.com/mail.send https://graph.microsoft.com/offline_access')
+      .set('code', localStorage.getItem('ms::code'))
+      .set('client_secret', this.configService.config.client_secret);
+    console.info('MsAuthService::getTokens::params', params, ';');
+
+    return this.http
+      .post<ITokenResponse>(
+        `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/v2.0/token`,
+        MsAuthService.paramsToObject(params)
+      );
+  }
+
+  /*
   public getAccessToken(state?: string): HttpParams {
     // redirect to get access_token
 
@@ -218,26 +266,7 @@ export class MsAuthService {
     console.info('MsAuthService::getAccessToken::params', params, ';');
     return params;
   }
-
-  public getCode(state?: string): HttpParams {
-    // https://github.com/microsoftgraph/microsoft-graph-docs/blob/master/concepts/auth_v2_user.md#authorization-request
-
-    const default_params = MsAuthService.paramsToObject(this.getTokenParams(state));
-    const params = new HttpParams({
-      fromObject:
-        Object
-          .keys(default_params)
-          .filter(k => [
-            'client_id', 'response_type', 'redirect_uri', 'scope', 'response_mode', 'state'
-          ].indexOf(k) > -1)
-          .reduce((a, b) => Object.assign(a, { [b]: default_params[b] }), {})
-    })
-      .set('response_type', 'code')
-      .set('response_mode', 'query')
-      .set('scope', 'offline_access mail.send');
-    console.info('MsAuthService::getCode::params', params, ';');
-    return params;
-  }
+  */
 
   public remoteSendEmail(risk_id: number, mail: IMail): Observable<IMail> {
     return this.http
