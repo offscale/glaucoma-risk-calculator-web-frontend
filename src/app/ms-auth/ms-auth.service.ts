@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 
 import { ConfigService } from '../../api/config/config.service';
+import { AlertsService } from '../alerts/alerts.service';
 
 
 interface ArrayBufferViewForEach extends ArrayBufferView {
@@ -62,7 +63,7 @@ export const parseQueryString = (url: string): ResHash => {
 
 @Injectable()
 export class MsAuthService {
-  private params: ResHash;
+  private readonly params: ResHash;
 
   static genNonce() {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz'; // '-._~';
@@ -106,7 +107,8 @@ export class MsAuthService {
 
   constructor(private http: HttpClient,
               private router: Router,
-              private configService: ConfigService) {
+              private configService: ConfigService,
+              private alertsService: AlertsService) {
     this.params = parseQueryString(location.hash);
     this.init();
   }
@@ -136,8 +138,16 @@ export class MsAuthService {
               Object.keys(tokens).forEach(key =>
                 localStorage.setItem(`ms::#${key}`, tokens[key])
               ),
-            console.error.bind(console)
-          );
+            error => {
+              const msg: {
+                statusCode: number,
+                method: string,
+                headers: {}
+              } = JSON.parse(error.error_message);
+              console.error(msg.headers);
+              const method: {error: string, error_description: string} = JSON.parse(msg.method);
+              this.alertsService.add(`${method.error}: ${method.error_description}`)
+            });
     }
 
     this.router.navigateByUrl(state == null ? '/' : decodeURIComponent(state));
