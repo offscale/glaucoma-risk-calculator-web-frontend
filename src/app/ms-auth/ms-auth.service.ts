@@ -236,7 +236,7 @@ export class MsAuthService {
     })
       .set('response_type', 'code')
       .set('response_mode', 'query')
-      .set('scope', 'offline_access mail.send');
+      .set('scope', 'https://outlook.office.com/offline_access https://outlook.office.com/mail.send');
     console.info('MsAuthService::getCode::params', params, ';');
     return { params, url: `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/v2.0/authorize?` };
   }
