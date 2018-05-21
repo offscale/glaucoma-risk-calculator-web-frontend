@@ -138,12 +138,12 @@ export class MsAuthService {
               Object.keys(tokens).forEach(key =>
                 localStorage.setItem(`ms::#${key}`, tokens[key])
               ),
-            error => {
-              const msg: {
-                statusCode: number,
-                method: string,
-                headers: {}
-              } = JSON.parse(error.error_message);
+            (error: {
+              statusCode: number,
+              method: string,
+              headers: {}
+            }) => {
+              const msg = JSON.parse(error.method);
               console.error(msg.headers);
               const method: {error: string, error_description: string} = JSON.parse(msg.method);
               this.alertsService.add(`${method.error}: ${method.error_description}`)
@@ -236,7 +236,7 @@ export class MsAuthService {
     })
       .set('response_type', 'code')
       .set('response_mode', 'query')
-      .set('scope', 'https://outlook.office.com/offline_access https://outlook.office.com/mail.send');
+      .set('scope', 'mail.send offline_access');
     console.info('MsAuthService::getCode::params', params, ';');
     return { params, url: `https://login.microsoftonline.com/${this.configService.config.tenant_id}/oauth2/v2.0/authorize?` };
   }
@@ -253,7 +253,7 @@ export class MsAuthService {
           .reduce((a, b) => Object.assign(a, { [b]: default_params[b] }), {})
     })
       .set('grant_type', 'authorization_code')
-      .set('scope', 'https://graph.microsoft.com/mail.send https://graph.microsoft.com/offline_access')
+      .set('scope', 'mail.send offline_access')
       .set('code', localStorage.getItem('ms::code'))
       .set('client_secret', this.configService.config.client_secret);
     console.info('MsAuthService::getTokens::params', params, ';');
