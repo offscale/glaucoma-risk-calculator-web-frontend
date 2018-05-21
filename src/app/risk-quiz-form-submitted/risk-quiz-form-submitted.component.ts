@@ -152,7 +152,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
               private modalService: BsModalService,
               private riskStatsService: RiskStatsService,
               private riskResService: RiskResService,
-              private templateService: TemplateService,
+              public templateService: TemplateService,
               private alertsService: AlertsService,
               private msAuthService: MsAuthService) {
 
@@ -207,13 +207,15 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   }
 
   sendEmail(recipient: string) {
-    this.msAuthService.remoteSendEmail(this.id, {
-      recipient: recipient,
-      subject: this.templateService.getTpl('email_subject'),
-      content: this.templateService.getTpl('email') + ' ' + this.share_url
-    }).subscribe(email => console.info('RiskQuizFormSubmittedComponent::sendEmail::email', email) || this.alertsService.add({
-      type: 'info', msg: 'Sent email'
-    }), console.error);
+    this.msAuthService
+      .remoteSendEmail(this.id, {
+        recipient: recipient,
+        subject: this.templateService.getTpl('email_subject'),
+        content: this.templateService.getTpl('email') + ' ' + this.share_url
+      })
+      .subscribe(email => console.info('RiskQuizFormSubmittedComponent::sendEmail::email', email) || this.alertsService.add({
+        type: 'info', msg: 'Sent email'
+      }), console.error);
     this.modalRef.hide();
   }
 

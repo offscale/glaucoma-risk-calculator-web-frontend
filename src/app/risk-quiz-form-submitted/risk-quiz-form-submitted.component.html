@@ -71,7 +71,7 @@
               </div>
             </div>
 
-            <div class="row" [innerHtml]="getTemplate('email') + ' ' + share_url"></div>
+            <div class="row" [innerHtml]="templateService.getTpl('email') + ' ' + share_url"></div>
             <button type="submit" class="btn" (click)="sendEmail(toEmail.value)"
                     [disabled]="!toEmail.value.length" [ngClass]="{'btn-outline-success': toEmail.value.length}">
               Send email
@@ -88,7 +88,7 @@
     </div>
     <div class="btn-group mr-2" role="group" aria-label="twitter">
       <a target="_blank" class="btn btn-lg btn-info" id="tweet" #tweet
-         [href]="'https://twitter.com/intent/tweet?text='+getTemplate('twitter')+' '+share_url"
+         [href]="'https://twitter.com/intent/tweet?text='+templateService.getTpl('twitter')+' '+share_url"
          data-size="large">
         Tweet
       </a>

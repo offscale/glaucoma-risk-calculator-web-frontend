@@ -45,7 +45,8 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
   };
   public doClose = () => document.getElementById('parent').focus();
 
-  constructor(private fb: FormBuilder, private riskStatsService: RiskStatsService) {
+  constructor(private fb: FormBuilder,
+              private riskStatsService: RiskStatsService) {
   }
 
   ngAfterViewInit() {
