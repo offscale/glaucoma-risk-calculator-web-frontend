@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/throw';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { AlertsService } from '../../app/alerts/alerts.service';
 import { IAuthReq, ILoginResp } from './auth.interfaces';
+
 
 @Injectable()
 export class AuthService {
@@ -51,11 +50,11 @@ export class AuthService {
 
   public signinup(user: IAuthReq): Observable<IAuthReq | ILoginResp> {
     return (this.login(user) as Observable<ILoginResp>)
-      .catch((err: HttpErrorResponse) =>
+      .pipe(catchError((err: HttpErrorResponse) =>
         err && err.error && err.error.message && err.error.message === 'User not found' ?
           this.register(user)
-            .map(o => Object.assign(o.body, { access_token: o.headers.get('X-Access-Token') }))
-          : this.alertsService.add(err.error.message) || Observable.throw(err.error)
-      );
+            .pipe(map(o => Object.assign(o.body, { access_token: o.headers.get('X-Access-Token') })))
+          : this.alertsService.add(err.error.message) || throwError(err.error)
+      ));
   }
 }

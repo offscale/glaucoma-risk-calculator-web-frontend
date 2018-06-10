@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+import { map } from 'rxjs/operators';
+
 import { UserService } from '../../api/user/user.service';
 import { IAuthReq } from '../../api/auth/auth.interfaces';
+
 
 @Component({
   selector: 'app-users',
@@ -33,7 +36,7 @@ export class UsersComponent implements OnInit {
   ngOnInit() {
     this.userService
       .getAll()
-      .map(user => user.users)
+      .pipe(map(user => user.users))
       .subscribe(users => this.users = users,
         console.error
       );

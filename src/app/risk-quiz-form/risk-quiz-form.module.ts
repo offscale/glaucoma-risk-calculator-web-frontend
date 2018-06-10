@@ -4,14 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { ClipboardModule } from 'ngx-clipboard';
-import { NgxSelectModule } from 'ngx-select-ex';
+import { NgbCollapseModule, NgbModalModule, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { GaugeModule } from 'ng-gauge/dist';
+import { ClipboardModule } from 'ngx-clipboard';
+import { GaugeModule } from 'ng-gauge/dist/gauge';
 
 import { RiskStatsService } from '../../api/risk_stats/risk-stats.service';
 import { RiskResService } from '../../api/risk_res/risk_res.service';
@@ -25,8 +22,9 @@ import { RiskQuizFormComponent } from './risk-quiz-form.component';
   imports: [
     CommonModule, ReactiveFormsModule, BrowserAnimationsModule, FormsModule,
     RouterModule, RouterModule.forChild(riskQuizFormSubmittedRoutes),
-    PaginationModule.forRoot(), CollapseModule.forRoot(), TypeaheadModule.forRoot(),
-    ModalModule.forRoot(), GaugeModule, ClipboardModule, NgxSelectModule, NgxChartsModule
+    NgbPaginationModule.forRoot(), NgbCollapseModule.forRoot(),
+    NgbTypeaheadModule.forRoot(), NgbModalModule.forRoot(),
+    GaugeModule, ClipboardModule, NgSelectModule, NgxChartsModule
   ],
   providers: [RiskStatsService, RiskResService],
   declarations: [

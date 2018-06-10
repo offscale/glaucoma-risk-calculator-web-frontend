@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "citeproc": "github:SamuelMarks/cust_typings/citeproc/citeproc.d.ts",
-    "glaucoma-risk-calculator-engine": "github:glaucoma-australia/glaucoma-risk-calculator-engine/glaucoma-risk-calculator-engine.d.ts"
-  }
-}

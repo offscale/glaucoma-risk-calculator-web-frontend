@@ -3,7 +3,7 @@
 For the files ready to deploy, see the [glaucoma-risk-calculator-web-frontend-dist](https://github.com/glaucoma-australia/glaucoma-risk-calculator-web-frontend-dist) repo.
 
 ## Technical details
-Built in TypeScript with Angular 5, following latest official standards for scaffolding.
+Built in TypeScript with Angular 6, following latest official standards for scaffolding.
 
 ## Deploy
 
@@ -20,14 +20,14 @@ Requires a server with HTTPS—for Office 365 / Microsoft Graph auth—and the A
 ## Release new version of dist repo
 Assuming the -dist is in the directory above where this is cloned, in Bash just:
 
-    rm -rf dist; ng build -prod --aot=false && d=../glaucoma-risk-calculator-web-frontend-dist && rm -rf "$d/dist" && mv "$PWD/dist" "$d" && cd "$d" && (git add .; git status) || ( >&2 echo BUILD FAILED )
+    rm -rf dist; ng build --prod && d=../glaucoma-risk-calculator-web-frontend-dist && rm -rf "$d/dist" && mv "$PWD/dist" "$d" && cd "$d" && (git add .; git status) || ( >&2 echo BUILD FAILED )
 
 ## Development setup
 
 Install latest:
-  - Node.JS LTS (tested with 8.11.1);
-  - npm (tested with 5.8.0); and
-  - `ng` with `npm install -g @angular/cli`... (tested with 1.7.4). 
+  - Node.JS LTS (tested with 8.11.2);
+  - npm (tested with 6.1.0); and
+  - `ng` with `npm install -g @angular/cli`... (tested with 6.0.8). 
 
 ## Build
 

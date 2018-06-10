@@ -31,13 +31,13 @@
 
     <div class="form-group">
       <label for="ethnicity">Ethnicity</label>
-      <ngx-select [items]="ethnicities"
-                  (selected)="selected_ethnicity($event)"
-                  (data)="selected_ethnicity($event)"
-                  (close)="doClose()"
-                  id="ethnicity" formControlName="ethnicity"
-                  placeholder="Search for ethnicity">
-      </ngx-select>
+      <ng-select [items]="ethnicities"
+                 (selected)="selected_ethnicity($event)"
+                 (data)="selected_ethnicity($event)"
+                 (close)="doClose()"
+                 id="ethnicity" formControlName="ethnicity"
+                 placeholder="Search for ethnicity">
+      </ng-select>
     </div>
 
     <div class="container-fluid">

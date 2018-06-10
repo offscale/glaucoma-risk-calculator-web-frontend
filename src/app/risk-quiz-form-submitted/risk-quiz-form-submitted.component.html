@@ -1,14 +1,13 @@
 <div *ngIf="submitted">
-  <div class="col" *ngIf="gauge">
-    <ng-gauge [bgRadius]=progressGraph.bgRadius
-              [bgColor]=progressGraph.bgColor
-              [rounded]=progressGraph.rounded
-              [reverse]=progressGraph.reverse
-              [animationSecs]=progressGraph.animationSecs
-              [labels]=progressGraph.labels
-              [segments]=progressGraph.segments>
-    </ng-gauge>
-  </div>
+  <ng-gauge [bgRadius]=progressGraph.bgRadius
+            [bgColor]=progressGraph.bgColor
+            [rounded]=progressGraph.rounded
+            [reverse]=progressGraph.reverse
+            [animationSecs]=progressGraph.animationSecs
+            [labels]=progressGraph.labels
+            [segments]=progressGraph.segments
+            *ngIf="gauge" style="width: 100%; max-width: 30em; margin: 0;">
+  </ng-gauge>
   <h3 style="text-underline: single">
     {{recommendation}}
   </h3>
@@ -104,7 +103,7 @@
   <button class="btn btn-secondary" (click)="toggleCollapse()" [class.btn-outline-secondary]="!isCollapsed">
     Review references and submission
   </button>
-  <div [collapse]="isCollapsed" class="card card-block card-header" *ngIf="!isCollapsed">
+  <div [ngbCollapse]="isCollapsed" class="card card-block card-header" *ngIf="!isCollapsed">
     <div class="well well-lg">
       <h6>Your submission</h6>
 

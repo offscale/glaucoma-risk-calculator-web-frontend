@@ -76,7 +76,7 @@
  }
 
  intercept(observable: Observable<any>) {
- return observable.catch(err => {
+ return observablecatchErr(err => {
 
  if (err.status === 401) {
  return this.unauthorised();
@@ -84,7 +84,7 @@
  } else if (err.status === 403) {
  return this.forbidden();
  } else {
- return Observable.throw(err);
+ return throwError(err);
  }
  });
  }

@@ -1,17 +1,1 @@
-/* You can add global styles to this file, and also import other style files */
-
-.dropdown-menu {
-  display: block;
-}
-
-a {
-  outline: 0;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Helvetica Neue', sans-serif;
-}
-
-p, div {
-  font-family: 'Helvetica Neue', sans-serif;
-}
+@import "~@ng-select/ng-select/themes/default.theme.css";

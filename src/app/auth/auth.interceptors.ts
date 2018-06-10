@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { AuthService } from '../../api/auth/auth.service';
 import { AlertsService } from '../alerts/alerts.service';
@@ -21,35 +19,36 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(AuthService.loggedIn() && !req.url.startsWith('https://graph.microsoft.com') ?
       req.clone({ headers: req.headers.set('X-Access-Token', AuthService.getAccessToken()) })
       : req)
-      .catch((err: any/*, caught*/) => {
-        if (err instanceof HttpErrorResponse)
-          switch (err.status) {
-            case 403:
-              if (!this.router.isActive('auth', false) && !this.router.isActive('/', true)
-              /*err.error.message === 'NotFound: X-Access-Token header must be included'*/) {
-                this.alertsService.add('Authentication required');
+      .pipe(catchError((err: any/*, caught*/) => {
+          if (err instanceof HttpErrorResponse)
+            switch (err.status) {
+              case 403:
+                if (!this.router.isActive('auth', false) && !this.router.isActive('/', true)
+                /*err.error.message === 'NotFound: X-Access-Token header must be included'*/) {
+                  this.alertsService.add('Authentication required');
 
 
-                this.router
-                  .navigate(['auth'], { queryParams: { redirectUrl: this.router.url } })
-                  .then(success =>
-                    success || this.alertsService.add('Unable to route to /auth'))
-                  .catch(Observable.throw);
-              } else
-                console.warn({
+                  this.router
+                    .navigate(['auth'], { queryParams: { redirectUrl: this.router.url } })
+                    .then(success =>
+                      success || this.alertsService.add('Unable to route to /auth'))
+                    .catch(console.error);
+                } else
+                  console.warn({
+                    code: err.status,
+                    message: err.error.message
+                  });
+                break;
+              default:
+                /*this.alertsService.add({
                   code: err.status,
                   message: err.error.message
-                });
-              break;
-            default:
-              /*this.alertsService.add({
-                code: err.status,
-                message: err.error.message
-              });*/
-              return Observable.throw(err);
-          }
-        //  if (err.status === 403)
-        return Observable.throw(err);
-      });
+                });*/
+                return throwError(err);
+            }
+          //  if (err.status === 403)
+          return throwError(err);
+        })
+      );
   }
 }

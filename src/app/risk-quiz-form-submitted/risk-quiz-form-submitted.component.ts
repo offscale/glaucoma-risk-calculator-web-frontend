@@ -3,10 +3,8 @@ import * as math from 'mathjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 
-import { GaugeLabel, GaugeSegment } from 'ng-gauge/dist';
+import { GaugeLabel, GaugeSegment } from 'ng-gauge/dist/gauge';
 import { calc_relative_risk, familial_risks_from_study, IMultiplicativeRisks, IRiskJson } from 'glaucoma-risk-calculator-engine';
-
-import 'rxjs/add/operator/switchMap';
 
 import { IRiskQuiz, RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
 import { RiskResService } from '../../api/risk_res/risk_res.service';
@@ -14,8 +12,11 @@ import { MsAuthService } from '../ms-auth/ms-auth.service';
 import { colours, numToColour } from '../colours';
 import { RiskStatsService } from '../../api/risk_stats/risk-stats.service';
 import { TemplateService } from '../../api/template/template.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+// import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { AlertsService } from '../alerts/alerts.service';
+import { switchMap } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 
 
 math.config({
@@ -88,6 +89,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
 
   @Output() submittedChange: EventEmitter<boolean> = new EventEmitter();
 
+  modalRef: NgbModalRef;
+
   // <pie grid>
   colorScheme = { domain: [colours.teal, colours.darkred, colours.gold, colours.grey] };
   pieAdvColorScheme = this.colorScheme;
@@ -145,11 +148,9 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     return m[label.data.data.name] || label.data.data.name;
   };
 
-  modalRef: BsModalRef;
-
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private modalService: BsModalService,
+              private modalService: NgbModal,
               private riskStatsService: RiskStatsService,
               private riskResService: RiskResService,
               public templateService: TemplateService,
@@ -179,14 +180,16 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     else
       this.route
         .params
-        .switchMap((params: Params) => {
-          this.id = this.riskResService.id = +params['id'];
-          return this.riskResService.read(this.id)
-        })
+        .pipe(
+          switchMap((params: Params) => {
+            this.id = this.riskResService.id = +params['id'];
+            return this.riskResService.read(this.id);
+          })
+        )
         .subscribe((riskQuiz: IRiskQuiz | any) => {
           this.riskQuiz = new RiskQuiz(riskQuiz);
           this.submitted = true;
-          this.prepareView()
+          this.prepareView();
         });
   }
 
@@ -211,12 +214,12 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
       .remoteSendEmail(this.id, {
         recipient: recipient,
         subject: this.templateService.getTpl('email_subject'),
-        content: this.templateService.getTpl('email') + ' ' + this.share_url
+        content: `${this.templateService.getTpl('email')} ${this.share_url}`
       })
       .subscribe(email => console.info('RiskQuizFormSubmittedComponent::sendEmail::email', email) || this.alertsService.add({
         type: 'info', msg: 'Sent email'
       }), console.error);
-    this.modalRef.hide();
+    this.modalRef.close();
   }
 
   private gaugeView(risk_pc: number, risk_pc_as_s: string) {
@@ -257,7 +260,9 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   // modal
 
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
+    this.modalRef = this.modalService.open(template);
+    // = this.modalService.show(template, { class: 'modal-sm' });
+    this.modalRef.componentInstance.name = 'World';
   }
 
   private prepareView() {
@@ -345,7 +350,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
               .create(this.riskQuiz.toJSON())
               .subscribe(r => {
                 this.id = this.riskResService.id = r.id;
-                this.share_url = this.idWithUrl()
+                this.share_url = this.idWithUrl();
               }, console.error);
           else this.share_url = this.idWithUrl();
         },

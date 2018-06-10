@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AlertModule } from 'ngx-bootstrap'
+
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AlertsModule } from '../alerts/alerts.module';
 import { NavbarComponent } from './navbar.component';
 
 
 @NgModule({
-  imports: [CommonModule, RouterModule, AlertModule, AlertsModule],
+  imports: [CommonModule, RouterModule, NgbAlertModule, AlertsModule],
   declarations: [NavbarComponent],
   exports: [NavbarComponent]
 })

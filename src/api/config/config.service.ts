@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { IConfig, IConfigBase } from './config.interfaces';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -14,13 +15,13 @@ export class ConfigService {
   }
 
   public get(): Observable<IConfig> {
-    return this.config ? Observable.of(this.config) :
+    return this.config ? of(this.config) :
       this.http.get<IConfig>('/api/config')
-        .map(config => this.config = config)
+        .pipe(map(config => this.config = config));
   }
 
   public post(conf: IConfigBase): Observable<IConfig> {
     return this.http.post<IConfig>('/api/config', conf)
-      .map(config => this.config = config);
+      .pipe(map(config => this.config = config));
   }
 }

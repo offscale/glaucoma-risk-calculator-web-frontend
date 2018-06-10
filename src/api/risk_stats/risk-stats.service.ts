@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { IRiskJson } from 'glaucoma-risk-calculator-engine';
 
@@ -18,18 +18,18 @@ export class RiskStatsService {
               private http: HttpClient) {}
 
   create(risk_stats: IRiskStatsBase): Observable<IRiskStats> {
-    return this.http.post<IRiskStats>('/api/risk_stats', risk_stats)
+    return this.http.post<IRiskStats>('/api/risk_stats', risk_stats);
   }
 
   read(createdAt: string | 'latest' | Date): Observable<IRiskStats> {
-    return this.http.get<IRiskStats>(`/api/risk_stats/${createdAt}`)
+    return this.http.get<IRiskStats>(`/api/risk_stats/${createdAt}`);
   }
 
   update(prevRecord: IRiskStats, newRecord: IRiskStatsBase): Observable<IRiskStats> {
-    return this.http.put<IRiskStats>(`/api/risk_stats/${prevRecord.createdAt}`, newRecord)
+    return this.http.put<IRiskStats>(`/api/risk_stats/${prevRecord.createdAt}`, newRecord);
   }
 
   destroy(createdAt: string | Date): Observable<{}> {
-    return this.http.delete<{}>(`/api/risk_stats/${createdAt}`)
+    return this.http.delete<{}>(`/api/risk_stats/${createdAt}`);
   }
 }

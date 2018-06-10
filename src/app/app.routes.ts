@@ -10,7 +10,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 export const rootRoutes: Routes = [
   { path: '', component: RiskQuizFormComponent },
-  { path: 'auth', loadChildren: 'app/auth/auth.module#AuthModule' },
+  { path: 'auth', loadChildren: './auth/auth.module#AuthModule' },
   { path: 'admin', component: DashboardComponent }
 ];
 

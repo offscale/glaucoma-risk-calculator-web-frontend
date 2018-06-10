@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import { ITemplate, ITemplateBase, ITemplateBatch } from './template.d';
-import { AlertsService } from '../../app/alerts/alerts.service';
+import { Observable, throwError } from 'rxjs';
 
+import { AlertsService } from '../../app/alerts/alerts.service';
+import { ITemplate, ITemplateBase, ITemplateBatch } from './template.d';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class TemplateService {
@@ -40,26 +39,27 @@ export class TemplateService {
   }
 
   read(createdAt: string | 'latest' | Date, kind: string = 'email'): Observable<ITemplate> {
-    return this.http.get<ITemplate>(`/api/template/${createdAt}_${kind}`)
+    return this.http.get<ITemplate>(`/api/template/${createdAt}_${kind}`);
   }
 
   readBatch(): Observable<{templates: ITemplate[]}> {
     return this.http.get<{templates: ITemplate[]}>('/api/templates/latest')
-      .map(templates => {
-        templates.templates.forEach(template =>
-          this.templates.set(template.kind, template)
-        );
-        return templates;
-      }).catch(error =>
-        this.alertsService.add(error) || Observable.throw(error)
-      );
+      .pipe(map(templates => {
+          templates.templates.forEach(template =>
+            this.templates.set(template.kind, template)
+          );
+          return templates;
+        }),
+        catchError(error =>
+          this.alertsService.add(error) || throwError(error)
+        ));
   }
 
   update(prevRecord: ITemplate, newRecord: ITemplateBase): Observable<ITemplate> {
-    return this.http.put<ITemplate>(`/api/template/${prevRecord.createdAt}`, newRecord)
+    return this.http.put<ITemplate>(`/api/template/${prevRecord.createdAt}`, newRecord);
   }
 
   destroy(createdAt: string | Date, kind: string = 'email'): Observable<{}> {
-    return this.http.delete<ITemplate>(`/api/template/${createdAt}_${kind}`)
+    return this.http.delete<ITemplate>(`/api/template/${createdAt}_${kind}`);
   }
 }

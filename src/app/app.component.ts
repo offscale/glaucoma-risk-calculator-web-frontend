@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Params } from '@angular/router/src/shared';
 
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/observable/merge';
-
 import { AuthService } from '../api/auth/auth.service';
 import { ConfigService } from '../api/config/config.service';
 import { MsAuthService, parseQueryString } from './ms-auth/ms-auth.service';
@@ -94,6 +91,6 @@ export class AppComponent implements OnInit {
   }
 
   getBottom() {
-    return { 'margin-bottom': `${this.alertsService.alerts.length ? this.alertsService.alerts.length * 6 : 6}em` }
+    return { 'margin-bottom': `${this.alertsService.alerts.length ? this.alertsService.alerts.length * 6 : 6}em` };
   }
 }

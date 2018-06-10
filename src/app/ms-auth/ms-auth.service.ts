@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
+import { Observable, throwError } from 'rxjs';
 
 import { ConfigService } from '../../api/config/config.service';
 import { AlertsService } from '../alerts/alerts.service';
+import { catchError, map } from 'rxjs/operators';
 
 
 interface ArrayBufferViewForEach extends ArrayBufferView {
@@ -146,7 +146,7 @@ export class MsAuthService {
               const msg = JSON.parse(error.method);
               console.error(msg.headers);
               const method: {error: string, error_description: string} = JSON.parse(msg.method);
-              this.alertsService.add(`${method.error}: ${method.error_description}`)
+              this.alertsService.add(`${method.error}: ${method.error_description}`);
             });
     }
 
@@ -163,7 +163,7 @@ export class MsAuthService {
     this.configService.get().subscribe(() => {});
   }
 
-  public localSendEmail(mail: IMail): Observable<IMail> {
+  public localSendEmail(mail: IMail): Observable<IMSRefreshResponse> | any {
     const httpOptions: {
       headers?: HttpHeaders | {
         [header: string]: string | string[];
@@ -199,18 +199,20 @@ export class MsAuthService {
     };
     return this.http
       .post<IMSRefreshResponse>('https://graph.microsoft.com/v1.0/users/me/sendMail', body, httpOptions)
-      .map((response: HttpResponse<IMSRefreshResponse>) => {
-        if (response.status !== 202)
-          Observable.throw(new Error(`Expected response.status of 202 got ${response.status}.
+      .pipe(
+        map((response: HttpResponse<IMSRefreshResponse>) => {
+          if (response.status !== 202)
+            return throwError(new Error(`Expected response.status of 202 got ${response.status}.
            Body: ${response.body}`));
-        return response.body;
-      })
-      .catch(error => {
-        const err = JSON.parse(error._body).error;
-        if (err.message === 'Access token has expired.')
-          this.login('code');
-        return Observable.throw(err);
-      });
+          return response.body;
+        }),
+        catchError(error => {
+          const err = JSON.parse(error._body).error;
+          if (err.message === 'Access token has expired.')
+            this.login('code');
+          return throwError(err);
+        })
+      );
   }
 
   public getCode(state?: string): IUrlParams {

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { CollapseModule } from 'ngx-bootstrap';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { MsAuthComponent } from './ms-auth.component';
 import { MsAuthService } from './ms-auth.service';
@@ -12,7 +12,7 @@ import { MsAuthService } from './ms-auth.service';
 @NgModule({
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
-    CollapseModule.forRoot()
+    NgbCollapseModule.forRoot()
   ],
   providers: [MsAuthService],
   declarations: [MsAuthComponent],

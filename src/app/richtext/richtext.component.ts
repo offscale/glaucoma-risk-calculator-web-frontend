@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { QuillEditorComponent } from 'ngx-quill';
@@ -7,11 +7,16 @@ import { QuillEditorComponent } from 'ngx-quill';
 @Component({
   selector: 'app-richtext',
   templateUrl: './richtext.component.html',
-  styleUrls: ['./richtext.component.css']
+  styleUrls: [
+    './richtext.component.css',
+    './../../../node_modules/quill/dist/quill.snow.css',
+    './../../../node_modules/quill/dist/quill.bubble.css'
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class RichTextComponent implements AfterViewInit, OnInit {
   @Input() elementId: String;
-  @Output() onEdited: EventEmitter<string> = new EventEmitter<string>();
+  @Output() whenEdited: EventEmitter<string> = new EventEmitter<string>();
   @ViewChild('editor') editor: QuillEditorComponent;
 
   form: FormGroup;
@@ -26,7 +31,7 @@ export class RichTextComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    this.form.valueChanges.subscribe(content => this.onEdited.emit(content.editor));
+    this.form.valueChanges.subscribe(content => this.whenEdited.emit(content.editor));
   }
 
   setFocus($event) {
@@ -36,12 +41,12 @@ export class RichTextComponent implements AfterViewInit, OnInit {
   public patchValue(content?: string) {
     this.form.controls['editor'].patchValue(
       content ? content : `${this.form.controls['editor'].value} patched!`
-    )
+    );
   }
 
   public setValue(content: string) {
     this.form.setValue({
       editor: content || ''
-    })
+    });
   }
 }
