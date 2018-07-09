@@ -21,7 +21,19 @@ Requires a server with HTTPS—for Office 365 / Microsoft Graph auth—and the A
 Assuming the -dist is in the directory above where this is cloned, in Bash just:
 
     rm -rf dist; ng build --prod && d=../glaucoma-risk-calculator-web-frontend-dist && rm -rf "$d/dist" && mv "$PWD/dist/${PWD##*/}/" "$d/dist" && cd "$d" && (git add .; git status) || ( >&2 echo BUILD FAILED )
+    
 
+Then fix the build output by replacing:
+
+    201347067&e.flags){case 512:n=function(t,e,n){var i=n.length;switch(i){case 0:return new e;
+
+With:
+
+    201347067&e.flags){case 512:n=function(t,e,n){var i=n.length;switch(i){case 0:return e==null?e:new e;
+
+E.g., using Node.js in Bash:
+
+    export FNAME=$(printf main*); export FIND='l/201347067&e.flags){case 512:n=function(t,e,n){var i=n.length;switch(i){case 0:return new e;'; export REPLACE='l/201347067&e.flags){case 512:n=function(t,e,n){var i=n.length;switch(i){case 0:return e==null?e:new e;'; node -e 'fs=require("fs");console.info("FNAME:", process.env.FNAME, ";");fs.readFile(process.env.FNAME,"utf8",(err,data)=>{if(err!=null)throw err;fs.writeFile(process.env.FNAME,data.replace(process.env.FIND,process.env.REPLACE),"utf8",e=>{if(e!=null)throw e;});});'
 
 ## Development setup
 
