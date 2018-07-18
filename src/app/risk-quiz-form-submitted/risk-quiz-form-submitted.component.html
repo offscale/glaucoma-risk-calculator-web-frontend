@@ -1,13 +1,15 @@
 <div *ngIf="submitted">
-  <ng-gauge [bgRadius]=progressGraph.bgRadius
-            [bgColor]=progressGraph.bgColor
-            [rounded]=progressGraph.rounded
-            [reverse]=progressGraph.reverse
-            [animationSecs]=progressGraph.animationSecs
-            [labels]=progressGraph.labels
-            [segments]=progressGraph.segments
-            *ngIf="gauge" style="width: 100%; max-width: 30em; margin: 0;">
-  </ng-gauge>
+  <div style="width: 100%; max-width: 30em; max-height: 30em;">
+    <ng-gauge-chart [bgRadius]=progressGraph.bgRadius
+                    [bgColor]=progressGraph.bgColor
+                    [rounded]=progressGraph.rounded
+                    [reverse]=progressGraph.reverse
+                    [animationSecs]=progressGraph.animationSecs
+                    [labels]=progressGraph.labels
+                    [segments]=progressGraph.segments
+                    *ngIf="gauge">
+    </ng-gauge-chart>
+  </div>
   <h3 style="text-underline: single">
     {{recommendation}}
   </h3>

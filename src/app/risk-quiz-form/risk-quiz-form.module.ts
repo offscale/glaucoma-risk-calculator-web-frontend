@@ -8,7 +8,7 @@ import { NgbCollapseModule, NgbModalModule, NgbPaginationModule, NgbTypeaheadMod
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ClipboardModule } from 'ngx-clipboard';
-import { GaugeModule } from 'ng-gauge/dist/gauge';
+import { GaugeChartModule } from 'gauge-chart';
 
 import { RiskStatsService } from '../../api/risk_stats/risk-stats.service';
 import { RiskResService } from '../../api/risk_res/risk_res.service';
@@ -24,7 +24,7 @@ import { RiskQuizFormComponent } from './risk-quiz-form.component';
     RouterModule, RouterModule.forChild(riskQuizFormSubmittedRoutes),
     NgbPaginationModule.forRoot(), NgbCollapseModule.forRoot(),
     NgbTypeaheadModule.forRoot(), NgbModalModule.forRoot(),
-    GaugeModule, ClipboardModule, NgSelectModule, NgxChartsModule
+    GaugeChartModule, ClipboardModule, NgSelectModule, NgxChartsModule
   ],
   providers: [RiskStatsService, RiskResService],
   declarations: [

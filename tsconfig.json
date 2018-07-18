@@ -15,12 +15,6 @@
     "lib": [
       "es2017",
       "dom"
-    ],
-    "paths": {
-      "fs": [ "./shims/noop" ],
-      "path": [ "./shims/path" ],
-      "stream": [ "./shims/noop" ],
-      "crypto": [ "./shims/noop" ]
-    }
+    ]
   }
 }

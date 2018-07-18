@@ -3,7 +3,12 @@ import * as math from 'mathjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 
-import { GaugeLabel, GaugeSegment } from 'ng-gauge/dist/gauge';
+import { switchMap } from 'rxjs/operators';
+
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { GaugeLabel, GaugeSegment } from 'gauge-chart';
+
 import { calc_relative_risk, familial_risks_from_study, IMultiplicativeRisks, IRiskJson } from 'glaucoma-risk-calculator-engine';
 
 import { IRiskQuiz, RiskQuiz } from '../risk-quiz-form/risk-quiz.model';
@@ -12,11 +17,9 @@ import { MsAuthService } from '../ms-auth/ms-auth.service';
 import { colours, numToColour } from '../colours';
 import { RiskStatsService } from '../../api/risk_stats/risk-stats.service';
 import { TemplateService } from '../../api/template/template.service';
-// import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+
 import { AlertsService } from '../alerts/alerts.service';
-import { switchMap } from 'rxjs/operators';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+// import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 
 math.config({
@@ -216,7 +219,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
         subject: this.templateService.getTpl('email_subject'),
         content: `${this.templateService.getTpl('email')} ${this.share_url}`
       })
-      .subscribe(email => console.info('RiskQuizFormSubmittedComponent::sendEmail::email', email) || this.alertsService.add({
+      .subscribe(email => console.info('RiskQuizFormSubmittedComponent::sendEmail::email', email, ';') || this.alertsService.add({
         type: 'info', msg: 'Sent email'
       }), console.error);
     this.modalRef.close();

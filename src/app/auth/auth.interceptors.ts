@@ -23,10 +23,11 @@ export class AuthInterceptor implements HttpInterceptor {
           if (err instanceof HttpErrorResponse)
             switch (err.status) {
               case 403:
-                if (!this.router.isActive('auth', false) && !this.router.isActive('/', true)
-                /*err.error.message === 'NotFound: X-Access-Token header must be included'*/) {
-                  this.alertsService.add('Authentication required');
-
+                if (!this.router.isActive('auth', false)
+                  && !this.router.isActive('/', true)
+                  && !this.router.isActive('/results', false)) {
+                  /*err.error.message === 'NotFound: X-Access-Token header must be included'*/
+                  this.alertsService.add(`Authentication required to view: ${this.router.url}`);
 
                   this.router
                     .navigate(['auth'], { queryParams: { redirectUrl: this.router.url } })
