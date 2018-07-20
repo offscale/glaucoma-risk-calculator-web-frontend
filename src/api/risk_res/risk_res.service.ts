@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { IRiskQuiz } from '../../app/risk-quiz-form/risk-quiz.model';
-
 import { IRiskRes, IRiskResBase } from './risk_res';
 
 
@@ -22,6 +22,12 @@ export class RiskResService {
 
   read(id: number | 'latest'): Observable<IRiskRes> {
     return this.http.get<IRiskRes>(`/api/risk_res/${id}`);
+  }
+
+  readAll(): Observable<IRiskRes[]> {
+    return this.http.get<{risk_res: IRiskRes[]}>('/api/risk_res').pipe(
+      map(risk_res => risk_res.risk_res)
+    );
   }
 
   update(id: number | 'latest', newRecord: IRiskResBase): Observable<IRiskRes> {

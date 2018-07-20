@@ -7,8 +7,8 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { NgbPaginationModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { dashboardRoutes } from '../dashboard/dashboard.routes';
-import { UsersComponent } from './users.component';
 import { UserService } from '../../api/user/user.service';
+import { UsersComponent } from './users.component';
 
 
 @NgModule({

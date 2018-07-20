@@ -8,7 +8,6 @@ import { AlertsModule } from './alerts/alerts.module';
 import { NavbarModule } from './navbar/navbar.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { UsersModule } from './users/users.module';
-import { EmailModule } from './email/email.module';
 import { FooterModule } from './footer/footer.module';
 import { RiskQuizFormModule } from './risk-quiz-form/risk-quiz-form.module';
 

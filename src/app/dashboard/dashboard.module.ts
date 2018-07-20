@@ -6,10 +6,11 @@ import { UsersModule } from '../users/users.module';
 import { EmailModule } from '../email/email.module';
 import { DashboardComponent } from './dashboard.component';
 import { dashboardRoutes } from './dashboard.routes';
+import { RiskResModule } from '../risk-res/risk-res.module';
 
 @NgModule({
   imports: [
-    CommonModule, UsersModule, EmailModule,
+    CommonModule, UsersModule, EmailModule, RiskResModule,
     RouterModule, RouterModule.forChild(dashboardRoutes)
   ],
   declarations: [DashboardComponent]
