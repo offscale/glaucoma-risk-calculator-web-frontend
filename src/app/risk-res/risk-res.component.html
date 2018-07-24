@@ -1,3 +1,19 @@
+<!--
+<ngx-datatable class="bootstrap"
+               [columnMode]="'force'"
+               [rows]="data"
+               [columns]="columns"
+               [rowHeight]="getHeight">
+</ngx-datatable>
+-->
+<div class="container">
+  <div class="row">
+    <div class="col-md">
+      <ngx-charts-pie-chart [labels]="true" [results]="ethnicity_agg" style="text-align: left"></ngx-charts-pie-chart>
+    </div>
+  </div>
+</div>
+
 <ng-table [config]="config"
           (tableChanged)="onChangeTable(config)"
           (cellClicked)="onCellClick($event)"
