@@ -35,14 +35,14 @@ export class RiskResComponent extends Table<IRiskRes> implements OnInit {
           this.data = r.risk_res;
           this.ethnicity_agg = r.ethnicity_agg;
           const age_to_riskids = new Map<number, number[]>();
-          [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(
+          [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach(
             k => age_to_riskids.set(k, [])
           );
           const riskid_to_risk = new Map<number, IRiskRes>();
           r.risk_res.forEach(risk_res => {
             riskid_to_risk.set(risk_res.id, risk_res);
             const k = Math.floor(risk_res.age / 10);
-            age_to_riskids.set(k, console.info(`age_to_riskids.get(${k})`) || console.info('age_to_riskids.get(k)', age_to_riskids.get(k), ';') || age_to_riskids.get(k).concat(risk_res.id));
+            age_to_riskids.set(k, console.info(`age_to_riskids.get(${k})`, age_to_riskids.get(k), ';') || age_to_riskids.get(k).concat(risk_res.id));
           });
           this.age_distr = Array
             .from(age_to_riskids.values())
