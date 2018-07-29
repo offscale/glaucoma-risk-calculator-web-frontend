@@ -61,7 +61,7 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.buildForm()
+    this.buildForm();
   }
 
   onSubmit() {
@@ -81,7 +81,7 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
 
   buildForm(): void {
     this.riskForm = this.fb.group({
-      age: [this.riskQuiz.riskQuiz.age, [Validators.required]],
+      age: [this.riskQuiz.riskQuiz.age, [Validators.required, Validators.min(0)]],
       gender: [this.riskQuiz.riskQuiz.gender, [Validators.required]],
       ethnicity: [this.riskQuiz.riskQuiz.ethnicity, Validators.required],
       sibling: [this.riskQuiz.riskQuiz.sibling],

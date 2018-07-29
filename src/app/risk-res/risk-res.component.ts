@@ -13,7 +13,6 @@ import { Table } from '../table';
 })
 export class RiskResComponent extends Table<IRiskRes> implements OnInit {
   ethnicity_agg: TSingleSeries;
-  max_id: number;
   age_distr: Array<{name: string, series: Array<{name: string, value: number}>}>;
 
   constructor(private router: Router,
@@ -35,24 +34,26 @@ export class RiskResComponent extends Table<IRiskRes> implements OnInit {
       .subscribe(r => {
           this.data = r.risk_res;
           this.ethnicity_agg = r.ethnicity_agg;
-          this.max_id = r.risk_res[r.risk_res.length - 1].id;
-          const m = new Map<number, number[]>();
+          const age_to_riskids = new Map<number, number[]>();
           [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(
-            k => m.set(k, [])
+            k => age_to_riskids.set(k, [])
           );
           const riskid_to_risk = new Map<number, IRiskRes>();
           r.risk_res.forEach(risk_res => {
             riskid_to_risk.set(risk_res.id, risk_res);
             const k = Math.floor(risk_res.age / 10);
-            m.set(k, m.get(k).concat(risk_res.id));
+            age_to_riskids.set(k, console.info(`age_to_riskids.get(${k})`) || console.info('age_to_riskids.get(k)', age_to_riskids.get(k), ';') || age_to_riskids.get(k).concat(risk_res.id));
           });
-          this.age_distr = Array.from(m.values()).map((risk_ids, idx) => ({
-            name: (sr => `${sr}-${sr + 9}`)(idx * 10),
-            series: risk_ids.map(k => (risk_res => ({
-              name: risk_res.id.toString(),
-              value: risk_res.age
-            }))(riskid_to_risk.get(k)))
-          }));
+          this.age_distr = Array
+            .from(age_to_riskids.values())
+            .map((risk_ids, idx) => ({
+              name: (sr => `${sr}-${sr + 9}`)(idx * 10),
+              series: risk_ids.map(k => console.info('age_distr::k', k, ';') || (risk_res => ({
+                name: risk_res.id.toString(),
+                value: risk_res.age
+              }))(riskid_to_risk.get(k)))
+            }))
+            .filter(o => o.series.length);
         },
         console.error
       );
