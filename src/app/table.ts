@@ -104,6 +104,6 @@ export class Table<T> {
   }
 
   public onCellClick(data: any): any {
-    console.log(data);
+    console.log('onCellClick', data, ';');
   }
 }

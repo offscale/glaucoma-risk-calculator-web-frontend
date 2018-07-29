@@ -99,3 +99,7 @@
   line-height: 27px;
   padding: 0 3px;
 }
+
+.table-striped tbody tr:hover {
+  background-color: #7ACAFF !important;
+}

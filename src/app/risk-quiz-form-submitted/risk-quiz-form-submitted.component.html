@@ -82,7 +82,8 @@
       </ng-template>
     </div>
     <div class="btn-group mr-2" role="group" aria-label="facebook">
-      <a class="btn btn-lg btn-primary" [href]="'https://www.facebook.com/sharer/sharer.php?u='+share_url"
+      <a class="btn btn-lg btn-primary"
+         [href]="'https://www.facebook.com/sharer/sharer.php?u='+share_url+'&quote='+templateService.getTpl('facebook')"
          target="_blank">
         Share on facebook
       </a>

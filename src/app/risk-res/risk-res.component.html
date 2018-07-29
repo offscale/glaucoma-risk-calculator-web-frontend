@@ -9,7 +9,23 @@
 <div class="container">
   <div class="row">
     <div class="col-md">
-      <ngx-charts-pie-chart [labels]="true" [results]="ethnicity_agg" style="text-align: left"></ngx-charts-pie-chart>
+      <fieldset>
+        <legend>Calculations</legend>
+        <h1 style="font-size: 250px">{{max_id}}</h1>
+      </fieldset>
+    </div>
+    <div class="col-md">
+      <fieldset>
+        <legend>Ethnic distribution</legend>
+        <ngx-charts-pie-chart [labels]="true" [results]="ethnicity_agg" [view]="[350,250]"
+                              style="text-align: left"></ngx-charts-pie-chart>
+      </fieldset>
+    </div>
+    <div class="col-md">
+      <fieldset>
+        <legend>Age distribution</legend>
+        <ngx-charts-line-chart [results]="age_distr" [view]="[350,250]" [showGridLines]="true"></ngx-charts-line-chart>
+      </fieldset>
     </div>
   </div>
 </div>
