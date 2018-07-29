@@ -42,13 +42,13 @@ export class RiskResComponent extends Table<IRiskRes> implements OnInit {
           r.risk_res.forEach(risk_res => {
             riskid_to_risk.set(risk_res.id, risk_res);
             const k = Math.floor(risk_res.age / 10);
-            age_to_riskids.set(k, console.info(`age_to_riskids.get(${k})`, age_to_riskids.get(k), ';') || age_to_riskids.get(k).concat(risk_res.id));
+            age_to_riskids.set(k, age_to_riskids.get(k).concat(risk_res.id));
           });
           this.age_distr = Array
             .from(age_to_riskids.values())
             .map((risk_ids, idx) => ({
               name: (sr => `${sr}-${sr + 9}`)(idx * 10),
-              series: risk_ids.map(k => console.info('age_distr::k', k, ';') || (risk_res => ({
+              series: risk_ids.map(k => (risk_res => ({
                 name: risk_res.id.toString(),
                 value: risk_res.age
               }))(riskid_to_risk.get(k)))
@@ -66,7 +66,6 @@ export class RiskResComponent extends Table<IRiskRes> implements OnInit {
   }
 
   onCellClick(data: {column: string, row: IRiskRes}): any {
-    console.log(':onCellClick', data.row, ';');
     this.router
       .navigateByUrl(`/results/${data.row.id}`)
       .catch(console.error);

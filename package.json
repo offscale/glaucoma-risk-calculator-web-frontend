@@ -1,6 +1,6 @@
 {
   "name": "glaucoma-risk-calculator-web-frontend",
-  "version": "0.0.41-beta",
+  "version": "0.0.41",
   "license": "MIT",
   "author": "Samuel Marks <samuel@offscale.io>",
   "scripts": {

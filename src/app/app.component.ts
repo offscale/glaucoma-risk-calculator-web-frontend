@@ -27,8 +27,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     /* tslint:disable:no-console */
-    console.info('AppComponent::route.fragment =', this.route.fragment, ';');
-    console.info('AppComponent::route.queryParams =', this.route.queryParams, ';');
+    /*console.info('AppComponent::route.fragment =', this.route.fragment, ';');
+    console.info('AppComponent::route.queryParams =', this.route.queryParams, ';');*/
 
     /*
     Observable.merge(this.route.fragment, this.route.queryParams)
@@ -45,14 +45,14 @@ export class AppComponent implements OnInit {
     this.route.fragment.subscribe((fragment: string) => {
       const qs = parseQueryString(fragment);
       /* tslint:disable:no-console */
-      console.log('AppComponent::ngOnInit::ngOnInit::hash_fragment', qs, ';');
+      // console.log('AppComponent::ngOnInit::ngOnInit::hash_fragment', qs, ';');
       this.handleParams(qs);
     });
 
     this.route.queryParams.subscribe(
       (params: Params & {id_token: string, state: string, access_token: string}) => {
         // tslint:disable:no-console
-        console.info('AppComponent::ngOnInit::queryParams::params', params, ';');
+        // console.info('AppComponent::ngOnInit::queryParams::params', params, ';');
         this.handleParams(params);
       });
   }
@@ -61,7 +61,7 @@ export class AppComponent implements OnInit {
     if (!params || Object.keys(params).length === 0 && params.constructor === Object)
       return;
 
-    console.info('AppComponent::handleParams::params:', params, ';');
+    // console.info('AppComponent::handleParams::params:', params, ';');
 
     this.confService
       .get()
