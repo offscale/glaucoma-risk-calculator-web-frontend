@@ -46,18 +46,13 @@ export class RiskResComponent extends Table<IRiskRes> implements OnInit {
             const k = Math.floor(risk_res.age / 10);
             m.set(k, m.get(k).concat(risk_res.id));
           });
-          this.age_distr =
-            Array.from(m.values()).map((risk_ids, idx) => {
-                const sr = idx * 10;
-                return {
-                  name: `${sr}-${sr + 9}`,
-                  series: risk_ids.map(riskid_to_risk.get.bind(riskid_to_risk)).map((risk_res: IRiskRes) => ({
-                    name: risk_res.id.toString(),
-                    value: risk_res.age
-                  }))
-                };
-              }
-            );
+          this.age_distr = Array.from(m.values()).map((risk_ids, idx) => ({
+            name: (sr => `${sr}-${sr + 9}`)(idx * 10),
+            series: risk_ids.map(k => (risk_res => ({
+              name: risk_res.id.toString(),
+              value: risk_res.age
+            }))(riskid_to_risk.get(k)))
+          }));
         },
         console.error
       );
