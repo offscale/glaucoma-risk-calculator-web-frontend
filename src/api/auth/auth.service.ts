@@ -52,9 +52,9 @@ export class AuthService {
     return (this.login(user) as Observable<ILoginResp>)
       .pipe(catchError((err: HttpErrorResponse) =>
         err && err.error && err.error.message && err.error.message === 'User not found' ?
-          this.register(user)
-            .pipe(map(o => Object.assign(o.body, { access_token: o.headers.get('X-Access-Token') })))
-          : this.alertsService.add(err.error.message) || throwError(err.error)
-      ));
+          (this.register(user)
+            .pipe(map(o => Object.assign(o.body, { access_token: o.headers.get('X-Access-Token') }))) as Observable<IAuthReq>)
+          : this.alertsService.add(err.error.message) as any || throwError(err.error)
+      )) as Observable<IAuthReq | ILoginResp>;
   }
 }

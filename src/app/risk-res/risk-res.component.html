@@ -7,47 +7,49 @@
 </ngx-datatable>
 -->
 <div class="container">
-  <div class="row">
-    <div class="col-md">
+  <div class="row" style="margin-bottom: 3px" *ngIf="data.length">
+    <div class="col" id="stats-num">
       <fieldset>
         <legend>Calculations</legend>
-        <h1 style="font-size: 250px">{{data.length}}</h1>
+        <h1 style="font-size: 10em">{{data.length}}</h1>
       </fieldset>
     </div>
-    <div class="col-md">
+    <div class="col">
       <fieldset>
         <legend>Ethnic distribution</legend>
-        <ngx-charts-pie-chart [labels]="true" [results]="ethnicity_agg" [view]="[350,250]"
+        <ngx-charts-pie-chart [labels]="true" [results]="ethnicity_agg" [view]="view"
                               style="text-align: left"></ngx-charts-pie-chart>
       </fieldset>
     </div>
-    <div class="col-md">
+    <div class="col">
       <fieldset>
         <legend>Age distribution</legend>
         <ngx-charts-line-chart [results]="age_distr"
-                               [view]="[350,250]"
+                               [view]="view"
                                [yAxis]="true"></ngx-charts-line-chart>
       </fieldset>
     </div>
   </div>
-</div>
 
-<ng-table [config]="config"
-          (tableChanged)="onChangeTable(config)"
-          (cellClicked)="onCellClick($event)"
-          [rows]="data" [columns]="columns">
-</ng-table>
-<ng-container *ngIf="config.paging && page !== numPages">
-  <ngb-pagination
-    class="pagination-sm"
-    [(ngModel)]="page"
-    [collectionSize]="length"
-    [pageSize]="itemsPerPage"
-    [maxSize]="maxSize"
-    [boundaryLinks]="true"
-    [rotate]="false"
-    (pageChanged)="onChangeTable(config, $event)"
-    (numPages)="numPages = $event">
-  </ngb-pagination>
-  <pre *ngIf="config.paging" class="card card-block card-header">Page: {{page}} / {{numPages}}</pre>
-</ng-container>
+  <div class="row">
+    <ng-table [config]="config" #tableContainer
+              (tableChanged)="onChangeTable(config)"
+              (cellClicked)="onCellClick($event)"
+              [rows]="data" [columns]="columns">
+    </ng-table>
+    <ng-container *ngIf="config.paging && page !== numPages">
+      <ngb-pagination
+        class="pagination-sm"
+        [(ngModel)]="page"
+        [collectionSize]="length"
+        [pageSize]="itemsPerPage"
+        [maxSize]="maxSize"
+        [boundaryLinks]="true"
+        [rotate]="false"
+        (pageChanged)="onChangeTable(config, $event)"
+        (numPages)="numPages = $event">
+      </ngb-pagination>
+      <pre *ngIf="config.paging" class="card card-block card-header">Page: {{page}} / {{numPages}}</pre>
+    </ng-container>
+  </div>
+</div>

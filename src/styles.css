@@ -100,6 +100,18 @@
   padding: 0 3px;
 }
 
-.table-striped tbody tr:hover {
+.calculations-tbl tbody tr:hover {
   background-color: #7ACAFF !important;
+}
+
+.container {
+  padding-right: 0 !important;
+}
+
+*, ::before, ::after {
+  box-sizing: unset !important;
+}
+
+.bg-red {
+  background-color: rosybrown;
 }

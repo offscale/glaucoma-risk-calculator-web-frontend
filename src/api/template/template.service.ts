@@ -51,8 +51,8 @@ export class TemplateService {
           return templates;
         }),
         catchError(error =>
-          this.alertsService.add(error) || throwError(error)
-        ));
+          this.alertsService.add(error) as any || throwError(error)
+        )) as Observable<{templates: ITemplate[]}>;
   }
 
   update(prevRecord: ITemplate, newRecord: ITemplateBase): Observable<ITemplate> {

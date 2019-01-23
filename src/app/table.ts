@@ -1,4 +1,4 @@
-export class Table<T> {
+export abstract class Table<T> {
   public data: T[] = [];
   public columns: Array<any> = [
     { title: 'updatedAt', className: ['office-header', 'text-success'], name: 'updatedAt', sort: 'asc' },
@@ -53,13 +53,32 @@ export class Table<T> {
     });
   }
 
-  public changeFilter(data: any, config: any): any {
-    let filteredData: Array<any> = data;
+  public changeFilter(data: T[], config: any): T[] {
+    let filteredData: T[] = data;
     this.columns.forEach((column: any) => {
       if (column.filtering) {
-        filteredData = filteredData.filter((item: any) =>
-          item[column.name].match(column.filtering.filterString)
-        );
+        console.info('changeFilter::column.filtering.filterString', column.filtering.filterString,
+          typeof column.filtering.filterString, ';');
+
+        filteredData = filteredData.filter((item: any) => {
+          console.info('changeFilter::item[column.name]', item[column.name],
+            typeof item[column.name], 'item:', item, 'column', column, ';');
+
+          const el = item[column.name];
+
+          switch (typeof el) {
+            case 'number':
+              return el >= parseInt(column.filtering.filterString, 10);
+            case 'string':
+              return el.match(column.filtering.filterString);
+            case 'boolean':
+              return el === column.filtering.filterString.toLowerCase().startsWith('t');
+            case 'undefined':
+              return false;
+            default:
+              throw TypeError(`Search with ${typeof el} not implemented`);
+          }
+        });
       }
     });
 

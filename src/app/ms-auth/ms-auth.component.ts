@@ -77,7 +77,7 @@ export class MsAuthComponent implements OnInit {
           })
           .reduce((a, b) => Object.assign(a, b), {}) as IMail
       ))
-      .subscribe(email => console.info(email) || this.alertsService.add({
+      .subscribe(email => console.info(email) as any || this.alertsService.add({
           type: 'info', msg: 'Sent email'
         }), console.error
       );
@@ -95,7 +95,7 @@ export class MsAuthComponent implements OnInit {
         this.advanced_form.value
       ))
       .subscribe(
-        auth => console.info(auth) || this.alertsService.add({ type: 'info', msg: 'Updated auth' }),
+        auth => console.info(auth) as any || this.alertsService.add({ type: 'info', msg: 'Updated auth' }),
         console.error.bind(console) // error => this.authService.redirOnResIfUnauth(error)
       )
   }

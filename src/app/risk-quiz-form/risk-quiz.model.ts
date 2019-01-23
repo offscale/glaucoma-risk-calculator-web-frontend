@@ -29,7 +29,7 @@ export interface IRiskQuiz {
 }
 
 interface IIRiskQuiz {
-  riskQuiz: IRiskQuiz
+  riskQuiz: IRiskQuiz;
 }
 
 export class RiskQuiz implements IIRiskQuiz {

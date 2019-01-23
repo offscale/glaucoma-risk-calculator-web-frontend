@@ -12,7 +12,7 @@ import { IRiskStats, IRiskStatsBase } from './risk-stats';
 @Injectable()
 export class RiskStatsService {
   public risk_json: IRiskJson;
-  public risk;
+  public risk: number;
 
   constructor(private authService: AuthService,
               private http: HttpClient) {}

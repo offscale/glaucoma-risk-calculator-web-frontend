@@ -11,8 +11,8 @@ export type TSingleSeries = Array<{name: string, value: number}>;
 
 @Injectable()
 export class RiskResService {
-  public risk;
-  public id;
+  public risk: IRiskRes;
+  public id: number;
 
   constructor(private http: HttpClient) {
   }

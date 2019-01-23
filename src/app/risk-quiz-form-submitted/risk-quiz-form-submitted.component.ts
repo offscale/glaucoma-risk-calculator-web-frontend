@@ -219,9 +219,10 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
         subject: this.templateService.getTpl('email_subject'),
         content: `${this.templateService.getTpl('email')} ${this.share_url}`
       })
-      .subscribe(email => console.info('RiskQuizFormSubmittedComponent::sendEmail::email', email, ';') || this.alertsService.add({
-        type: 'info', msg: 'Sent email'
-      }), console.error);
+      .subscribe(email => console.info('RiskQuizFormSubmittedComponent::sendEmail::email', email, ';') as any ||
+        this.alertsService.add({
+          type: 'info', msg: 'Sent email'
+        }), console.error);
     this.modalRef.close();
   }
 
@@ -292,11 +293,16 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
           }
 
           this.html_of_all_refs = JSON.parse(this.riskStatsService.risk_json.html_of_all_refs);
-          this.html_of_last_note = this.riskStatsService.risk_json.global_notes.pop() as any;
+          this.html_of_last_note = this.riskStatsService.risk_json.global_notes.pop() as any as HTMLAllCollection;
           this.notes = this.riskStatsService.risk_json.global_notes;
           this.riskStatsService.risk = this.riskQuiz.risk;
           this.riskQuiz.ref = this.riskStatsService.risk_json.studies[this.riskQuiz.study].ref;
           // this.riskQuiz.prepareRef();
+
+          /*const multiplicative_risks = {
+            this.riskQuiz.risk
+          };*/
+          console.info('this.riskQuiz.risk:', this.riskQuiz.risk, ';');
 
           const fam_risk = familial_risks_from_study(this.riskStatsService.risk_json, this.riskQuiz.toJSON());
           const risk_pc =
@@ -334,6 +340,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
           this.riskQuiz.client_risk = +risk_pc.toPrecision(4);
 
           this.recommendation = 'We recommend you see an eye-health professional ';
+          this.recommendation_subtitle = 'Unless you\'ve seen one recently.';
           if (risk_pc <= 25) {
             this.recommendation += ' in the next two years.';
             this.recommendation_subtitle = 'Unless you\'ve seen one in the last 2 years';
@@ -342,10 +349,8 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
             this.recommendation_subtitle = 'Unless you\'ve seen one in the last year';
           } else if (risk_pc <= 75) {
             this.recommendation += ' in the next 6 months.';
-            this.recommendation_subtitle = 'Unless you\'ve seen one recently.';
           } else {
             this.recommendation += ' ASAP.';
-            this.recommendation_subtitle = 'Unless you\'ve seen one recently.';
           }
 
           if (this.id == null)
