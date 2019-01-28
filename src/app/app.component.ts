@@ -57,12 +57,17 @@ export class AppComponent implements OnInit {
       });
   }
 
+  getBottom() {
+    return { 'margin-bottom': `${this.alertsService.alerts.length ? this.alertsService.alerts.length * 6 : 6}em` };
+  }
+
   private handleParams(params: Params) {
     if (!params || Object.keys(params).length === 0 && params.constructor === Object)
       return;
 
     // console.info('AppComponent::handleParams::params:', params, ';');
 
+    if (localStorage.getItem('access-token') == null) return;
     this.confService
       .get()
       .subscribe(conf => {
@@ -76,7 +81,7 @@ export class AppComponent implements OnInit {
           if (params.hasOwnProperty('code'))
             this.msAuthService.login('code', params.code, params.state);
           else if (params.hasOwnProperty('refresh_token'))
-            this.msAuthService.login( 'refresh_token', params.refresh_token, params.state);
+            this.msAuthService.login('refresh_token', params.refresh_token, params.state);
           else if (params.hasOwnProperty('access_token')) {
             this.confService.config.access_token = params.access_token;
             localStorage.setItem('ms::access_token', params.access_token);
@@ -88,9 +93,5 @@ export class AppComponent implements OnInit {
         },
         console.error
       );
-  }
-
-  getBottom() {
-    return { 'margin-bottom': `${this.alertsService.alerts.length ? this.alertsService.alerts.length * 6 : 6}em` };
   }
 }

@@ -14,19 +14,19 @@ export class AuthService {
   public access_token: string;
   public loggedIn = AuthService.loggedIn;
 
+  constructor(private http: HttpClient,
+              private router: Router,
+              private alertsService: AlertsService) {
+    const at = localStorage.getItem('access-token');
+    if (at != null) this.access_token = at;
+  }
+
   static loggedIn(): boolean {
     return localStorage.getItem('access-token') !== null;
   }
 
   static getAccessToken(): string {
     return localStorage.getItem('access-token');
-  }
-
-  constructor(private http: HttpClient,
-              private router: Router,
-              private alertsService: AlertsService) {
-    const at = localStorage.getItem('access-token');
-    if (at != null) this.access_token = at;
   }
 
   public logout() {

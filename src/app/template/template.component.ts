@@ -35,17 +35,17 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     this.templateService
       .readBatch()
       .subscribe(() => {
-        const values = Array.from(this.templateService.templates.keys())
-          .filter(kind => kind !== 'email')
-          .reduce(
-            (obj, kind) => Object.assign(obj, { [kind]: this.templateService.getTpl(kind) }), {})
-        ;
-        if (Object.keys(values).length) {
-          this.editor.setValue(this.templateService.getTpl('email'));
-          this.form.setValue(values);
+          const values = Array.from(this.templateService.templates.keys())
+            .filter(kind => kind !== 'email')
+            .reduce(
+              (obj, kind) => Object.assign(obj, { [kind]: this.templateService.getTpl(kind) }), {})
+          ;
+          if (Object.keys(values).length) {
+            this.editor.setValue(this.templateService.getTpl('email'));
+            this.form.setValue(values);
+          }
         }
-        }
-      )
+      );
   }
 
   save() {
@@ -82,7 +82,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
     } else
       this.tplBatchCreate(templates, (err, created_templates) => {
         if (err != null) this.alertsService.add(err);
-        else this.alertsService.add({ type: 'info', msg: 'Updated templates' })
+        else this.alertsService.add({ type: 'info', msg: 'Updated templates' });
       });
   };
 
@@ -91,7 +91,7 @@ export class TemplateComponent implements OnInit, AfterViewInit {
       new_template == null) return cb(new TypeError('new_template must be defined'));
     this.templateService
       .create(new_template)
-      .subscribe(template => this.handleTemplate(template, template.kind, cb), this.handleError.bind(this))
+      .subscribe(template => this.handleTemplate(template, template.kind, cb), this.handleError.bind(this));
   };
 
   tplBatchCreate(new_templates: ITemplateBase[], cb) {
@@ -101,10 +101,10 @@ export class TemplateComponent implements OnInit, AfterViewInit {
       .subscribe(templates => {
           templates.templates
             .forEach(template => this.handleTemplate(template, template.kind));
-          return cb(void 0, templates)
+          return cb(void 0, templates);
         },
         cb
-      )
+      );
   };
 
   tplRead(createdAt: string | Date, kind: string, cb: (Error, string?) => void) {
@@ -117,22 +117,23 @@ export class TemplateComponent implements OnInit, AfterViewInit {
           this.alertsService.add({ type: 'warning', msg: error });
           return cb(error);
         }
-      )
+      );
   };
 
   onEdited(content: string) {
     this.templateService.setTpl(content);
   }
 
-  private init(kind: string) {
-    this.tplRead('latest', kind, (err, template) =>
-      !err && template && this.editor.patchValue(template.contents)
-    );
+  tplDestroy(createdAt: string | Date) {
+    this.templateService
+      .destroy(createdAt)
+      .subscribe(_ => _,
+        this.handleError.bind(this)
+      );
   }
 
-  private handleTemplate(template: ITemplate, kind: string, cb?: (Error, string) => void) {
-    this.templateService.templates.set(kind, template);
-    if (cb) return cb(void 0, template);
+  validTwitterLength(): boolean {
+    return this.form.value.twitter.length < 240;
   }
 
   /* // Would be better to not update, in case drafts are introduced
@@ -146,19 +147,18 @@ export class TemplateComponent implements OnInit, AfterViewInit {
       .subscribe(this.handleTemplate, this.handleError.bind(this))
   }*/
 
-  tplDestroy(createdAt: string | Date) {
-    this.templateService
-      .destroy(createdAt)
-      .subscribe(_ => _,
-        this.handleError.bind(this)
-      )
+  private init(kind: string) {
+    this.tplRead('latest', kind, (err, template) =>
+      !err && template && this.editor.patchValue(template.contents)
+    );
+  }
+
+  private handleTemplate(template: ITemplate, kind: string, cb?: (Error, string) => void) {
+    this.templateService.templates.set(kind, template);
+    if (cb) return cb(void 0, template);
   }
 
   private handleError(error: string) {
-    this.alertsService.add({ type: 'warning', msg: error })
-  }
-
-  validTwitterLength(): boolean {
-    return this.form.value.twitter.length < 240
+    this.alertsService.add({ type: 'warning', msg: error });
   }
 }

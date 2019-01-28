@@ -1,5 +1,5 @@
-<ngb-alert *ngFor="let alert of alertsService.alerts;let i = index" [type]="alert.type" dismissible="true"
-           (close)="closeAlert(i)"
+<ngb-alert (close)="closeAlert(i)" *ngFor="let alert of alertsService.alerts;let i = index" [type]="alert.type"
+           dismissible="true"
            style="color: #ffcc9a">
   <h3>{{ alert?.msg }}</h3>
 </ngb-alert>

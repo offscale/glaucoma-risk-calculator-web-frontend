@@ -73,6 +73,6 @@ export class RiskQuiz implements IIRiskQuiz {
       myopia: this.riskQuiz.myopia,
       diabetes: this.riskQuiz.diabetes,
       client_risk: this.client_risk
-    }
+    };
   }
 }

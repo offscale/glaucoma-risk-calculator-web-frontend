@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <quill-editor #editor id="{{elementId}}" [style]="{height: '200px'}"
-                (onEditorCreated)="setFocus($event)"
-                [formControl]="form.controls['editor']"></quill-editor>
+  <quill-editor #editor (onEditorCreated)="setFocus($event)" [formControl]="form.controls['editor']"
+                [style]="{height: '200px'}"
+                id="{{elementId}}"></quill-editor>
 </form>

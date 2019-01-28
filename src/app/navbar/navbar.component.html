@@ -1,20 +1,20 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" style="line-height: 2.68">
-  <a class="navbar-brand" routerLink="/" routerLinkActive="active"
-     [routerLinkActiveOptions]="{exact:true}">
+  <a [routerLinkActiveOptions]="{exact:true}" class="navbar-brand" routerLink="/"
+     routerLinkActive="active">
     Glaucoma Risk Calculator
   </a>
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <form class="form-inline col btn-group" *ngIf="authService.loggedIn()">
-      <a class="nav-item nav-link btn btn-outline-info" routerLinkActive="active" routerLink="/admin/dashboard">
+    <form *ngIf="authService.loggedIn()" class="form-inline col btn-group">
+      <a class="nav-item nav-link btn btn-outline-info" routerLink="/admin/dashboard" routerLinkActive="active">
         Dashboard
       </a>
-      <button class="a nav-item nav-link btn" (click)="logout()">
+      <button (click)="logout()" class="a nav-item nav-link btn">
         Logout
       </button>
     </form>
     <ul class="navbar-nav mr-auto"></ul>
-    <a href="http://glaucoma.org.au"><img src="../../assets/reversed-logo.png" alt="Glaucoma Australia logo"/></a>
+    <a href="http://glaucoma.org.au"><img alt="Glaucoma Australia logo" src="../../assets/reversed-logo.png"/></a>
   </div>
 
 </nav>

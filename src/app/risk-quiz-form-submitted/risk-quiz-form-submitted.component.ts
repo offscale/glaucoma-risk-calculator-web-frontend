@@ -116,7 +116,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
 
   pie_grid = false;
   show_pie_adv = false;
-  added_risk = false;
+
   gauge = false;
 
   show_treemap = false;
@@ -128,6 +128,18 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
   html_of_all_refs: HTMLAllCollection;
   html_of_last_note: HTMLAllCollection;
   notes: string[];
+
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private modalService: NgbModal,
+              private riskStatsService: RiskStatsService,
+              private riskResService: RiskResService,
+              public templateService: TemplateService,
+              private alertsService: AlertsService,
+              private msAuthService: MsAuthService) {
+
+  }
+
   labelFormat = (label: {
     data: {
       data: {name: string, value: number},
@@ -150,17 +162,6 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     this.treemap_legend.sort((a, b) => a.value < b.value as any);
     return m[label.data.data.name] || label.data.data.name;
   };
-
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private modalService: NgbModal,
-              private riskStatsService: RiskStatsService,
-              private riskResService: RiskResService,
-              public templateService: TemplateService,
-              private alertsService: AlertsService,
-              private msAuthService: MsAuthService) {
-
-  }
 
   redo() {
     this.submittedChange.emit(false);
@@ -226,6 +227,12 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     this.modalRef.close();
   }
 
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.open(template);
+    // = this.modalService.show(template, { class: 'modal-sm' });
+    this.modalRef.componentInstance.name = 'World';
+  }
+
   private gaugeView(risk_pc: number, risk_pc_as_s: string) {
     this.progressGraph.labels.push(
       new GaugeLabel({
@@ -253,20 +260,14 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
     this.gauge = true;
   }
 
+  // modal
+
   private pieAdvView(multiplicative_risks: IMultiplicativeRisks) {
     this.pieAdvData = Object
       .keys(multiplicative_risks)
       .map(k => ({ name: k, value: multiplicative_risks[k] }))
       .filter(o => o.value > 1);
-    this.show_pie_adv = this.added_risk = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
-  }
-
-  // modal
-
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.open(template);
-    // = this.modalService.show(template, { class: 'modal-sm' });
-    this.modalRef.componentInstance.name = 'World';
+    this.show_pie_adv = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
   }
 
   private prepareView() {
@@ -302,7 +303,6 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
           /*const multiplicative_risks = {
             this.riskQuiz.risk
           };*/
-          console.info('this.riskQuiz.risk:', this.riskQuiz.risk, ';');
 
           const fam_risk = familial_risks_from_study(this.riskStatsService.risk_json, this.riskQuiz.toJSON());
           const risk_pc =
@@ -359,6 +359,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
               .subscribe(r => {
                 this.id = this.riskResService.id = r.id;
                 this.share_url = this.idWithUrl();
+                this.router.navigate(['/results', this.id]);
               }, console.error);
           else this.share_url = this.idWithUrl();
         },

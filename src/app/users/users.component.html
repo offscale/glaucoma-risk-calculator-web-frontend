@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col-md-4">
-    <input *ngIf="config.filtering" placeholder="Filter all columns"
+    <input (tableChanged)="onChangeTable(config)" *ngIf="config.filtering"
            [ngTableFiltering]="config.filtering"
            class="form-control"
-           (tableChanged)="onChangeTable(config)"/>
+           placeholder="Filter all columns"/>
   </div>
 </div>
 <br>

@@ -36,6 +36,7 @@ export class MsAuthComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (localStorage.getItem('access-token') == null) return;
     this.confService
       .get()
       .subscribe(conf =>
@@ -73,7 +74,7 @@ export class MsAuthComponent implements OnInit {
           .keys(this.email_form.value)
           .map(k => {
             const sw = 'test_';
-            return { [k.startsWith(sw) ? k.slice('sw'.length) : k]: this.email_form.value[k] }
+            return { [k.startsWith(sw) ? k.slice('sw'.length) : k]: this.email_form.value[k] };
           })
           .reduce((a, b) => Object.assign(a, b), {}) as IMail
       ))
@@ -97,6 +98,6 @@ export class MsAuthComponent implements OnInit {
       .subscribe(
         auth => console.info(auth) as any || this.alertsService.add({ type: 'info', msg: 'Updated auth' }),
         console.error.bind(console) // error => this.authService.redirOnResIfUnauth(error)
-      )
+      );
   }
 }

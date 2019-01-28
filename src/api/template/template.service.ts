@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { AlertsService } from '../../app/alerts/alerts.service';
 import { ITemplate, ITemplateBase, ITemplateBatch } from './template.d';
-import { catchError, map } from 'rxjs/operators';
+
 
 @Injectable()
 export class TemplateService {
   public templates: Map<string, ITemplateBase> = new Map();  // silly cache
 
   constructor(private http: HttpClient,
-              private alertsService: AlertsService) {
-  }
+              private alertsService: AlertsService) {}
 
   public hasTpl(kind: string = 'email'): boolean {
     return this.templates.has(kind) && this.templates.get(kind).contents

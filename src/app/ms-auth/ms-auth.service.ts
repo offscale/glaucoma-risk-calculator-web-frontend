@@ -65,6 +65,14 @@ export const parseQueryString = (url: string): ResHash => {
 export class MsAuthService {
   private readonly params: ResHash;
 
+  constructor(private http: HttpClient,
+              private router: Router,
+              private configService: ConfigService,
+              private alertsService: AlertsService) {
+    this.params = parseQueryString(location.hash);
+    this.init();
+  }
+
   static genNonce() {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz'; // '-._~';
     const rands = new Uint8Array(32);
@@ -86,31 +94,6 @@ export class MsAuthService {
     /* tslint:disable:no-console */
     console.info('paramsToObject::params:', params, ';\ntoObject:', o, ';');
     return o;
-  }
-
-  private msAuthRedir(url_params: IUrlParams) {
-    console.info('MsAuthService::getTokenParams() =', this.getTokenParams(), ';');
-    console.info('MsAuthService::msAuthRedir::params', url_params.params, ';');
-    window.location.href = `${url_params.url}${url_params.params}`;
-  }
-
-  private getTokenParams(state?: string): HttpParams {
-    /* tslint:disable:no-console */
-    console.info('MsAuthService::getTokenParams::client_id =', this.configService.config.client_id, ';');
-
-    return new HttpParams()
-      .set('client_id', this.configService.config.client_id)
-      .set('redirect_uri', MsAuthService.getHostOrigin())
-      .set('state', state || window.location.pathname) // redirect_uri doesn't work with angular for some reason?
-      .set('nonce', MsAuthService.genNonce());
-  }
-
-  constructor(private http: HttpClient,
-              private router: Router,
-              private configService: ConfigService,
-              private alertsService: AlertsService) {
-    this.params = parseQueryString(location.hash);
-    this.init();
   }
 
   public login(token_type: 'refresh_token' | 'code' | 'access_token',
@@ -160,6 +143,7 @@ export class MsAuthService {
   }
 
   public init() {
+    if (localStorage.getItem('access-token') == null) return;
     this.configService.get().subscribe(() => {});
   }
 
@@ -264,6 +248,17 @@ export class MsAuthService {
       .post<ITokenResponse>('/api/email/ms-auth', MsAuthService.paramsToObject(params));
   }
 
+  public remoteSendEmail(risk_id: number, mail: IMail): Observable<IMail> {
+    return this.http
+      .post<IMail>(`/api/email/${mail.recipient}/${risk_id}`, void 0);
+  }
+
+  private msAuthRedir(url_params: IUrlParams) {
+    console.info('MsAuthService::getTokenParams() =', this.getTokenParams(), ';');
+    console.info('MsAuthService::msAuthRedir::params', url_params.params, ';');
+    window.location.href = `${url_params.url}${url_params.params}`;
+  }
+
   /*
   public getAccessToken(state?: string): HttpParams {
     // redirect to get access_token
@@ -277,8 +272,14 @@ export class MsAuthService {
   }
   */
 
-  public remoteSendEmail(risk_id: number, mail: IMail): Observable<IMail> {
-    return this.http
-      .post<IMail>(`/api/email/${mail.recipient}/${risk_id}`, void 0);
+  private getTokenParams(state?: string): HttpParams {
+    /* tslint:disable:no-console */
+    console.info('MsAuthService::getTokenParams::client_id =', this.configService.config.client_id, ';');
+
+    return new HttpParams()
+      .set('client_id', this.configService.config.client_id)
+      .set('redirect_uri', MsAuthService.getHostOrigin())
+      .set('state', state || window.location.pathname) // redirect_uri doesn't work with angular for some reason?
+      .set('nonce', MsAuthService.genNonce());
   }
 }

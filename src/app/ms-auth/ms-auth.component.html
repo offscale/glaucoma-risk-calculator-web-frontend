@@ -1,14 +1,14 @@
 <div class="container">
   <div class="row">
-    <a type="button" class="col btn btn-lg btn-warning" (click)="login()" *ngIf="!loggedIn()">
+    <a (click)="login()" *ngIf="!loggedIn()" class="col btn btn-lg btn-warning" type="button">
       Authenticate with Office 365
     </a>
 
-    <button class="col btn btn-sm btn-outline-danger"
-            (click)="logout()" *ngIf="loggedIn()">
+    <button (click)="logout()"
+            *ngIf="loggedIn()" class="col btn btn-sm btn-outline-danger">
       Office 365 logout
     </button>
-    <button type="button" class="col-sm-2 btn btn-sm" (click)="toggleCollapse()">Advanced</button>
+    <button (click)="toggleCollapse()" class="col-sm-2 btn btn-sm" type="button">Advanced</button>
   </div>
 </div>
 

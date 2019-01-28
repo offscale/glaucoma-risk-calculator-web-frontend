@@ -1,13 +1,13 @@
 <div *ngIf="submitted">
   <div style="width: 100%; max-width: 30em; max-height: 30em;">
-    <ng-gauge-chart [bgRadius]=progressGraph.bgRadius
-                    [bgColor]=progressGraph.bgColor
-                    [rounded]=progressGraph.rounded
-                    [reverse]=progressGraph.reverse
+    <ng-gauge-chart *ngIf="gauge"
                     [animationSecs]=progressGraph.animationSecs
+                    [bgColor]=progressGraph.bgColor
+                    [bgRadius]=progressGraph.bgRadius
                     [labels]=progressGraph.labels
-                    [segments]=progressGraph.segments
-                    *ngIf="gauge">
+                    [reverse]=progressGraph.reverse
+                    [rounded]=progressGraph.rounded
+                    [segments]=progressGraph.segments>
     </ng-gauge-chart>
   </div>
   <h3 style="text-underline: single">
@@ -23,11 +23,26 @@
 
       <h3>This puts you in the
         <strong>{{most_at_risk}}</strong> most at risk subgroup.
-        <span *ngIf="added_risk">
-          Adding in <strong>family risk</strong>, and you have:
-          {{riskQuiz.client_risk}}% relative risk within your cohort.
-        </span>
       </h3>
+    </div>
+    <div *ngIf="riskQuiz.multiplicative_risks" class="container">
+      <div class="row">
+        These health factors increase your risk by:
+      </div>
+      <div class="row">
+        <div *ngIf="riskQuiz.multiplicative_risks.family_history" class="col-sm">
+          <h3>{{riskQuiz.multiplicative_risks.family_history * 100}}%</h3>
+          Family history
+        </div>
+        <div *ngIf="riskQuiz.multiplicative_risks.diabetes" class="col-sm">
+          <h3>{{riskQuiz.multiplicative_risks.diabetes * 100}}%</h3>
+          Diabetes
+        </div>
+        <div *ngIf="riskQuiz.multiplicative_risks.myopia" class="col-sm">
+          <h3>{{riskQuiz.multiplicative_risks.myopia * 100}}%</h3>
+          Myopia
+        </div>
+      </div>
     </div>
   </div>
 
@@ -51,13 +66,13 @@
   </table>
 
   <br>
-  <button class="btn btn-default" (click)="redo()">Redo</button>
+  <button (click)="redo()" class="btn btn-default">Redo</button>
   <br>
   <hr>
   <h5>Share with family and friends to calculate their own risk</h5>
-  <div class="btn-toolbar" role="toolbar" aria-label="Share">
-    <div class="btn-group mr-2" role="group" aria-label="email">
-      <button class="btn btn-lg btn-warning" (click)="openModal(sendEmailTemplate)">Share as email</button>
+  <div aria-label="Share" class="btn-toolbar" role="toolbar">
+    <div aria-label="email" class="btn-group mr-2" role="group">
+      <button (click)="openModal(sendEmailTemplate)" class="btn btn-lg btn-warning">Share as email</button>
       <ng-template #sendEmailTemplate>
         <div class="modal-body text-center">
           <form class="container form-group">
@@ -68,45 +83,47 @@
                 </label>
               </div>
               <div class="col-auto">
-                <input class="form-check-input" placeholder="Email" id="email" #toEmail>
+                <input #toEmail class="form-check-input" id="email" placeholder="Email">
               </div>
             </div>
 
-            <div class="row" [innerHtml]="templateService.getTpl('email') + ' ' + share_url"></div>
-            <button type="submit" class="btn" (click)="sendEmail(toEmail.value)"
-                    [disabled]="!toEmail.value.length" [ngClass]="{'btn-outline-success': toEmail.value.length}">
+            <div [innerHtml]="templateService.getTpl('email') + ' ' + share_url" class="row"></div>
+            <button (click)="sendEmail(toEmail.value)" [disabled]="!toEmail.value.length"
+                    [ngClass]="{'btn-outline-success': toEmail.value.length}"
+                    class="btn" type="submit">
               Send email
             </button>
           </form>
         </div>
       </ng-template>
     </div>
-    <div class="btn-group mr-2" role="group" aria-label="facebook">
-      <a class="btn btn-lg btn-primary"
-         [href]="'https://www.facebook.com/sharer/sharer.php?u='+share_url+'&quote='+templateService.getTpl('facebook')"
+    <div aria-label="facebook" class="btn-group mr-2" role="group">
+      <a [href]="'https://www.facebook.com/sharer/sharer.php?u='+share_url+'&quote='+templateService.getTpl('facebook')"
+         class="btn btn-lg btn-primary"
          target="_blank">
         Share on facebook
       </a>
     </div>
-    <div class="btn-group mr-2" role="group" aria-label="twitter">
-      <a target="_blank" class="btn btn-lg btn-info" id="tweet" #tweet
-         [href]="'https://twitter.com/intent/tweet?text='+templateService.getTpl('twitter')+' '+share_url"
-         data-size="large">
+    <div aria-label="twitter" class="btn-group mr-2" role="group">
+      <a #tweet [href]="'https://twitter.com/intent/tweet?text='+templateService.getTpl('twitter')+' '+share_url"
+         class="btn btn-lg btn-info" data-size="large"
+         id="tweet"
+         target="_blank">
         Tweet
       </a>
     </div>
-    <div class="btn-group" role="group" aria-label="copy-link">
-      <button class="btn btn-lg btn-outline" [class.btn-success]="isCopied" ngxClipboard
-              [cbContent]="share_url" (cbOnSuccess)="isCopied = true">
+    <div aria-label="copy-link" class="btn-group" role="group">
+      <button (cbOnSuccess)="isCopied = true" [cbContent]="share_url" [class.btn-success]="isCopied"
+              class="btn btn-lg btn-outline" ngxClipboard>
         Copy link
       </button>
     </div>
   </div>
   <hr>
-  <button class="btn btn-secondary" (click)="toggleCollapse()" [class.btn-outline-secondary]="!isCollapsed">
+  <button (click)="toggleCollapse()" [class.btn-outline-secondary]="!isCollapsed" class="btn btn-secondary">
     Review references and submission
   </button>
-  <div [ngbCollapse]="isCollapsed" class="card card-block card-header" *ngIf="!isCollapsed">
+  <div *ngIf="!isCollapsed" [ngbCollapse]="isCollapsed" class="card card-block card-header">
     <div class="well well-lg">
       <h6>Your submission</h6>
 
@@ -133,12 +150,12 @@
 
       <!--<app-risk-pointer [risk_value]="riskQuiz.client_risk"></app-risk-pointer>-->
 
-      <ngx-charts-pie-grid *ngIf="pie_grid"
-                           [view]="pieView"
-                           [scheme]="colorScheme"
+      <ngx-charts-pie-grid (select)="onPieGridSelect($event)"
+                           *ngIf="pie_grid"
                            [results]="pieData"
-                           autoScale="true"
-                           (select)="onPieGridSelect($event)">
+                           [scheme]="colorScheme"
+                           [view]="pieView"
+                           autoScale="true">
       </ngx-charts-pie-grid>
 
       <hr>
@@ -149,7 +166,7 @@
       [gradient]="gradient"
       (select)="treemapSelect($event)"-->
       <h4>Risk compared with other ethnicities of same age and gender</h4>
-      <div class="row" *ngIf="show_treemap">
+      <div *ngIf="show_treemap" class="row">
         <p>Hover over each box to view the comparative risk score.</p>
         <ngx-charts-tree-map [labelFormatting]="labelFormat"
                              [results]="riskQuiz.relative_risks.graphed_rr">

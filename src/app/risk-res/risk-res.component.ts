@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { RiskResService, TSingleSeries } from '../../api/risk_res/risk_res.service';
 import { IRiskRes } from '../../api/risk_res/risk_res';
 import { Table } from '../table';
-import { Ng2TableModule } from 'ng2-table';
 import { NgTableComponent } from 'ng2-table/components/table/ng-table.component';
 
 
@@ -61,7 +60,7 @@ export class RiskResComponent extends Table<IRiskRes> implements OnInit, AfterCo
   ngAfterContentInit() {
     console.info('this.tableContainer', this.tableContainer, ';');
     this.tableContainer.rows[3].className = 'bg-red';
-    console.info('this.tableContainer.rows[3]', this.tableContainer.rows[3],';');
+    console.info('this.tableContainer.rows[3]', this.tableContainer.rows[3], ';');
     // const trs = this.tableContainer.nativeElement.children[0].children[0].children[1].children;
     /*if (rowNumber !== -1) {
       if (rowNumber > -1 && rowNumber < trs.length) { // Avoid updating class if no need to
@@ -79,6 +78,24 @@ export class RiskResComponent extends Table<IRiskRes> implements OnInit, AfterCo
     const ret = super.changeFilter(data, config);
     this.graphInit();
     return ret;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    const statsNum = document.getElementById('stats-num');
+    // [350,250]
+    // this.view = [statsNum.clientHeight - 20, statsNum.clientWidth];
+  }
+
+  getHeight(row: any, index: number): number {
+    console.info('row.client_risk', row.client_risk, ';');
+    return 50;
+  }
+
+  onCellClick(data: {column: string, row: IRiskRes}): any {
+    this.router
+      .navigateByUrl(`/results/${data.row.id}`)
+      .catch(console.error);
   }
 
   private graphInit() {
@@ -102,23 +119,5 @@ export class RiskResComponent extends Table<IRiskRes> implements OnInit, AfterCo
         }))(riskid_to_risk.get(k)))
       }))
       .filter(o => o.series.length);
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    const statsNum = document.getElementById('stats-num');
-    // [350,250]
-    // this.view = [statsNum.clientHeight - 20, statsNum.clientWidth];
-  }
-
-  getHeight(row: any, index: number): number {
-    console.info('row.client_risk', row.client_risk, ';');
-    return 50;
-  }
-
-  onCellClick(data: {column: string, row: IRiskRes}): any {
-    this.router
-      .navigateByUrl(`/results/${data.row.id}`)
-      .catch(console.error);
   }
 }

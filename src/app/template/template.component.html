@@ -1,4 +1,4 @@
-<app-richtext [elementId]="'contents'" (whenEdited)="onEdited($event)" #editor>
+<app-richtext #editor (whenEdited)="onEdited($event)" [elementId]="'contents'">
 </app-richtext>
 
 <form class="form-group" [formGroup]="form">

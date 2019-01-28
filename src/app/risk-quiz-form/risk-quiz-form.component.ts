@@ -43,21 +43,24 @@ export class RiskQuizFormComponent implements OnInit, AfterViewInit {
       'required': 'Ethnicity is required.'
     }
   };
-  public doClose = () => document.getElementById('parent').focus();
 
   constructor(private fb: FormBuilder,
               private riskStatsService: RiskStatsService) {
   }
 
+  public doClose = () => document.getElementById('parent').focus();
+
   ngAfterViewInit() {
-    this.riskStatsService.read('latest').subscribe(
-      content => {
-        this.riskStatsService.risk_json = content.risk_json as IRiskJson;
-        this.ethnicity2study = ethnicity2study(this.riskStatsService.risk_json);
-        this.all_ethnicities = this.ethnicities = Object.keys(this.ethnicity2study).sort();
-      },
-      console.error
-    );
+    this.riskStatsService
+      .read('latest')
+      .subscribe(
+        content => {
+          this.riskStatsService.risk_json = content.risk_json as IRiskJson;
+          this.ethnicity2study = ethnicity2study(this.riskStatsService.risk_json);
+          this.all_ethnicities = this.ethnicities = Object.keys(this.ethnicity2study).sort();
+        },
+        console.error
+      );
   }
 
   ngOnInit(): void {

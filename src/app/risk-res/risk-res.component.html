@@ -7,7 +7,7 @@
 </ngx-datatable>
 -->
 <div class="container">
-  <div class="row" style="margin-bottom: 3px" *ngIf="data.length">
+  <div *ngIf="data.length" class="row" style="margin-bottom: 3px">
     <div class="col" id="stats-num">
       <fieldset>
         <legend>Calculations</legend>
@@ -32,22 +32,22 @@
   </div>
 
   <div class="row">
-    <ng-table [config]="config" #tableContainer
+    <ng-table #tableContainer (cellClicked)="onCellClick($event)"
               (tableChanged)="onChangeTable(config)"
-              (cellClicked)="onCellClick($event)"
-              [rows]="data" [columns]="columns">
+              [columns]="columns"
+              [config]="config" [rows]="data">
     </ng-table>
     <ng-container *ngIf="config.paging && page !== numPages">
       <ngb-pagination
-        class="pagination-sm"
-        [(ngModel)]="page"
-        [collectionSize]="length"
-        [pageSize]="itemsPerPage"
-        [maxSize]="maxSize"
-        [boundaryLinks]="true"
-        [rotate]="false"
+        (numPages)="numPages = $event"
         (pageChanged)="onChangeTable(config, $event)"
-        (numPages)="numPages = $event">
+        [(ngModel)]="page"
+        [boundaryLinks]="true"
+        [collectionSize]="length"
+        [maxSize]="maxSize"
+        [pageSize]="itemsPerPage"
+        [rotate]="false"
+        class="pagination-sm">
       </ngb-pagination>
       <pre *ngIf="config.paging" class="card card-block card-header">Page: {{page}} / {{numPages}}</pre>
     </ng-container>
