@@ -319,7 +319,7 @@ export class RiskQuizFormSubmittedComponent implements OnInit, AfterContentInit 
               case math.smallerEq(_risk_pc, 50):
                 return 'average';
               case math.smallerEq(_risk_pc, 75):
-                return '2nd greatest';
+                return 'high';
               case math.larger(_risk_pc, 75):
               default:
                 return 'greatest';

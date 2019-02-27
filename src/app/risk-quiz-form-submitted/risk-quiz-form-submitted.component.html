@@ -21,24 +21,26 @@
     <div class="card-block">
       <h2>Glaucoma prevalence in your population is: {{riskQuiz.risk}}%.</h2>
 
+      <small>Population = age, gender and ethnicity</small>
+
       <h3>This puts you in the
         <strong>{{most_at_risk}}</strong> most at risk subgroup.
       </h3>
     </div>
-    <div *ngIf="riskQuiz.multiplicative_risks" class="container">
+    <div *ngIf="riskQuiz.multiplicative_risks && (riskQuiz.multiplicative_risks.family_history > 1 || riskQuiz.multiplicative_risks.diabetes > 1 || riskQuiz.multiplicative_risks.myopia > 1)" class="container">
       <div class="row">
         These health factors increase your risk by:
       </div>
       <div class="row">
-        <div *ngIf="riskQuiz.multiplicative_risks.family_history" class="col-sm">
+        <div *ngIf="riskQuiz.multiplicative_risks.family_history > 1" class="col-sm">
           <h3>{{riskQuiz.multiplicative_risks.family_history * 100}}%</h3>
           Family history
         </div>
-        <div *ngIf="riskQuiz.multiplicative_risks.diabetes" class="col-sm">
+        <div *ngIf="riskQuiz.multiplicative_risks.diabetes > 1" class="col-sm">
           <h3>{{riskQuiz.multiplicative_risks.diabetes * 100}}%</h3>
           Diabetes
         </div>
-        <div *ngIf="riskQuiz.multiplicative_risks.myopia" class="col-sm">
+        <div *ngIf="riskQuiz.multiplicative_risks.myopia > 1" class="col-sm">
           <h3>{{riskQuiz.multiplicative_risks.myopia * 100}}%</h3>
           Myopia
         </div>
