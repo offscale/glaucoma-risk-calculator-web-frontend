@@ -1,7 +1,8 @@
 import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import * as math from 'mathjs';
+import { all, create } from 'mathjs';
+
 
 import { GaugeLabel, GaugeSegment } from 'gauge-chart';
 import { calc_relative_risk, familial_risks_from_study, IMultiplicativeRisks, IRiskJson } from 'glaucoma-risk-calculator-engine';
@@ -16,6 +17,7 @@ import { SurveyService } from '../../api/survey/survey.service';
 import { ISurvey } from '../../api/survey/survey';
 import { StepperService } from '../stepper.service';
 
+const math = create(all);
 math.config({
   number: 'BigNumber',  // Default type of number:
                         // 'number' (default), 'BigNumber', or 'Fraction'

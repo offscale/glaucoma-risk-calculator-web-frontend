@@ -9,7 +9,6 @@ import { SurveyModule } from './survey/survey.module';
 import { StepperService } from './stepper.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SurveyService } from './survey/survey.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +28,7 @@ import { SurveyService } from './survey/survey.service';
 
     SurveyModule.forRoot()
   ],
-  providers: [StepperService, SurveyService],
+  providers: [StepperService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

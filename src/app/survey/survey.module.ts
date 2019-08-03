@@ -7,7 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule, MatInputModule, MatSelectModule, MatSnackBarModule, MatStepperModule } from '@angular/material';
 
 import { SurveyComponent } from './survey.component';
-import { SurveyService } from './survey.service';
+import { SurveyService } from '../../api/survey/survey.service';
 
 
 @NgModule({
@@ -17,7 +17,6 @@ import { SurveyService } from './survey.service';
     FlexLayoutModule,
     MatButtonModule, MatInputModule, MatSelectModule, MatSnackBarModule, MatStepperModule
   ],
-  providers: [SurveyService],
   exports: [SurveyComponent]
 })
 export class SurveyModule {

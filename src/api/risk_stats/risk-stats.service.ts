@@ -37,6 +37,7 @@ export class RiskStatsService {
     return this.http
       .get<IRiskStats>(`/api/risk_stats/${createdAt}`)
       .pipe(map(riskStatsJson => {
+        riskStatsJson.risk_json = JSON.parse(riskStatsJson.risk_json);
         localStorage.setItem('risk_stats_timestamp', new Date().toISOString());
         localStorage.setItem('risk_stats', JSON.stringify(riskStatsJson));
         return riskStatsJson;
