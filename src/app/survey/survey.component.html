@@ -1,0 +1,91 @@
+<mat-horizontal-stepper #stepper (selectionChange)="stepClick($event)" [linear]="true" class="app-toolbar">
+  <mat-step>
+    <ng-template matStepLabel>Pre<span fxHide fxShow.gt-xs> questions</span></ng-template>
+
+    <form [formGroup]="preQuestionsForm" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <h4 fxFlex="45%">Perceived risk prior</h4>
+
+      <mat-form-field fxFlex="45%">
+        <mat-select formControlName="perceived_risk" placeholder="Expected">
+          <mat-option value="0">Lowest risk</mat-option>
+          <mat-option value="25">Low risk</mat-option>
+          <mat-option value="50">Medium risk</mat-option>
+          <mat-option value="75">High risk</mat-option>
+          <mat-option value="100">Highest risk</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <h4 fxFlex="45%">Why are you doing the test</h4>
+      <mat-form-field fxFlex="45%">
+        <mat-select formControlName="recruiter" placeholder="Purpose">
+          <mat-option value="family">Affected family member</mat-option>
+          <mat-option value="recommended">On recommendation</mat-option>
+          <mat-option value="curious">Just curious</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <h4 fxFlex="45%"> How often do you visit an eyecare professional?</h4>
+
+      <mat-form-field fxFlex="45%">
+        <mat-select formControlName="eye_test_frequency" placeholder="Frequency">
+          <mat-option value="annual">Annually or more frequently</mat-option>
+          <mat-option value="biennial">Every 2 years</mat-option>
+          <mat-option value="quinquennial">Every 5 years</mat-option>
+          <mat-option value="rarely">Rarely</mat-option>
+          <mat-option value="never">Never</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <h4 fxFlex="45%">What vision issue do your glasses correct?</h4>
+      <mat-form-field fxFlex="45%">
+        <mat-select formControlName="glasses_use" placeholder="Refractive error">
+          <mat-option value="shortsighted">Shortsightedness</mat-option>
+          <mat-option value="longsighted">Longsightedness</mat-option>
+          <mat-option value="astigmatism">Astigmatised</mat-option>
+          <mat-option value="other">Other issue requiring glasses</mat-option>
+          <mat-option value="none">No glasses</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    Entering this data gives consent for deidentified data to be used in our open-source research.
+
+    <div style="margin-top: 5px">
+      <button (click)="next()" color="accent" mat-raised-button>Next</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Risk<span fxHide fxShow.gt-xs> calculator</span></ng-template>
+    <div style="padding: 0 10px">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Post<span fxHide fxShow.gt-xs> questions</span></ng-template>
+
+    <form [formGroup]="postQuestionsForm" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <h4 fxFlex="45%">Has your participation in this event impacted your attitude towards regular eye tests?</h4>
+
+      <mat-form-field fxFlex="45%">
+        <mat-select formControlName="behaviour_change" placeholder="Impact">
+          <mat-option value="as_recommended">I will get tested at the frequency it recommends</mat-option>
+          <mat-option value="less_likely">Less likely to see eyecare professional</mat-option>
+          <mat-option value="no_change">No change in my behaviour</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <h4 fxFlex="45%">
+        Sign up to Glaucoma Australia's newsletter
+      </h4>
+      <mat-form-field fxFlex="45%">
+        <input (focus)="submit()" formControlName="email_for_opsm" matInput placeholder="Email (optional)" type="email">
+      </mat-form-field>
+    </form>
+
+    <div>
+      <button (click)="submit() && showMsg()" mat-button mat-raised-button>Submit</button>
+      <button (click)="submit()" mat-button matStepperPrevious>Save & go back</button>
+      <button (click)="submit() && reset()" color="primary" mat-button>Submit & start again</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

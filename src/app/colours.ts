@@ -1,7 +1,7 @@
 import * as math from 'mathjs';
 
 export interface IString2String {
-  [str: string]: string
+  [str: string]: string;
 }
 
 export const colours: IString2String = Object.freeze({
@@ -21,13 +21,14 @@ export const colours: IString2String = Object.freeze({
 });
 
 export const numToColour = (num: number): string => {
-  if (math.compare(num, 5) < 1)
+  if (math.compare(num, 5) < 1) {
     return colours.darkgrey;
-  else if (math.compare(num, 25) < 1)
+  } else if (math.compare(num, 25) < 1) {
     return colours.cyan;
-  else if (math.compare(num, 50) < 1)
+  } else if (math.compare(num, 50) < 1) {
     return colours.mint;
-  else if (math.compare(num, 75) < 1)
+  } else if (math.compare(num, 75) < 1) {
     return colours.orange;
+  }
   return colours.pink;
 };

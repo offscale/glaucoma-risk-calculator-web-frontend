@@ -1,47 +1,35 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AlertsModule } from './alerts/alerts.module';
-import { NavbarModule } from './navbar/navbar.module';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { UsersModule } from './users/users.module';
-import { FooterModule } from './footer/footer.module';
-import { RiskQuizFormModule } from './risk-quiz-form/risk-quiz-form.module';
-
-import { TemplateService } from '../api/template/template.service';
-import { AuthService } from '../api/auth/auth.service';
-
-import { AuthGuard } from './auth/auth.guard';
-import { AuthInterceptor } from './auth/auth.interceptors';
-import { AuthModule } from './auth/auth.module';
-
-import { rootRoutes } from './app.routes';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatTableModule, MatToolbarModule } from '@angular/material';
+import { SurveyModule } from './survey/survey.module';
+import { StepperService } from './stepper.service';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AppService } from './app.service';
-
+import { SurveyService } from './survey/survey.service';
 
 @NgModule({
+  declarations: [
+    AppComponent
+    // ResultsTableComponent
+  ],
   imports: [
-    RouterModule, RouterModule.forRoot(rootRoutes),
-    BrowserModule, HttpClientModule, FormsModule,
-    NavbarModule, FooterModule, UsersModule,
-    AlertsModule.forRoot(),
-    RiskQuizFormModule, AuthModule, DashboardModule
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+
+    FlexLayoutModule,
+
+    MatToolbarModule,
+    MatTableModule,
+
+    SurveyModule.forRoot()
   ],
-  declarations: [AppComponent],
-  providers: [
-    AppService, AuthService, AuthGuard,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
-    TemplateService
-  ],
+  providers: [StepperService, SurveyService],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

@@ -10,5 +10,5 @@ export interface ITemplateBase {
 }
 
 export interface ITemplateBatch {
-  templates: ITemplate[]
+  templates: ITemplate[];
 }

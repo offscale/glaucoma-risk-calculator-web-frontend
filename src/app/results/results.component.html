@@ -1,0 +1,204 @@
+<br>
+<button (click)="redo()" mat-button>Redo just this step (step 2)</button>
+<button (click)="stepperService.stepper.next()" mat-raised-button>Next step</button>
+<br>
+
+<div style="padding-top: 10px; width: 100%; max-width: 30em; max-height: 30em;">
+  <ng-gauge-chart *ngIf="gauge"
+                  [animationSecs]=progressGraph.animationSecs
+                  [bgColor]=progressGraph.bgColor
+                  [bgRadius]=progressGraph.bgRadius
+                  [labels]=progressGraph.labels
+                  [reverse]=progressGraph.reverse
+                  [rounded]=progressGraph.rounded
+                  [segments]=progressGraph.segments>
+  </ng-gauge-chart>
+</div>
+<h3 style="text-underline: single">
+  {{recommendation}}
+</h3>
+<h5 style="text-underline: single; font-style: italic;">
+  ({{recommendationSubtitle | lowercase}})
+</h5>
+
+<mat-card>
+  <mat-card-title>Glaucoma prevalence in your population is: {{riskQuiz.risk}}%.</mat-card-title>
+  <mat-card-content>
+    <small>Population = age, gender and ethnicity</small>
+
+    <h3>This puts you in the
+      <strong>{{mostAtRisk}}</strong> most at risk subgroup.
+    </h3>
+  </mat-card-content>
+</mat-card>
+
+<div
+  *ngIf="riskQuiz.multiplicativeRisks && (riskQuiz.multiplicativeRisks.family_history > 1 || riskQuiz.multiplicativeRisks.diabetes > 1 || riskQuiz.multiplicativeRisks.myopia > 1)"
+  class="container">
+  <div class="row">
+    These health factors increase your risk by:
+  </div>
+  <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <mat-card *ngIf="riskQuiz.multiplicativeRisks.family_history > 1" fxFlex>
+      <mat-card-title>{{riskQuiz.multiplicativeRisks.family_history * 100}}%</mat-card-title>
+      <mat-card-subtitle>Family history</mat-card-subtitle>
+    </mat-card>
+    <mat-card *ngIf="riskQuiz.multiplicativeRisks.diabetes > 1" fxFlex>
+      <mat-card-title>{{riskQuiz.multiplicativeRisks.diabetes * 100}}%</mat-card-title>
+      <mat-card-subtitle>Diabetes</mat-card-subtitle>
+    </mat-card>
+    <mat-card *ngIf="riskQuiz.multiplicativeRisks.myopia > 1" fxFlex>
+      <mat-card-title>{{riskQuiz.multiplicativeRisks.myopia * 100}}%</mat-card-title>
+      <mat-card-subtitle>Myopia</mat-card-subtitle>
+    </mat-card>
+  </div>
+</div>
+
+<h6>Based off submission:</h6>
+
+<ng-container *ngIf="submissionHeader && submissionHeader.length">
+  <app-results-table [dataSource]="[submissionRow]" fxHide fxShow.gt-sm fxShow.sm>
+  </app-results-table>
+
+  <dl *ngFor="let header of submissionHeader" fxHide fxShow.lt-sm>
+    <dt>{{header}}</dt>
+    <dd>{{submissionRow[header]}}</dd>
+  </dl>
+</ng-container>
+
+<hr>
+<h5 class="mat-h5">Share with family and friends to calculate their own risk</h5>
+<div aria-label="Share" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <!--
+  <div aria-label="email" class="btn-group mr-2" role="group">
+    <button (click)="openModal(sendEmailTemplate)" class="btn btn-lg btn-warning">Share as email</button>
+    <ng-template #sendEmailTemplate>
+      <div class="modal-body text-center">
+        <form class="container form-group">
+          <div class="row">
+            <div class="col-2">
+              <label class="col-form-label" for="email">
+                To:
+              </label>
+            </div>
+            <div class="col-auto">
+              <input #toEmail class="form-check-input" id="email" placeholder="Email">
+            </div>
+          </div>
+
+          <div [innerHtml]="templateService.getTpl('email') + ' ' + shareUrl" class="row"></div>
+          <button (click)="sendEmail(toEmail.value)" [disabled]="!toEmail.value.length"
+                  [ngClass]="{'btn-outline-success': toEmail.value.length}"
+                  class="btn" type="submit">
+            Send email
+          </button>
+        </form>
+      </div>
+    </ng-template>
+  </div>
+  -->
+  <div aria-label="facebook" class="btn-group mr-2" role="group">
+    <a [href]="'https://www.facebook.com/sharer/sharer.php?u='+shareUrl+'&quote='+templateService.getTpl('facebook')"
+       mat-button style="background-color: #3b5998; color: white"
+       target="_blank">
+      Share on facebook
+    </a>
+  </div>
+  <div aria-label="twitter" class="btn-group mr-2" role="group">
+    <a #tweet [href]="'https://twitter.com/intent/tweet?text='+templateService.getTpl('twitter')+' '+shareUrl"
+       data-size="large" id="tweet"
+       mat-button style="background-color: #55acee; color: white" target="_blank">
+      Tweet
+    </a>
+  </div>
+  <div aria-label="copy-link" class="btn-group" role="group">
+    <button (cbOnSuccess)="isCopied = true" [cbContent]="shareUrl" [class.btn-success]="isCopied"
+            mat-stroked-button ngxClipboard>
+      Copy link
+    </button>
+  </div>
+</div>
+<hr>
+
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Review references, notes, and see more visualisations of risk
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <!--<app-risk-pointer [risk_value]="riskQuiz.clientRisk"></app-risk-pointer>-->
+
+  <!--
+  (legendLabelClick)="onLegendLabelClick($event)"
+  [scheme]="colorScheme"
+  [gradient]="gradient"
+  (select)="treemapSelect($event)"-->
+  <h4>Risk compared with other ethnicities of same age and gender</h4>
+  <div *ngIf="showTreemap" class="row">
+    <p>Hover over each box to view the comparative risk score.</p>
+    <ngx-charts-tree-map [labelFormatting]="labelFormat"
+                         [results]="riskQuiz.relativeRisks.graphed_rr">
+    </ngx-charts-tree-map>
+
+    <table class="table table-responsive table-striped">
+      <thead>
+      <tr>
+        <th>Study</th>
+        <th>Prevalence</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let leg of treemapLegend" [style.background-color]="leg.color">
+        <td>
+          {{leg.name}}
+        </td>
+        <td>
+          {{leg.value}}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--
+  <div class="row">
+    <pre>multiplicativeRisks = {{riskQuiz.multiplicativeRisks|json}}</pre>
+  </div>
+  <div class="row">
+    <pre>relativeRisks = {{riskQuiz.relativeRisks|json}}</pre>
+  </div>
+  -->
+
+  <!--
+  <h4>Other charts</h4>
+
+  <div class="container-fluid">
+    <div class="row justify-content-md-center">
+      <div class="col" *ngIf="showPieAdv">
+        <ngx-charts-advanced-pie-chart [view]="pieAdvDim"
+                                       [scheme]="pieAdvColorScheme"
+                                       [results]="pieAdvData"
+                                       [gradient]="pieAdvGradient"
+
+                                       (select)="pieAdvOnSelect($event)">
+        </ngx-charts-advanced-pie-chart>
+  -->
+  <!-- [total-label]="pieAdvLabel" -->
+  <!--
+      </div>
+    </div>
+  </div>
+  -->
+
+  <h4>Notes</h4>
+  <ul *ngFor="let note of notes">
+    <li>{{note}}</li>
+  </ul>
+  <ul>
+    <li [innerHTML]="htmlOfLastNote"></li>
+  </ul>
+
+  <h4>References</h4>
+  <div [innerHTML]="htmlOfAllRefs"></div>
+</mat-expansion-panel>

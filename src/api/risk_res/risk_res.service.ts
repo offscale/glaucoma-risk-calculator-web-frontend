@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { IRiskQuiz } from '../../app/risk-quiz-form/risk-quiz.model';
 import { IRiskRes, IRiskResBase } from './risk_res';
 import { map } from 'rxjs/operators';
+import { IRiskQuiz } from '../../app/quiz/risk-quiz.model';
 
 export type TSingleSeries = Array<{name: string, value: number}>;
 
@@ -17,8 +17,8 @@ export class RiskResService {
   constructor(private http: HttpClient) {
   }
 
-  create(risk_res: IRiskQuiz): Observable<IRiskRes> {
-    return this.http.post<IRiskRes>('/api/risk_res', risk_res);
+  create(riskRes: IRiskQuiz): Observable<IRiskRes> {
+    return this.http.post<IRiskRes>('/api/risk_res', riskRes);
   }
 
   read(id: number | 'latest'): Observable<IRiskRes> {

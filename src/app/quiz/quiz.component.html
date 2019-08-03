@@ -1,0 +1,58 @@
+<form (ngSubmit)="onSubmit()" *ngIf="riskQuiz" [formGroup]="riskQuiz"
+      fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <fieldset fxFlex="100%">
+    <legend>Gender</legend>
+    <mat-radio-group formControlName="gender">
+      <mat-radio-button fxFlex value="male">Male</mat-radio-button>
+      <mat-radio-button fxFlex value="female">Female</mat-radio-button>
+    </mat-radio-group>
+  </fieldset>
+
+  <mat-form-field fxFlex="100%" id="age">
+    <input formControlName="age" matInput max="111" min="0" placeholder="Age" type="number">
+  </mat-form-field>
+
+  <mat-form-field fxFlex="100%" id="ethnicity" style="padding-bottom: 5px">
+    <mat-select #singleSelect formControlName="ethnicity" placeholder="Ethnicity">
+      <mat-option>
+        <ngx-mat-select-search [formControl]="ethnicityFilterCtrl" [placeholderLabel]="'Select closest match...'">
+        </ngx-mat-select-search>
+      </mat-option>
+      <mat-option *ngFor="let ethnicity of filteredEthnicities | async" [value]="ethnicity">
+        {{ethnicity}}
+      </mat-option>
+    </mat-select>
+    <mat-hint *ngIf="!riskQuiz.value.ethnicity">Select closest match</mat-hint>
+
+  </mat-form-field>
+
+
+  <!--
+  <mat-form-field fxFlex="100%">
+    <mat-select placeholder="Ethnicity" formControlName="ethnicity" *ngFor="let ethnicity of ethnicities">
+      <mat-option value="{{ethnicity}}">{{ethnicity}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  -->
+
+  <fieldset fxFlex="40%" fxFlex.gt-sm="30%">
+    <legend>Family history</legend>
+    <mat-radio-group fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <mat-checkbox formControlName="parent" fxFlex name="parent">Parent</mat-checkbox>
+      <mat-checkbox formControlName="sibling" fxFlex name="sibling">Sibling</mat-checkbox>
+    </mat-radio-group>
+  </fieldset>
+
+  <fieldset fxFlex="40%" fxFlex.gt-sm="30%">
+    <legend>Other issues</legend>
+
+    <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <mat-checkbox formControlName="myopia" fxFlex name="myopia">Myopia</mat-checkbox>
+      <mat-checkbox formControlName="diabetes" fxFlex name="diabetes">Diabetes</mat-checkbox>
+    </div>
+  </fieldset>
+
+  <button color="accent" fxFlex="100%" mat-raised-button style="width: 100%; height: 100%">
+    Calculate risk
+  </button>
+</form>

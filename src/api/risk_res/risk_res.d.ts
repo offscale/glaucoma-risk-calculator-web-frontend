@@ -10,11 +10,7 @@ export interface IRiskResBase {
   study: string;
   myopia?: boolean;
   diabetes?: boolean;
-  ocular_disease_history?: string[];
-  ocular_surgery_history?: string[];
   other_info?: string;
-  family_history_of_glaucoma?: string[];
-  email?: string;
   createdAt?: string | Date;
   client_risk: number;
   sibling?: boolean; // sibling has glaucoma?

@@ -1,20 +1,34 @@
-<header [ngStyle]="getBottom()">
-  <app-navbar></app-navbar>
-</header>
+<mat-toolbar class="app-toolbar" color="primary" routerLink="/">
+  <a routerLink="/">Glaucoma&nbsp;<span fxHide.xs>Risk</span>&nbsp;Calculator</a>
+  <span fxFlex></span>
+  <a href="https://glaucoma.org.au">
+    <img alt="Glaucoma Australia" fxHide.lt-md src="../assets/ga-50px.png" style="height: 50px; width: 135px;"/>
+  </a>
+</mat-toolbar>
 
-<div class="container" style="margin-left: 0">
-  <router-outlet></router-outlet>
-</div>
-<!--
-<hr>
+<app-survey #survey></app-survey>
 
-<div class="container">
-  <div class="row offset-sm-9">
-    <button class="btn btn-lg btn-danger"
-            (click)="addAlert()">Add alert</button>
+<footer class="docs-footer">
+  <div class="docs-footer-list">
+    <div class="docs-footer-logo">
+      <div class="footer-logo">
+        <a href="https://offscale.io">
+          <img alt="Offscale.io"
+               class="docs-footer-angular-logo"
+               src="../assets/Offscale-logo-white.png">
+        </a>
+      </div>
+    </div>
+
+    <div class="docs-footer-version" fxLayout="column">
+      <span class="version" fxFlex>App version: 0.0.53; API version: 0.0.46</span>
+      <span fxFlex>Open-sourced by <a href="https://offscale.io"
+                                      style="border-bottom: 1px dotted #777;">Offscale.io</a> &copy; 2019.</span>
+    </div>
+
+    <div class="docs-footer-copyright">
+      <span>Development sponsored by <a href="https://offscale.io"
+                                        style="border-bottom: 1px dotted #777;">Offscale.io</a></span>
+    </div>
   </div>
-</div>
--->
-<hr>
-
-<app-footer></app-footer>
+</footer>

@@ -1,0 +1,76 @@
+<table [dataSource]="dataSource" mat-table>
+  <!-- risk Column -->
+  <ng-container matColumnDef="client_risk">
+    <th *matHeaderCellDef mat-header-cell> client_risk</th>
+    <td *matCellDef="let element" mat-cell> {{element.client_risk}} </td>
+  </ng-container>
+
+  <!-- id Column -->
+  <ng-container matColumnDef="id">
+    <th *matHeaderCellDef mat-header-cell> id</th>
+    <td *matCellDef="let element" mat-cell> {{element.id}} </td>
+  </ng-container>
+
+  <!-- Age Column -->
+  <ng-container matColumnDef="age">
+    <th *matHeaderCellDef mat-header-cell>Age</th>
+    <td *matCellDef="let element" mat-cell> {{element.age}} </td>
+  </ng-container>
+
+  <!-- Gender Column -->
+  <ng-container matColumnDef="gender">
+    <th *matHeaderCellDef mat-header-cell> Gender</th>
+    <td *matCellDef="let element" mat-cell> {{element.gender}} </td>
+  </ng-container>
+
+  <!-- Ethnicity Column -->
+  <ng-container matColumnDef="ethnicity">
+    <th *matHeaderCellDef mat-header-cell> Ethnicity</th>
+    <td *matCellDef="let element" mat-cell> {{element.ethnicity}} </td>
+  </ng-container>
+
+  <!-- Study Column -->
+  <ng-container matColumnDef="study">
+    <th *matHeaderCellDef mat-header-cell> Study</th>
+    <td *matCellDef="let element" mat-cell> {{element.study}} </td>
+  </ng-container>
+
+  <!-- Parent Column -->
+  <ng-container matColumnDef="parent">
+    <th *matHeaderCellDef mat-header-cell> Parent</th>
+    <td *matCellDef="let element" mat-cell> {{element.parent}} </td>
+  </ng-container>
+
+  <!-- Sibling Column -->
+  <ng-container matColumnDef="sibling">
+    <th *matHeaderCellDef mat-header-cell> Sibling</th>
+    <td *matCellDef="let element" mat-cell> {{element.sibling}} </td>
+  </ng-container>
+
+  <!-- Myopia Column -->
+  <ng-container matColumnDef="myopia">
+    <th *matHeaderCellDef mat-header-cell> Myopia</th>
+    <td *matCellDef="let element" mat-cell> {{element.myopia}} </td>
+  </ng-container>
+
+  <!-- Diabetes Column -->
+  <ng-container matColumnDef="diabetes">
+    <th *matHeaderCellDef mat-header-cell> Diabetes</th>
+    <td *matCellDef="let element" mat-cell> {{element.diabetes}} </td>
+  </ng-container>
+
+  <!-- updatedAt Column -->
+  <ng-container matColumnDef="updatedAt">
+    <th *matHeaderCellDef mat-header-cell> updatedAt</th>
+    <td *matCellDef="let element" mat-cell> {{element.updatedAt}} </td>
+  </ng-container>
+
+  <!-- createdAt Column -->
+  <ng-container matColumnDef="createdAt">
+    <th *matHeaderCellDef mat-header-cell> createdAt</th>
+    <td *matCellDef="let element" mat-cell> {{element.createdAt}} </td>
+  </ng-container>
+
+  <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+  <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+</table>

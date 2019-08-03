@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { AlertsService } from '../../app/alerts/alerts.service';
 import { ITemplate, ITemplateBase, ITemplateBatch } from './template.d';
 
 
@@ -12,8 +11,7 @@ import { ITemplate, ITemplateBase, ITemplateBatch } from './template.d';
 export class TemplateService {
   public templates: Map<string, ITemplateBase> = new Map();  // silly cache
 
-  constructor(private http: HttpClient,
-              private alertsService: AlertsService) {}
+  constructor(private http: HttpClient) {}
 
   public hasTpl(kind: string = 'email'): boolean {
     return this.templates.has(kind) && this.templates.get(kind).contents
@@ -23,7 +21,7 @@ export class TemplateService {
   public setTpl(contents: string, kind: string = 'email') {
     this.hasTpl(kind) ?
       this.templates.get(kind).contents = contents
-      : this.templates.set(kind, { contents: contents, createdAt: new Date().toISOString() });
+      : this.templates.set(kind, { contents, createdAt: new Date().toISOString() });
   }
 
   public getTpl(kind: string = 'email'): string {
@@ -34,8 +32,8 @@ export class TemplateService {
     return this.http.post<ITemplate>('/api/template', template);
   }
 
-  createBatch(new_templates: ITemplateBase[]): Observable<ITemplateBatch> {
-    return this.http.post<ITemplateBatch>('/api/templates', { templates: new_templates });
+  createBatch(newTemplates: ITemplateBase[]): Observable<ITemplateBatch> {
+    return this.http.post<ITemplateBatch>('/api/templates', { templates: newTemplates });
   }
 
   read(createdAt: string | 'latest' | Date, kind: string = 'email'): Observable<ITemplate> {
@@ -51,7 +49,7 @@ export class TemplateService {
           return templates;
         }),
         catchError(error =>
-          this.alertsService.add(error) as any || throwError(error)
+          console.error(error) as any || throwError(error)
         )) as Observable<{templates: ITemplate[]}>;
   }
 

@@ -7,12 +7,12 @@ import { IServerStatus } from './server-status.interfaces';
 
 @Injectable()
 export class ServerStatusService {
-  last_resp: IServerStatus;
+  previousResponse: IServerStatus;
 
   constructor(private http: HttpClient) { }
 
   get(): Observable<IServerStatus> {
-    return this.last_resp ? of(this.last_resp)
+    return this.previousResponse ? of(this.previousResponse)
       : this.http.get<IServerStatus>('/api');
   }
 }
