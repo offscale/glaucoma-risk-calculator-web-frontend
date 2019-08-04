@@ -20,7 +20,8 @@ import { StepperService } from '../stepper.service';
 export class SurveyComponent implements OnInit, AfterContentInit {
   public preQuestionsForm: FormGroup;
   public postQuestionsForm: FormGroup;
-  @ViewChild('stepper', { static: false }) public stepper: MatStepper;
+  @ViewChild('stepper', { static: true }) public stepper: MatStepper;
+  // tslint:disable-next-line:no-input-rename
   @Input('select') public selectedStep;
   public showRiskQuiz1 = false;
   private showPost = false;
@@ -42,7 +43,7 @@ export class SurveyComponent implements OnInit, AfterContentInit {
 
     this.postQuestionsForm = this.formBuilder.group({
       behaviour_change: ['', Validators.required],
-      email_for_opsm: ['', Validators.email]
+      email: ['', Validators.email]
     });
   }
 
@@ -113,12 +114,16 @@ export class SurveyComponent implements OnInit, AfterContentInit {
         if (this.postQuestionsForm.invalid) {
           return false;
         }
-        const email_for_opsm: string = this.postQuestionsForm.value.email_for_opsm;
+        const email: string = this.postQuestionsForm.value.email;
         const behaviour_change: ISurveyBase['behaviour_change'] = this.postQuestionsForm.value.behaviour_change;
 
+        if (this.surveyService.survey.id == null) {
+          this.snackBar.open('survey missing');
+        }
+
         return merge(
-          this.surveyService.addEmail(email_for_opsm),
-          this.surveyService.update(this.surveyService.survey.id, { behaviour_change, email: email_for_opsm })
+          this.surveyService.addEmail(email),
+          this.surveyService.update(this.surveyService.survey.id, { behaviour_change, email })
         );
     }
   }

@@ -9,6 +9,7 @@ import { SurveyModule } from './survey/survey.module';
 import { StepperService } from './stepper.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ServerStatusModule } from './server-status/server-status.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AppComponent } from './app.component';
     MatToolbarModule,
     MatTableModule,
 
-    SurveyModule.forRoot()
+    SurveyModule.forRoot(),
+    ServerStatusModule
   ],
   providers: [StepperService],
   bootstrap: [AppComponent]

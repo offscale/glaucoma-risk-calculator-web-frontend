@@ -59,7 +59,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
   // </advanced-pie-chart>
   @Input() private submitted = false;
   private id: number = undefined;
-  private progressGraph = {
+  public progressGraph = {
     bgRadius: 60,
     bgColor: colours.indigo,
     rounded: false,
@@ -80,7 +80,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
   // private pieAdvDim: any[] = [700, 400];
   private pieAdvData = [];
   private showPieAdv = false;
-  private treemapLegend: Array<{color: string, name: string, value: number}> = [];
+  public treemapLegend: Array<{color: string, name: string, value: number}> = [];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -141,7 +141,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
       .catch(console.error);
   }
 
-  private labelFormat = (label: {
+  public labelFormat = (label: {
     data: {
       data: {name: string, value: number},
       x: number, y: number, width: number, height: number,

@@ -23,9 +23,9 @@ export class QuizComponent implements OnInit, AfterContentInit, OnDestroy {
   /** control for the selected ethnicity */
   private ethnicityCtrl = new FormControl();
   /** control for the MatSelect filter keyword */
-  private ethnicityFilterCtrl = new FormControl();
+  public ethnicityFilterCtrl = new FormControl();
   /** list of ethnicities filtered by search keyword */
-  private filteredEthnicities = new ReplaySubject<string[]>(1);
+  public filteredEthnicities = new ReplaySubject<string[]>(1);
   private ethnicities: string[] = [];
   private ethnicity2study: {};
 
@@ -85,7 +85,7 @@ export class QuizComponent implements OnInit, AfterContentInit, OnDestroy {
     this.destructionSubject.complete();
   }
 
-  private onSubmit() {
+  public onSubmit() {
     const route = this.router.config.find(r => r.path === 'results');
     this.riskQuiz.value.study = this.ethnicity2study[this.riskQuiz.value.ethnicity];
 
