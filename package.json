@@ -1,6 +1,21 @@
 {
   "name": "glaucoma-risk-calculator-web-frontend",
   "version": "0.0.54",
+  "keywords": [
+    "angular",
+    "glaucoma",
+    "risk-calculator",
+    "epidemiology"
+  ],
+  "homepage": "https://github.com/glaucoma/glaucoma-risk-calculator-web-frontend#readme",
+  "bugs": "https://github.com/glaucoma/glaucoma-risk-calculator-web-frontend/issues",
+  "license": "(Apache-2.0 OR MIT)",
+  "author": "Samuel Marks @SamuelMarks",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/glaucoma/glaucoma-risk-calculator-web-frontend"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
@@ -9,7 +24,6 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "~8.2.0",
     "@angular/cdk": "^8.1.2",
