@@ -1,6 +1,6 @@
 {
   "name": "glaucoma-risk-calculator-web-frontend",
-  "version": "0.0.54",
+  "version": "0.0.55",
   "keywords": [
     "angular",
     "glaucoma",
@@ -40,7 +40,7 @@
     "gauge-chart": "glaucoma/gauge-chart",
     "glaucoma-risk-calculator-engine": "glaucoma/glaucoma-risk-calculator-engine-dist",
     "hammerjs": "^2.0.8",
-    "mathjs": "^6.0.3",
+    "mathjs": "^6.0.4",
     "ngx-clipboard": "^12.2.0",
     "ngx-mat-select-search": "^1.8.0",
     "rxjs": "~6.5.2",
@@ -52,8 +52,8 @@
     "@angular/cli": "~8.2.0",
     "@angular/compiler-cli": "~8.2.0",
     "@angular/language-service": "~8.2.0",
-    "@types/node": "~12.6.9",
-    "@types/jasmine": "~3.3.16",
+    "@types/node": "~12.7.1",
+    "@types/jasmine": "~3.4.0",
     "@types/jasminewd2": "~2.0.6",
     "codelyzer": "^5.1.0",
     "jasmine-core": "~3.4.0",

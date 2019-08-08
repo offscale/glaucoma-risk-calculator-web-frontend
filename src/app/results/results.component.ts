@@ -154,6 +154,10 @@ export class ResultsComponent implements OnInit, AfterContentInit {
       'White European (Canadian; Italian; Irish; Welsh; Scottish)': 'White (Can.)',
       'White (Northern European: Australian)': 'White (Aus.)'
     };
+    if (!label.data || !label.data.data) {
+      console.warn('label.data.data is null');
+      return;
+    }
     if (this.treemapLegend.findIndex(o => o.color === label.data.fill) < 0) {
       this.treemapLegend.push({
         color: label.data.fill,

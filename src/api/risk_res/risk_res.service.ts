@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 
 import { IRiskRes, IRiskResBase } from './risk_res';
 import { map } from 'rxjs/operators';
+
 import { IRiskQuiz } from '../../app/quiz/risk-quiz.model';
 
 export type TSingleSeries = Array<{name: string, value: number}>;
