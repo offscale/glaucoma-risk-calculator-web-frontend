@@ -1,14 +1,14 @@
 Glaucoma risk calculator web-frontend
 =====================================
 
-For the files ready to deploy, see the [glaucoma-risk-calculator-web-frontend-dist](https://github.com/glaucoma-australia/glaucoma-risk-calculator-web-frontend-dist) repo.
+For the files ready to deploy, see the [glaucoma-risk-calculator-web-frontend-dist](https://github.com/offscale/glaucoma-risk-calculator-web-frontend-dist) repo.
 
 ## Technical details
 Built in TypeScript with Angular 8.2, following latest official standards for scaffolding.
 
 ## Deploy
 
-Requires a server with HTTPS—for Office 365 / Microsoft Graph auth—and the API: [glaucoma-risk-calculator-web-frontend-dist](https://github.com/glaucoma-australia/glaucoma-risk-calculator-web-frontend-dist); be colocated so relative paths work, like `.get('/api')`. With nginx and other servers you can fake this with `proxy_pass`. Alternatively many servers allow you to actually run both side-by-side, e.g.: IIS.
+Requires a server with HTTPS—for Office 365 / Microsoft Graph auth—and the API: [glaucoma-risk-calculator-web-frontend-dist](https://github.com/offscale/glaucoma-risk-calculator-web-frontend-dist); be colocated so relative paths work, like `.get('/api')`. With nginx and other servers you can fake this with `proxy_pass`. Alternatively many servers allow you to actually run both side-by-side, e.g.: IIS.
 
 ## Reuse directories with
 

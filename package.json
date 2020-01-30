@@ -7,14 +7,14 @@
     "risk-calculator",
     "epidemiology"
   ],
-  "homepage": "https://github.com/glaucoma/glaucoma-risk-calculator-web-frontend#readme",
-  "bugs": "https://github.com/glaucoma/glaucoma-risk-calculator-web-frontend/issues",
+  "homepage": "https://github.com/offscale/glaucoma-risk-calculator-web-frontend#readme",
+  "bugs": "https://github.com/offscale/glaucoma-risk-calculator-web-frontend/issues",
   "license": "(Apache-2.0 OR MIT)",
   "author": "Samuel Marks @SamuelMarks",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/glaucoma/glaucoma-risk-calculator-web-frontend"
+    "url": "https://github.com/offscale/glaucoma-risk-calculator-web-frontend"
   },
   "scripts": {
     "ng": "ng",
