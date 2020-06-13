@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.router.events.subscribe((event) => {
       if ((event as {url: string}).url
         && (event as {url: string}).url.startsWith('/results')

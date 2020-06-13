@@ -101,7 +101,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
       ':' + window.location.port : ''}`;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (!(this.riskQuiz instanceof RiskQuiz)) {
       this.riskQuiz = new RiskQuiz(this.riskQuiz);
     }
@@ -110,7 +110,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
       .subscribe(() => this.tweet.href = this.templateService.getTpl('twitter'));
   }
 
-  ngAfterContentInit() {
+  ngAfterContentInit(): void {
     if (this.submitted) {
       this.prepareView();
     } else if (this.riskQuiz != null && this.riskQuiz.riskQuiz != null) {
@@ -134,7 +134,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
     }
   }
 
-  public redo() {
+  public redo(): void {
     this.submittedChange.emit(false);
     this.router
       .navigate(['/'])
@@ -173,7 +173,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
     return `${ResultsComponent.getHostOrigin()}/results/${this.id}`;
   }
 
-  private onPieGridSelect(event) {
+  private onPieGridSelect(event): void {
     console.log(event);
   }
 
@@ -205,7 +205,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
   }
   */
 
-  private gaugeView(riskPercent: number, riskPercentAsStr: string) {
+  private gaugeView(riskPercent: number, riskPercentAsStr: string): void {
     this.progressGraph.labels.push(
       new GaugeLabel({
         color: colours.white,
@@ -234,7 +234,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
 
   // modal
 
-  private pieAdvView(multiplicativeRisks: IMultiplicativeRisks) {
+  private pieAdvView(multiplicativeRisks: IMultiplicativeRisks): void {
     this.pieAdvData = Object
       .keys(multiplicativeRisks)
       .map(k => ({ name: k, value: multiplicativeRisks[k] }))
@@ -242,7 +242,7 @@ export class ResultsComponent implements OnInit, AfterContentInit {
     this.showPieAdv = this.riskQuiz.riskQuiz.sibling || this.riskQuiz.riskQuiz.parent;
   }
 
-  private prepareView() {
+  private prepareView(): void {
     this.submissionHeader = Object
       .keys(this.riskQuiz.riskQuiz)
       .filter(k => ['createdAt', 'updatedAt', 'id', 'clientRisk'].indexOf(k) === -1);

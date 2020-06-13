@@ -14,7 +14,7 @@ export class ServerStatusComponent implements OnInit {
 
   constructor(private serverStatusService: ServerStatusService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.serverStatusService.get()
       .subscribe(serverStatus => this.serverStatus = serverStatus);
   }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { MatStepper } from '@angular/material';
+import { MatStepper } from '@angular/material/stepper';
+
 
 @Injectable({
   providedIn: 'root'

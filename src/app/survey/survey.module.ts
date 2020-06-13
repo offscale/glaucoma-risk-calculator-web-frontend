@@ -4,7 +4,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule, MatInputModule, MatSelectModule, MatSnackBarModule, MatStepperModule } from '@angular/material';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { SurveyComponent } from './survey.component';
 import { SurveyService } from '../../api/survey/survey.service';
@@ -20,7 +25,7 @@ import { SurveyService } from '../../api/survey/survey.service';
   exports: [SurveyComponent]
 })
 export class SurveyModule {
-  public static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders<SurveyModule> {
     return { ngModule: SurveyModule, providers: [SurveyService] };
   }
 }

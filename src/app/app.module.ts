@@ -4,7 +4,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatTableModule, MatToolbarModule } from '@angular/material';
+
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
+
 import { SurveyModule } from './survey/survey.module';
 import { StepperService } from './stepper.service';
 import { AppRoutingModule } from './app-routing.module';

@@ -3,13 +3,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { MatSnackBar, MatStepper } from '@angular/material';
+
 
 import { merge, Observable } from 'rxjs';
 
 import { SurveyService } from '../../api/survey/survey.service';
 import { ISurvey, ISurveyBase } from '../../api/survey/survey.d';
 import { StepperService } from '../stepper.service';
+import { MatStepper } from '@angular/material/stepper';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -33,7 +35,7 @@ export class SurveyComponent implements OnInit, AfterContentInit {
               private stepperService: StepperService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.preQuestionsForm = this.formBuilder.group({
       perceived_risk: ['', Validators.required],
       recruiter: ['', Validators.required],
@@ -47,7 +49,7 @@ export class SurveyComponent implements OnInit, AfterContentInit {
     });
   }
 
-  ngAfterContentInit() {
+  ngAfterContentInit(): void {
     if (window.location.pathname.startsWith('/results/') && this.stepper != null && this.stepper.selectedIndex === 0) {
       this.showRiskQuiz1 = true;
       if (this.stepper.steps != null) {
@@ -63,11 +65,11 @@ export class SurveyComponent implements OnInit, AfterContentInit {
     return true;
   }
 
-  public next() {
+  public next(): void {
     this.handleCheckValidityAndNextObservable(() => this.stepper.next());
   }
 
-  public previous() {
+  public previous(): void {
     this.stepper.previous();
   }
 
@@ -75,7 +77,7 @@ export class SurveyComponent implements OnInit, AfterContentInit {
     return this.stepper.selectedIndex;
   }
 
-  public reset() {
+  public reset(): void {
     this.preQuestionsForm.reset();
     this.postQuestionsForm.reset();
     this.stepper.reset();
@@ -84,7 +86,7 @@ export class SurveyComponent implements OnInit, AfterContentInit {
       .catch(console.error);
   }
 
-  stepClick($event: StepperSelectionEvent) {
+  stepClick($event: StepperSelectionEvent): void {
     const invalid = this.checkValidityAndNextObservable();
     if (typeof invalid === 'boolean' && invalid === false) {
       this.snackBar.open('Fill out required fields', void 0, { duration: 5000 });
@@ -96,7 +98,7 @@ export class SurveyComponent implements OnInit, AfterContentInit {
     return this.showPost;
   }
 
-  showMsg() {
+  showMsg(): void {
     this.snackBar.open('Submitted', void 0, { duration: 5000 });
   }
 
@@ -128,7 +130,7 @@ export class SurveyComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private handleCheckValidityAndNextObservable(subscriptionCallback: () => void) {
+  private handleCheckValidityAndNextObservable(subscriptionCallback: () => void): void {
     const invalid = this.checkValidityAndNextObservable();
     typeof invalid === 'boolean' && invalid === false ?
       this.snackBar.open('Fill out required fields', void 0, { duration: 5000 })

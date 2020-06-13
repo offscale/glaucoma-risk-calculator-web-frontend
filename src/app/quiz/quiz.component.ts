@@ -2,7 +2,8 @@ import { AfterContentInit, Component, OnDestroy, OnInit, ViewChild } from '@angu
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { MatSelect, MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSelect } from '@angular/material/select';
 
 import { ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -39,7 +40,7 @@ export class QuizComponent implements OnInit, AfterContentInit, OnDestroy {
               /*private surveyService: SurveyService*/) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.riskStatsService
       .read('latest')
       .subscribe(
@@ -76,16 +77,16 @@ export class QuizComponent implements OnInit, AfterContentInit, OnDestroy {
       );
   }
 
-  ngAfterContentInit() {
+  ngAfterContentInit(): void {
     this.setInitialValue();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destructionSubject.next();
     this.destructionSubject.complete();
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     const route = this.router.config.find(r => r.path === 'results');
     this.riskQuiz.value.study = this.ethnicity2study[this.riskQuiz.value.ethnicity];
 
@@ -114,7 +115,7 @@ export class QuizComponent implements OnInit, AfterContentInit, OnDestroy {
   /**
    * Sets the initial value after the filteredEthnicities are loaded initially
    */
-  private setInitialValue() {
+  private setInitialValue(): void {
     if (this.singleSelect == null) {
       return;
     }
@@ -130,7 +131,7 @@ export class QuizComponent implements OnInit, AfterContentInit, OnDestroy {
       });
   }
 
-  private filterEthnicities() {
+  private filterEthnicities(): void {
     if (!this.ethnicities) {
       return;
     }
