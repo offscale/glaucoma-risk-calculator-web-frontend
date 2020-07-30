@@ -4,7 +4,7 @@
 <br>
 
 <div style="padding-top: 10px; width: 100%; max-width: 30em; max-height: 30em;">
-  <ng-gauge-chart *ngIf="gauge"
+  <lib-gauge-chart *ngIf="gauge"
                   [animationSecs]=progressGraph.animationSecs
                   [bgColor]=progressGraph.bgColor
                   [bgRadius]=progressGraph.bgRadius
@@ -12,7 +12,7 @@
                   [reverse]=progressGraph.reverse
                   [rounded]=progressGraph.rounded
                   [segments]=progressGraph.segments>
-  </ng-gauge-chart>
+  </lib-gauge-chart>
 </div>
 <h3 style="text-underline: single">
   {{recommendation}}
