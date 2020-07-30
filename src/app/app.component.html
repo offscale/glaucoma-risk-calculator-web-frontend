@@ -8,27 +8,19 @@
 
 <app-survey #survey></app-survey>
 
-<footer class="docs-footer">
-  <div class="docs-footer-list">
-    <div class="docs-footer-logo">
-      <div class="footer-logo">
-        <a href="https://offscale.io">
-          <img alt="Offscale.io"
-               class="docs-footer-angular-logo"
-               src="../assets/Offscale-logo-white.png">
-        </a>
-      </div>
-    </div>
-
-    <div class="docs-footer-version" fxLayout="column">
-      <span class="version" fxFlex>App version: 0.0.60; API version: <app-server-status></app-server-status></span>
-      <span fxFlex>Open-sourced by <a href="https://offscale.io"
-                                      style="border-bottom: 1px dotted #777;">Offscale.io</a> &copy; 2019.</span>
-    </div>
-
-    <div class="docs-footer-copyright">
-      <span>Development sponsored by <a href="https://offscale.io"
-                                        style="border-bottom: 1px dotted #777;">Offscale.io</a></span>
-    </div>
+<footer class="text-center" fxLayout="row"
+        fxLayout.lt-md="column"
+        fxLayoutAlign="center center"
+        [ngStyle.lt-md]="{'padding': '0 20px'}"
+        [ngStyle.gt-sm]="{'padding': '20px 0 20px 20px'}">
+  <div fxFlex fxLayout="column">
+    <div fxFlex>Development sponsored by</div>
+    <a fxFlex href="https://sydneyscientific.org">
+      <h1>Sydney Scientific Foundation</h1>
+      <h3>The scalable medical diagnosis charity</h3>
+    </a>
+  </div>
+  <div fxLayoutAlign="end" style="padding-right: 20px">
+    &copy; 2018&ndash;2020
   </div>
 </footer>
